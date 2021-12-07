@@ -17,14 +17,25 @@ public class MouseController : MonoBehaviour
     {
         Vector3 currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        UpdateCameraMovement(currFramePosition);
+
+        lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    void UpdateCameraMovement(Vector3 currFramePosition)
+    {
         if (Input.GetMouseButton(1))
         {
             Vector3 diff = lastFramePosition - currFramePosition;
             Camera.main.transform.Translate(diff);
         }
 
-        lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
+    }
+
+    public void SetMode_Build()
+    {
+
     }
 }
