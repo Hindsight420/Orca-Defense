@@ -1,29 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Island
 {
-    Tile[,] tiles;
+    Dictionary<int, int> positionHeights;
+
     int width;
-    int height;
-
     public int Width { get => width; private set => width = value; }
-    public int Height { get => height; private set => height = value; }
 
-    public Island(int width = 100, int height = 20)
+    public Island(int width = 100)
     {
         Width = width;
-        Height = height;
-
-        tiles = new Tile[width, height];
-
+        positionHeights = new Dictionary<int, int>();
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
-            {
-                tiles[x, y] = new Tile(x, y);
-            }
+            positionHeights[x] = 0;
         }
+    }
+
+    public Vector3 GetHighestPositionAtCoords(Vector3 coords)
+    {
+        int x = Mathf.RoundToInt(coords.x);
+        if (!positionHeights.ContainsKey(x)) return new Vector3(-1, -1, 0);
+
+        int y = positionHeights[x];
+        return new Vector3(x, y, 0);
+    }
+
+    public void PlaceBuilding(Vector3 selectedPosition)
+    {
+        Building building = new Building((int)selectedPosition.x, (int)selectedPosition.y, "Square");
+
     }
 }
