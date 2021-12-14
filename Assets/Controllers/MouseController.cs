@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class MouseController : MonoBehaviour
     Vector3 currFramePosition;
 
     GameObject selectedBuilding;
-    public GameObject squarePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,7 @@ public class MouseController : MonoBehaviour
 
         UpdateCameraMovement();
 
-        if(selectedBuilding != null)
+        if (selectedBuilding != null)
         {
             UpdateBuildingPreview();
         }
@@ -38,18 +38,24 @@ public class MouseController : MonoBehaviour
 
     void UpdateBuildingPreview()
     {
+        // If we're over a UI element, then bail out from this.
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         Vector3 selectedPosition = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
         if (selectedPosition.x == -1) return;
 
-        Debug.Log(islandController);
         if (Input.GetMouseButtonUp(0))
         {
-            islandController.Island.PlaceBuilding(selectedPosition);
+            islandController.Island.PlaceBuilding((int)selectedPosition.x, (int)selectedPosition.y);
             Destroy(selectedBuilding);
             selectedBuilding = null;
         }
         else
         {
+            Debug.Log(selectedPosition);
             selectedBuilding.transform.position = selectedPosition;
         }
     }
@@ -69,6 +75,10 @@ public class MouseController : MonoBehaviour
     public void SetMode_Build()
     {
         Destroy(selectedBuilding);
-        selectedBuilding = Instantiate(squarePrefab);
+        selectedBuilding = new GameObject();
+        selectedBuilding.transform.position = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
+        SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
+        sr.sprite = islandController.squareSprite;
+        sr.color = Color.gray;
     }
 }
