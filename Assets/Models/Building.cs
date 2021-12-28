@@ -1,3 +1,4 @@
+using EventCallbacks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +10,6 @@ public class Building
     int y;
     string type;
 
-    public Action<Building> cbOnChanged;
-    public Action<Building> cbOnRemoved;
-
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
     public string Type { get => type; private set => type = value; }
@@ -22,11 +20,11 @@ public class Building
         Y = y;
         Type = type;
 
-        cbOnChanged?.Invoke(this);
+        new BuildingCreatedEvent().FireEvent(this);
     }
 
     public void Remove()
     {
-        cbOnRemoved(this);
+        new BuildingRemovedEvent().FireEvent(this);
     }
 }

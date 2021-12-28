@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+using EventCallbacks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,12 +20,12 @@ public class IslandController : MonoBehaviour
         buildingGameObjectMap = new Dictionary<Building, GameObject>();
 
         Island = new Island();
-        Island.cbOnBuildingCreated += OnBuildingCreated;
+        BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
 
         // Instantiate any buildings that already exist (from loading an existing save)
         foreach (Building building in Island.buildings)
         {
-            OnBuildingCreated(building);
+            new BuildingCreatedEvent().FireEvent(building);
         }
     }
 
@@ -35,9 +34,10 @@ public class IslandController : MonoBehaviour
 
     }
 
-    void OnBuildingCreated(Building building)
+    void OnBuildingCreated(BuildingEvent buildingEvent)
     {
-        GameObject building_go = new GameObject();
+        Building building = buildingEvent.building;
+        GameObject building_go = new();
 
         buildingGameObjectMap.Add(building, building_go);
 

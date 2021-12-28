@@ -1,5 +1,5 @@
+using EventCallbacks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +26,15 @@ public class Island
         }
     }
 
+    public Vector3 GetPositionAtCoords(Vector3 coords)
+    {
+        int x = Mathf.RoundToInt(coords.x);
+        if (!positionHeights.ContainsKey(x)) return new Vector3(-1, -1, 0);
+
+        int y = Mathf.RoundToInt(coords.y);
+        return new Vector3(x, y, 0);
+    }
+
     public Vector3 GetHighestPositionAtCoords(Vector3 coords)
     {
         int x = Mathf.RoundToInt(coords.x);
@@ -40,12 +49,11 @@ public class Island
         Building building = new Building(x, y, "Square");
         positionHeights[x] = y + 1;
 
-        building.cbOnRemoved += OnBuildingRemoved;
-        cbOnBuildingCreated?.Invoke(building);
+        BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
-    void OnBuildingRemoved(Building building)
+    void OnBuildingRemoved(BuildingEvent buildingEvent)
     {
-        buildings.Remove(building);
+        buildings.Remove(buildingEvent.building);
     }
 }

@@ -11,6 +11,8 @@ public class MouseController : MonoBehaviour
     Vector3 lastFramePosition;
     Vector3 currFramePosition;
 
+    bool buildOrDestroy;
+
     GameObject selectedBuilding;
 
     // Start is called before the first frame update
@@ -44,18 +46,31 @@ public class MouseController : MonoBehaviour
             return;
         }
 
-        Vector3 selectedPosition = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
+        Vector3 selectedPosition = (buildOrDestroy) ? islandController.Island.GetHighestPositionAtCoords(currFramePosition) : islandController.Island.GetPositionAtCoords(currFramePosition);
         if (selectedPosition.x == -1) return;
 
-        if (Input.GetMouseButtonUp(0))
+
+
+        if (Input.GetMouseButtonDown(0))
         {
-            islandController.Island.PlaceBuilding((int)selectedPosition.x, (int)selectedPosition.y);
+            if (buildOrDestroy)
+            {
+                islandController.Island.PlaceBuilding((int)selectedPosition.x, (int)selectedPosition.y);
+            }
+            else
+            {
+                // add logic for destroying buildings
+                Debug.Log("Trying to destroy building");
+                //islandController.Island.RemoveBuilding();
+
+
+                // add dragging logic?
+            }
             Destroy(selectedBuilding);
             selectedBuilding = null;
         }
         else
         {
-            Debug.Log(selectedPosition);
             selectedBuilding.transform.position = selectedPosition;
         }
     }
@@ -74,11 +89,23 @@ public class MouseController : MonoBehaviour
 
     public void SetMode_Build()
     {
+        buildOrDestroy = true;
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
         selectedBuilding.transform.position = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
         sr.sprite = islandController.squareSprite;
         sr.color = Color.gray;
+    }
+
+    public void SetMode_Destroy()
+    {
+        buildOrDestroy = false;
+        Destroy(selectedBuilding);
+        selectedBuilding = new GameObject();
+        selectedBuilding.transform.position = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
+        SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
+        sr.sprite = islandController.squareSprite;
+        sr.color = Color.red;
     }
 }
