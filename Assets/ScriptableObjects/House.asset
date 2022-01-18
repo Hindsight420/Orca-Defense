@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
   m_Name: House
   m_EditorClassIdentifier: 
-  type: House
-  cost: 50
+  Cost: 50
+  Sprite: {fileID: 21300000, guid: 1c48703d2357d67409ab51b9e8165620, type: 3}

@@ -35,17 +35,17 @@ public class IslandController : MonoBehaviour
 
     void OnBuildingChanged(BuildingEvent buildingEvent)
     {
-        GameObject building_go = UpdateBuildingVisuals(buildingEvent);
+        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
     }
 
     void OnBuildingCreated(BuildingEvent buildingEvent)
     {
-        GameObject building_go = UpdateBuildingVisuals(buildingEvent);
+        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
 
         buildingGameObjectMap.Add(buildingEvent.building, building_go);
     }
 
-    GameObject UpdateBuildingVisuals(BuildingEvent buildingEvent)
+    GameObject UpdateBuildingGameObject(BuildingEvent buildingEvent)
     {
         Building building = buildingEvent.building;
         GameObject building_go = new();
