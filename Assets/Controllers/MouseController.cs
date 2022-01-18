@@ -11,6 +11,7 @@ public class MouseController : MonoBehaviour
     bool buildOrDestroy;
 
     GameObject selectedBuilding;
+    BuildingSettings buildingSettings;
 
     // Start is called before the first frame update
     void Start()
@@ -28,31 +29,28 @@ public class MouseController : MonoBehaviour
 
         if (selectedBuilding != null)
         {
-            UpdateBuildingPreview();
+            // If we're over a UI element, then bail out from this.
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            UpdateDraggingPreview();
         }
 
         lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         lastFramePosition.z = 0;
     }
 
-    void UpdateBuildingPreview()
+    void UpdateDraggingPreview()
     {
-        // If we're over a UI element, then bail out from this.
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        Vector3 selectedPosition = (buildOrDestroy) ? islandController.Island.GetHighestPositionAtCoords(currFramePosition) : islandController.Island.GetPositionAtCoords(currFramePosition);
-        if (selectedPosition.x == -1) return;
-
-
+        Tile selectedTile = islandController.Island.GetTileAtCoords(currFramePosition);
+        if (selectedTile == null) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             if (buildOrDestroy)
             {
-                islandController.Island.PlaceBuilding((int)selectedPosition.x, (int)selectedPosition.y);
+                islandController.Island.PlaceBuilding(selectedTile.X, selectedTile.Y, buildingSettings);
             }
             else
             {
@@ -68,7 +66,7 @@ public class MouseController : MonoBehaviour
         }
         else
         {
-            selectedBuilding.transform.position = selectedPosition;
+            selectedBuilding.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
         }
     }
 
@@ -84,14 +82,14 @@ public class MouseController : MonoBehaviour
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
     }
 
-    public void SetMode_Build()
+    public void SetMode_Build(BuildingSettings buildingSettings)
     {
+        this.buildingSettings = buildingSettings;
         buildOrDestroy = true;
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
-        selectedBuilding.transform.position = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        sr.sprite = islandController.squareSprite;
+        sr.sprite = buildingSettings.Sprite;
         sr.color = Color.gray;
     }
 
@@ -100,9 +98,8 @@ public class MouseController : MonoBehaviour
         buildOrDestroy = false;
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
-        selectedBuilding.transform.position = islandController.Island.GetHighestPositionAtCoords(currFramePosition);
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        sr.sprite = islandController.squareSprite;
+        sr.sprite = buildingSettings.Sprite;
         sr.color = Color.red;
     }
 }

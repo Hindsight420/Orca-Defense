@@ -4,17 +4,18 @@ public class Building
 {
     int x;
     int y;
-    string type;
+    private BuildingSettings buildingSettings;
 
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
-    public string Type { get => type; private set => type = value; }
+    public BuildingSettings BuildingSettings { get => buildingSettings; private set => buildingSettings = value; }
 
-    public Building(int x, int y, string type)
+
+    public Building(int x, int y, BuildingSettings buildingSettings)
     {
         X = x;
         Y = y;
-        Type = type;
+        BuildingSettings = buildingSettings;
 
         new BuildingCreatedEvent().FireEvent(this);
     }
@@ -22,5 +23,10 @@ public class Building
     public void Remove()
     {
         new BuildingRemovedEvent().FireEvent(this);
+    }
+
+    public override string ToString()
+    {
+        return buildingSettings.name;
     }
 }

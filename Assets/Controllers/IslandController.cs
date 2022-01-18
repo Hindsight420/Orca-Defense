@@ -5,7 +5,6 @@ using UnityEngine;
 public class IslandController : MonoBehaviour
 {
     Dictionary<Building, GameObject> buildingGameObjectMap;
-    public Sprite squareSprite;
 
     public static IslandController Instance { get; private set; }
 
@@ -34,18 +33,30 @@ public class IslandController : MonoBehaviour
 
     }
 
+    void OnBuildingChanged(BuildingEvent buildingEvent)
+    {
+        GameObject building_go = UpdateBuildingVisuals(buildingEvent);
+    }
+
     void OnBuildingCreated(BuildingEvent buildingEvent)
+    {
+        GameObject building_go = UpdateBuildingVisuals(buildingEvent);
+
+        buildingGameObjectMap.Add(buildingEvent.building, building_go);
+    }
+
+    GameObject UpdateBuildingVisuals(BuildingEvent buildingEvent)
     {
         Building building = buildingEvent.building;
         GameObject building_go = new();
 
-        buildingGameObjectMap.Add(building, building_go);
-
-        building_go.name = $"{building.Type}_{building.X}_{building.Y}";
+        building_go.name = $"{building.BuildingSettings.name}_{building.X}_{building.Y}";
         building_go.transform.position = new Vector3(building.X, building.Y, 0);
-        building_go.transform.SetParent(this.transform);
+        building_go.transform.SetParent(transform);
 
         SpriteRenderer sr = building_go.AddComponent<SpriteRenderer>();
-        sr.sprite = squareSprite;
+        sr.sprite = building.BuildingSettings.Sprite;
+
+        return building_go;
     }
 }

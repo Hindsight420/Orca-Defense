@@ -1,3 +1,5 @@
+using EventCallbacks;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,7 +9,7 @@ public class ResourceController : MonoBehaviour
     public int Dogecoin { get => dogecoin; private set => dogecoin = value; }
 
     float time = 0.0f;
-    public float gainzz = 0.5f;
+    public float gainzz;
 
     public GameObject Crypto;
 
@@ -16,6 +18,8 @@ public class ResourceController : MonoBehaviour
     void Start()
     {
         Instance = this;
+
+        BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
     }
 
     void Update()
@@ -29,5 +33,15 @@ public class ResourceController : MonoBehaviour
         }
 
         Crypto.GetComponent<TextMeshProUGUI>().text = $"{dogecoin} Ð";
+    }
+
+    public bool DoIHaveEnough(int cost)
+    {
+        return dogecoin > cost;
+    }
+
+    private void OnBuildingCreated(BuildingEvent buildingEvent)
+    {
+        dogecoin -= buildingEvent.building.BuildingSettings.Cost;
     }
 }
