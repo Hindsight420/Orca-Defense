@@ -2,11 +2,9 @@ using EventCallbacks;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IslandController : MonoBehaviour
+public class IslandController : Singleton<IslandController>
 {
     Dictionary<Building, GameObject> buildingGameObjectMap;
-
-    public static IslandController Instance { get; private set; }
 
     Island island;
     public Island Island { get => island; private set => island = value; }
@@ -14,8 +12,6 @@ public class IslandController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instance = this;
-
         buildingGameObjectMap = new Dictionary<Building, GameObject>();
 
         Island = new Island();
