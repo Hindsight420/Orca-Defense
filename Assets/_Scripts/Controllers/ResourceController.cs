@@ -42,6 +42,6 @@ public class ResourceController : MonoBehaviour
 
     private void OnBuildingCreated(BuildingEvent buildingEvent)
     {
-        dogecoin -= buildingEvent.building.BuildingSettings.Cost;
+        dogecoin -= buildingEvent.building.BuildingBase.Cost;
     }
 }

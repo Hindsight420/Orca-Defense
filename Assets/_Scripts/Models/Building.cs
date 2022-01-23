@@ -4,18 +4,18 @@ public class Building
 {
     int x;
     int y;
-    private BuildingSettings buildingSettings;
+    private BuildingBase buildingBase;
 
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
-    public BuildingSettings BuildingSettings { get => buildingSettings; private set => buildingSettings = value; }
+    public BuildingBase BuildingBase { get => buildingBase; private set => buildingBase = value; }
 
 
-    public Building(int x, int y, BuildingSettings buildingSettings)
+    public Building(int x, int y, BuildingBase buildingBase)
     {
         X = x;
         Y = y;
-        BuildingSettings = buildingSettings;
+        BuildingBase = buildingBase;
 
         new BuildingCreatedEvent().FireEvent(this);
     }
@@ -27,6 +27,6 @@ public class Building
 
     public override string ToString()
     {
-        return buildingSettings.name;
+        return buildingBase.name;
     }
 }

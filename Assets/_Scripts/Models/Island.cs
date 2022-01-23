@@ -51,7 +51,7 @@ public class Island
         }
     }
 
-    public Tile GetHighestTileAtCoords(Vector3 coords)
+    public Tile GetHighestFreeTileAtCoords(Vector3 coords)
     {
         int x = Mathf.RoundToInt(coords.x);
         if (!positionHeights.ContainsKey(x)) return null;
@@ -59,25 +59,34 @@ public class Island
         return Tiles[x, y];
     }
 
-    public void PlaceBuilding(int x, int y, BuildingSettings buildingSettings)
+    public void PlaceBuilding(int x, int y, BuildingBase buildingBase)
     {
         Tile tile = Tiles[x, y];
-        if (tile.Building != null)
-        {
-            Debug.Log($"Tile at {x},{y} is already occupied by building: {tile.Building}");
-            return;
-        }
-
-        if (!ResourceController.Instance.DoIHaveEnough(buildingSettings.Cost))
-        {
-            Debug.Log($"Can't place {buildingSettings.name} at {x},{y} because you don't have enough crypto");
-            return;
-        }
-
-        tile.Building = new Building(x, y, buildingSettings);
+        if (ValidateBuildingPlacement(tile, buildingBase) == false) return;
+        tile.Building = new Building(x, y, buildingBase);
+        Tiles[x, y + 1].IsSupported = true;
         positionHeights[x] = y + 1;
 
         BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
+    }
+
+    bool ValidateBuildingPlacement(Tile tile, BuildingBase buildingBase)
+    {
+        // Check if tile is occupied
+        if (tile.CanBuild(out string debugMessage) == false)
+        {
+            Debug.Log(debugMessage);
+            return false;
+        }
+
+        // Check if there's enough resources
+        if (ResourceController.Instance.DoIHaveEnough(buildingBase.Cost) == false)
+        {
+            Debug.Log($"Can't place {buildingBase.name} at {tile.X},{tile.Y} because you don't have enough crypto");
+            return false;
+        }
+
+        return true;
     }
 
     void OnBuildingRemoved(BuildingEvent buildingEvent)

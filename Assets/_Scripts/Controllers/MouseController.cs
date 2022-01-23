@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseController : MonoBehaviour
+public class MouseController : Singleton<MouseController>
 {
     IslandController islandController;
 
@@ -11,7 +11,7 @@ public class MouseController : MonoBehaviour
     bool buildOrDestroy;
 
     GameObject selectedBuilding;
-    BuildingSettings buildingSettings;
+    BuildingBase buildingBase;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +50,7 @@ public class MouseController : MonoBehaviour
         {
             if (buildOrDestroy)
             {
-                islandController.Island.PlaceBuilding(selectedTile.X, selectedTile.Y, buildingSettings);
+                islandController.Island.PlaceBuilding(selectedTile.X, selectedTile.Y, buildingBase);
             }
             else
             {
@@ -82,14 +82,14 @@ public class MouseController : MonoBehaviour
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
     }
 
-    public void SetMode_Build(BuildingSettings buildingSettings)
+    public void SetMode_Build(BuildingBase buildingBase)
     {
-        this.buildingSettings = buildingSettings;
+        this.buildingBase = buildingBase;
         buildOrDestroy = true;
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        sr.sprite = buildingSettings.Sprite;
+        sr.sprite = buildingBase.Sprite;
         sr.color = Color.gray;
     }
 
@@ -99,7 +99,7 @@ public class MouseController : MonoBehaviour
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        sr.sprite = buildingSettings.Sprite;
+        //sr.sprite = buildingBase.Sprite;
         sr.color = Color.red;
     }
 }

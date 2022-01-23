@@ -46,12 +46,12 @@ public class IslandController : Singleton<IslandController>
         Building building = buildingEvent.building;
         GameObject building_go = new();
 
-        building_go.name = $"{building.BuildingSettings.name}_{building.X}_{building.Y}";
+        building_go.name = $"{building.BuildingBase.name}_{building.X}_{building.Y}";
         building_go.transform.position = new Vector3(building.X, building.Y, 0);
         building_go.transform.SetParent(transform);
 
         SpriteRenderer sr = building_go.AddComponent<SpriteRenderer>();
-        sr.sprite = building.BuildingSettings.Sprite;
+        sr.sprite = building.BuildingBase.Sprite;
 
         return building_go;
     }

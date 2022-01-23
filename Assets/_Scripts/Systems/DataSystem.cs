@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class DataSystem : Singleton<DataSystem>
 {
-    public List<BuildingSettings> BuildingSettings { get; private set; }
+    public List<BuildingBase> BuildingBases { get; private set; }
 
     protected override void Awake()
     {
@@ -16,6 +14,6 @@ public class DataSystem : Singleton<DataSystem>
 
     private void AssembleData()
     {
-        BuildingSettings = Resources.LoadAll<BuildingSettings>("Buildings").ToList();
+        BuildingBases = Resources.LoadAll<BuildingBase>("BuildingBases").ToList();
     }
 }
