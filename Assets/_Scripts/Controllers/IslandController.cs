@@ -12,13 +12,13 @@ public class IslandController : Singleton<IslandController>
     public int Width;
     public int Height;
 
-    // Start is called before the first frame update
     void Start()
     {
         buildingGameObjectMap = new Dictionary<Building, GameObject>();
 
         Island = new Island(Width, Height);
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
+        BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
 
         // Instantiate any buildings that already exist (from loading an existing save)
         foreach (Building building in Island.buildings)
@@ -27,24 +27,21 @@ public class IslandController : Singleton<IslandController>
         }
     }
 
-    void Update()
+    void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
-
+        Building b = buildingEvent.building;
+        buildingGameObjectMap.Remove(b, out GameObject building_go);
+        Destroy(building_go);
     }
 
-    void OnBuildingChanged(BuildingEvent buildingEvent)
-    {
-        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
-    }
-
-    void OnBuildingCreated(BuildingEvent buildingEvent)
+    void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
         GameObject building_go = UpdateBuildingGameObject(buildingEvent);
 
         buildingGameObjectMap.Add(buildingEvent.building, building_go);
     }
 
-    GameObject UpdateBuildingGameObject(BuildingEvent buildingEvent)
+    GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)
     {
         Building building = buildingEvent.building;
         GameObject building_go = new();

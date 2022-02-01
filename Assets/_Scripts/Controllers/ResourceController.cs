@@ -20,6 +20,7 @@ public class ResourceController : MonoBehaviour
         Instance = this;
 
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
+        BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
     void Update()
@@ -40,8 +41,13 @@ public class ResourceController : MonoBehaviour
         return dogecoin > cost;
     }
 
-    private void OnBuildingCreated(BuildingEvent buildingEvent)
+    private void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
         dogecoin -= buildingEvent.building.BuildingBase.Cost;
+    }
+
+    private void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
+    {
+        dogecoin += buildingEvent.building.BuildingBase.Cost;
     }
 }

@@ -44,7 +44,20 @@ namespace EventCallbacks
         public int VerbosityLevel;
     }
 
-    public class BuildingEvent : Event<BuildingEvent>
+
+    // TODO: Figure out a way to do generic BuildingEvents
+    //public class BuildingEvent : Event<BuildingEvent>
+    //{
+    //    public Building building;
+
+    //    public void FireEvent(Building building)
+    //    {
+    //        this.building = building;
+    //        FireEvent();
+    //    }
+    //}
+
+    public class BuildingCreatedEvent : Event<BuildingCreatedEvent>
     {
         public Building building;
 
@@ -55,18 +68,25 @@ namespace EventCallbacks
         }
     }
 
-    public class BuildingCreatedEvent : BuildingEvent
+    public class BuildingChangedEvent : Event<BuildingChangedEvent>
     {
-    
+        public Building building;
+
+        public void FireEvent(Building building)
+        {
+            this.building = building;
+            FireEvent();
+        }
     }
 
-    public class BuildingChangedEvent : BuildingEvent
+    public class BuildingRemovedEvent : Event<BuildingRemovedEvent>
     {
+        public Building building;
 
-    }
-
-    public class BuildingRemovedEvent : BuildingEvent
-    {
-
+        public void FireEvent(Building building)
+        {
+            this.building = building;
+            FireEvent();
+        }
     }
 }

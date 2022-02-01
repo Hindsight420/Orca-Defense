@@ -35,6 +35,8 @@ public class Island
                 Tiles[x, y] = new Tile(x, y);
             }
         }
+
+        BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
     public Tile GetTileAtCoords(Vector3 coords)
@@ -60,9 +62,11 @@ public class Island
         return Tiles[x, y];
     }
 
-    public void PlaceBuilding(int x, int y, BuildingBase buildingBase)
+    public void TryPlaceBuilding(Tile tile, BuildingBase buildingBase)
     {
-        Tile tile = Tiles[x, y];
+        int x = tile.X;
+        int y = tile.Y;
+
         if (ValidateBuildingPlacement(tile, buildingBase) == false) return;
         tile.Building = new Building(x, y, buildingBase);
 
@@ -79,8 +83,6 @@ public class Island
         {
             positionHeights[x] = y + 1;
         }
-
-        BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
     bool ValidateBuildingPlacement(Tile tile, BuildingBase buildingBase)
@@ -103,8 +105,33 @@ public class Island
         return true;
     }
 
-    void OnBuildingRemoved(BuildingEvent buildingEvent)
+    public void TryDestroyBuilding(Tile tile)
     {
-        buildings.Remove(buildingEvent.building);
+        // Check whether there's a building in the tile
+        if (!tile.IsOccupied)
+        {
+            Debug.Log($"Can't remove building at {tile.X},{tile.Y} because the tile is not occupied");
+            return;
+        }
+
+        // Check whether there's a building on top
+        Tile tileAbove = Tiles[tile.X, tile.Y + 1];
+        if (tileAbove.IsOccupied)
+        {
+            Debug.Log($"Can't remove {tile.Building} at {tile.X},{tile.Y} because the tile above is occupied");
+            return;
+        }
+
+        tileAbove.IsSupported = false;
+
+        tile.Building.Remove();
+        tile.Building = null;
+    }
+
+    void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
+    {
+        Building b = buildingEvent.building;
+        buildings.Remove(b);
+        positionHeights[b.X]--;
     }
 }

@@ -9,6 +9,8 @@ public class Tile
     public readonly int Y;
 
     // TODO: clean up this mess
+
+    public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
     public bool IsSupported { get => isSupported; set => isSupported = value; }
 
     public Building Building
@@ -16,8 +18,8 @@ public class Tile
         get => building;
         set
         {
-            isOccupied = true;
             building = value;
+            isOccupied = (building != null);
         }
     }
 
@@ -33,7 +35,7 @@ public class Tile
     {
         bool canBuild = true;
         string message = $"Tile_{X}_{Y} is ";
-        if (isOccupied)
+        if (IsOccupied)
         {
             canBuild = false;
             message += $"occupied by {Building.BuildingBase.name}";

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -50,16 +51,11 @@ public class MouseController : Singleton<MouseController>
         {
             if (buildOrDestroy)
             {
-                islandController.Island.PlaceBuilding(selectedTile.X, selectedTile.Y, buildingBase);
+                islandController.Island.TryPlaceBuilding(selectedTile, buildingBase);
             }
             else
             {
-                // add logic for destroying buildings
-                Debug.Log("Trying to destroy building");
-                //islandController.Island.RemoveBuilding();
-
-
-                // add dragging logic?
+                islandController.Island.TryDestroyBuilding(selectedTile);
             }
             Destroy(selectedBuilding);
             selectedBuilding = null;
@@ -99,7 +95,9 @@ public class MouseController : Singleton<MouseController>
         Destroy(selectedBuilding);
         selectedBuilding = new GameObject();
         SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        //sr.sprite = buildingBase.Sprite;
+
+        // TODO: Clean up this mess
+        sr.sprite = DataSystem.Instance.BuildingBases.Single(b => b.name == "Square").Sprite;
         sr.color = Color.red;
     }
 }
