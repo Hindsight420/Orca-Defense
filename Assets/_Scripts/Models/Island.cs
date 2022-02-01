@@ -1,5 +1,6 @@
 using EventCallbacks;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,14 +65,27 @@ public class Island
         Tile tile = Tiles[x, y];
         if (ValidateBuildingPlacement(tile, buildingBase) == false) return;
         tile.Building = new Building(x, y, buildingBase);
-        Tiles[x, y + 1].IsSupported = true;
-        positionHeights[x] = y + 1;
+
+        try
+        {
+            Tiles[x, y + 1].IsSupported = true;
+        }
+        catch (IndexOutOfRangeException)
+        {
+            positionHeights.Remove(x);
+            Debug.Log($"There is no tile above {x}, {y} to support");
+        }
+        finally
+        {
+            positionHeights[x] = y + 1;
+        }
 
         BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
     bool ValidateBuildingPlacement(Tile tile, BuildingBase buildingBase)
     {
+
         // Check if tile is occupied
         if (tile.CanBuild(out string debugMessage) == false)
         {

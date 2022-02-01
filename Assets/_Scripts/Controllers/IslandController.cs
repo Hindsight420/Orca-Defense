@@ -9,12 +9,15 @@ public class IslandController : Singleton<IslandController>
     Island island;
     public Island Island { get => island; private set => island = value; }
 
+    public int Width;
+    public int Height;
+
     // Start is called before the first frame update
     void Start()
     {
         buildingGameObjectMap = new Dictionary<Building, GameObject>();
 
-        Island = new Island();
+        Island = new Island(Width, Height);
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
 
         // Instantiate any buildings that already exist (from loading an existing save)

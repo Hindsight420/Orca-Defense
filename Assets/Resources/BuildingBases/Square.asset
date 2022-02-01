@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Square
   m_EditorClassIdentifier: 
   Cost: 10
-  Sprite: {fileID: 7482667652216324306, guid: 97cab1577277c7744a2bb7783cf5041f, type: 3}
+  Sprite: {fileID: 21300000, guid: 97cab1577277c7744a2bb7783cf5041f, type: 3}
