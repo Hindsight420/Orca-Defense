@@ -4,11 +4,6 @@ namespace EventCallbacks
 {
     public abstract class Event<T> where T : Event<T>
     {
-        /*
-         * The base Event,
-         * might have some generic text
-         * for doing Debug.Log?
-         */
         public string Description;
 
         private bool hasFired;
@@ -46,18 +41,7 @@ namespace EventCallbacks
 
 
     // TODO: Figure out a way to do generic BuildingEvents
-    //public class BuildingEvent : Event<BuildingEvent>
-    //{
-    //    public Building building;
-
-    //    public void FireEvent(Building building)
-    //    {
-    //        this.building = building;
-    //        FireEvent();
-    //    }
-    //}
-
-    public class BuildingCreatedEvent : Event<BuildingCreatedEvent>
+    public class BuildingEventBase<T> : Event<T> where T : Event<T>
     {
         public Building building;
 
@@ -68,25 +52,18 @@ namespace EventCallbacks
         }
     }
 
-    public class BuildingChangedEvent : Event<BuildingChangedEvent>
+    public class BuildingCreatedEvent : BuildingEventBase<BuildingCreatedEvent>
     {
-        public Building building;
-
-        public void FireEvent(Building building)
-        {
-            this.building = building;
-            FireEvent();
-        }
+        
     }
 
-    public class BuildingRemovedEvent : Event<BuildingRemovedEvent>
+    public class BuildingChangedEvent : BuildingEventBase<BuildingChangedEvent>
     {
-        public Building building;
+        
+    }
 
-        public void FireEvent(Building building)
-        {
-            this.building = building;
-            FireEvent();
-        }
+    public class BuildingRemovedEvent : BuildingEventBase<BuildingRemovedEvent>
+    {
+        
     }
 }
