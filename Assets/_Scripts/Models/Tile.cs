@@ -38,7 +38,7 @@ public class Tile
         if (IsOccupied)
         {
             canBuild = false;
-            message += $"occupied by {Building.BuildingBase.name}";
+            message += $"occupied";
         }
 
         if (!IsSupported)
@@ -47,7 +47,7 @@ public class Tile
             message += $"not supported";
         }
 
-        debugMessage = message;
+        debugMessage = canBuild ? "" : message;
         return canBuild;
     }
 }

@@ -39,8 +39,6 @@ namespace EventCallbacks
         public int VerbosityLevel;
     }
 
-
-    // TODO: Figure out a way to do generic BuildingEvents
     public class BuildingEventBase<T> : Event<T> where T : Event<T>
     {
         public Building building;

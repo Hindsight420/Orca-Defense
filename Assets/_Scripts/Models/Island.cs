@@ -1,6 +1,5 @@
 using EventCallbacks;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,14 +17,14 @@ public class Island
     public List<Building> buildings;
     public Action<Building> cbOnBuildingCreated;
 
-    public Island(int width = 100, int height = 20)
+    public Island(int width, int height)
     {
         Width = width;
         Height = height;
         positionHeights = new Dictionary<int, int>();
         buildings = new List<Building>();
 
-        Tiles = new Tile[100, 20];
+        Tiles = new Tile[width, height];
         for (int x = 0; x < width; x++)
         {
             positionHeights[x] = 0;
