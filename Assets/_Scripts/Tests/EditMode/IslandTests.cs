@@ -3,11 +3,13 @@ using NUnit.Framework;
 public class IslandTests
 {
     [Test]
-    public void TestIslandConstructor()
+    [TestCase(20, 10)]
+    [TestCase(12, 69)]
+    public void TestIslandConstructor(int x, int y)
     {
-        Island island = new Island(15, 10);
+        Island island = new Island(x, y);
 
-        Assert.IsTrue(island.Width == 15);
-        Assert.IsTrue(island.Height == 10);
+        Assert.AreEqual(island.Width, x);
+        Assert.AreEqual(island.Height, y);
     }
 }

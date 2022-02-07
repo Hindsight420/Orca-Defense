@@ -8,13 +8,14 @@ public class BuildingTests
     [SerializeField]private BuildingBase buildingBase;
 
     [Test]
-    public void TestBuildingConstructor()
+    [TestCase(4, 7)]
+    public void TestBuildingConstructor(int x, int y)
     {
-        Building building = new Building(4, 7, buildingBase);
+        Building building = new Building(x, y, buildingBase);
 
-        Assert.IsTrue(building.BuildingBase == buildingBase);
-        Assert.IsTrue(building.X == 4);
-        Assert.IsTrue(building.Y == 7);
+        Assert.AreEqual(building.BuildingBase, buildingBase);
+        Assert.AreEqual(building.X, x);
+        Assert.AreEqual(building.Y, y);
     }
 
     [Test]

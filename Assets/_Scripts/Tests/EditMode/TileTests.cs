@@ -11,11 +11,11 @@ public class TileTests
         bool yIsZero = y == 0;
         Tile tile = new Tile(x, y);
 
-        Assert.IsTrue(tile.X == x);
-        Assert.IsTrue(tile.Y == y);
-        Assert.IsTrue(tile.IsOccupied == false);
-        Assert.IsTrue(tile.Building == null);
-        Assert.IsTrue(tile.IsSupported == yIsZero);
+        Assert.AreEqual(tile.X, x);
+        Assert.AreEqual(tile.Y, y);
+        Assert.AreEqual(tile.IsOccupied, false);
+        Assert.AreEqual(tile.Building, null);
+        Assert.AreEqual(tile.IsSupported, yIsZero);
     }
 
     [Test]
@@ -31,11 +31,11 @@ public class TileTests
         };
 
         bool expectedOutcome = !isOccupied && isSupported;
-        Assert.IsTrue(tile.CanBuild(out string debugMessage) == expectedOutcome);
+        Assert.AreEqual(tile.CanBuild(out string debugMessage), expectedOutcome);
 
         string expectedMessage = "";
         if (isOccupied) expectedMessage = $"Tile_1_1 is occupied";
         if (!isSupported) expectedMessage = $"Tile_1_1 is not supported";
-        Assert.IsTrue(debugMessage == expectedMessage);
+        Assert.AreEqual(debugMessage, expectedMessage);
     }
 }
