@@ -27,16 +27,7 @@ public class MouseController : Singleton<MouseController>
         currFramePosition.z = 0;
 
         UpdateCameraMovement();
-
-        if (selectedBuilding != null)
-        {
-            // If we're over a UI element, then bail out from this.
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
-            UpdateDraggingPreview();
-        }
+        UpdateDraggingPreview();
 
         lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         lastFramePosition.z = 0;
@@ -44,26 +35,37 @@ public class MouseController : Singleton<MouseController>
 
     void UpdateDraggingPreview()
     {
+        if (selectedBuilding == null) return; // No building currently selected
+        if (EventSystem.current.IsPointerOverGameObject()) return; // Mouse is over UI element
+        if (Input.GetMouseButtonDown(1))
+        {
+            // Cancel current build
+            DestroyPreview();
+            return;
+        };
+
         Tile selectedTile = islandController.Island.GetTileAtCoords(currFramePosition);
         if (selectedTile == null) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             if (buildOrDestroy)
-            {
                 islandController.Island.TryPlaceBuilding(selectedTile, buildingBase);
-            }
             else
-            {
                 islandController.Island.TryDestroyBuilding(selectedTile);
-            }
-            Destroy(selectedBuilding);
-            selectedBuilding = null;
+
+            DestroyPreview();
         }
         else
         {
             selectedBuilding.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
         }
+    }
+
+    void DestroyPreview()
+    {
+        Destroy(selectedBuilding);
+        selectedBuilding = null;
     }
 
     void UpdateCameraMovement()
@@ -83,9 +85,8 @@ public class MouseController : Singleton<MouseController>
         this.buildingBase = buildingBase;
         buildOrDestroy = true;
         Destroy(selectedBuilding);
-        selectedBuilding = new GameObject();
-        SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-        sr.sprite = buildingBase.Sprite;
+        selectedBuilding = Instantiate(buildingBase.Prefab);
+        SpriteRenderer sr = selectedBuilding.GetComponent<SpriteRenderer>();
         sr.color = Color.gray;
     }
 
@@ -93,11 +94,8 @@ public class MouseController : Singleton<MouseController>
     {
         buildOrDestroy = false;
         Destroy(selectedBuilding);
-        selectedBuilding = new GameObject();
-        SpriteRenderer sr = selectedBuilding.AddComponent<SpriteRenderer>();
-
-        // TODO: Clean up this mess
-        sr.sprite = DataSystem.Instance.BuildingBases.Single(b => b.name == "Square").Sprite;
+        selectedBuilding = Instantiate(DataSystem.Instance.BuildingBases.Single(b => b.name == "Square").Prefab);
+        SpriteRenderer sr = selectedBuilding.GetComponent<SpriteRenderer>();
         sr.color = Color.red;
     }
 }

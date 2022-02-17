@@ -5,5 +5,5 @@ using UnityEngine;
 public class BuildingBase : ScriptableObject
 {
     public int Cost;
-    public Sprite Sprite;
+    public GameObject Prefab;
 }

@@ -44,14 +44,11 @@ public class IslandController : Singleton<IslandController>
     GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)
     {
         Building building = buildingEvent.building;
-        GameObject building_go = new();
+        GameObject building_go = Instantiate(building.BuildingBase.Prefab);
 
         building_go.name = $"{building.BuildingBase.name}_{building.X}_{building.Y}";
         building_go.transform.position = new Vector3(building.X, building.Y, 0);
         building_go.transform.SetParent(transform);
-
-        SpriteRenderer sr = building_go.AddComponent<SpriteRenderer>();
-        sr.sprite = building.BuildingBase.Sprite;
 
         return building_go;
     }

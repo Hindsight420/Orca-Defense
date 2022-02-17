@@ -27,10 +27,8 @@ namespace EventCallbacks
                 throw new Exception("This event has already fired, to prevent infinite loops you can't refire an event");
             }
             hasFired = true;
-            if (listeners != null)
-            {
-                listeners(this as T);
-            }
+
+            listeners?.Invoke(this as T);
         }
     }
 
