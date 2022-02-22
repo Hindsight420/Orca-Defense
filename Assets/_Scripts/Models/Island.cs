@@ -53,9 +53,14 @@ public class Island
         }
     }
 
-    public Tile GetHighestFreeTileAtCoords(Vector3 coords)
+    public Tile GetHighestFreeTileAt(Vector3 coords)
     {
         int x = Mathf.RoundToInt(coords.x);
+        return GetHighestFreeTileAt(x);
+    }
+
+    public Tile GetHighestFreeTileAt(int x)
+    {
         if (!positionHeights.ContainsKey(x)) return null;
         int y = positionHeights[x];
         return Tiles[x, y];
@@ -67,6 +72,7 @@ public class Island
         int y = tile.Y;
 
         if (ValidateBuildingPlacement(tile, buildingBase) == false) return;
+        positionHeights[x] = y + 1;
         tile.Building = new Building(x, y, buildingBase);
 
         try
@@ -77,10 +83,6 @@ public class Island
         {
             positionHeights.Remove(x);
             Debug.Log($"There is no tile above {x}, {y} to support");
-        }
-        finally
-        {
-            positionHeights[x] = y + 1;
         }
     }
 
@@ -122,6 +124,7 @@ public class Island
         }
 
         tileAbove.IsSupported = false;
+        positionHeights[tile.X] = tile.Y + 1;
 
         tile.Building.Remove();
         tile.Building = null;

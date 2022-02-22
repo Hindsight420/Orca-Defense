@@ -1154,6 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e6d9a75c5839834ebcd4e13a8536582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoofPrefab: {fileID: 6395731410237515148, guid: 506013e04b2d54b4c8ede2fecba37877, type: 3}
   Width: 15
   Height: 20
 --- !u!4 &793902679

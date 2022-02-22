@@ -1,13 +1,17 @@
 using EventCallbacks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class IslandController : Singleton<IslandController>
 {
     Dictionary<Building, GameObject> buildingGameObjectMap;
+    Dictionary<int, GameObject> roofGameObjectMap;
 
     Island island;
     public Island Island { get => island; private set => island = value; }
+
+    public GameObject RoofPrefab;
 
     public int Width;
     public int Height;
@@ -15,6 +19,7 @@ public class IslandController : Singleton<IslandController>
     void Start()
     {
         buildingGameObjectMap = new Dictionary<Building, GameObject>();
+        roofGameObjectMap = new Dictionary<int, GameObject>();
 
         Island = new Island(Width, Height);
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
@@ -32,6 +37,8 @@ public class IslandController : Singleton<IslandController>
         Building b = buildingEvent.building;
         buildingGameObjectMap.Remove(b, out GameObject building_go);
         Destroy(building_go);
+
+        UpdateRoof(buildingEvent.building.X);
     }
 
     void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
@@ -39,6 +46,27 @@ public class IslandController : Singleton<IslandController>
         GameObject building_go = UpdateBuildingGameObject(buildingEvent);
 
         buildingGameObjectMap.Add(buildingEvent.building, building_go);
+
+        UpdateRoof(buildingEvent.building.X);
+    }
+
+    void UpdateRoof(int x)
+    {
+        Tile t = island.GetHighestFreeTileAt(x);
+
+        roofGameObjectMap.TryGetValue(x, out GameObject roofGO);
+
+        // Destroy the roof if there's no buildings
+        if (t.Y == 0)
+        {
+            roofGameObjectMap[x] = null;
+            Destroy(roofGO);
+        }
+
+        roofGO = roofGO != null ? roofGO : Instantiate(RoofPrefab, transform);
+        roofGO.transform.position = new Vector3(t.X, t.Y);
+
+        roofGameObjectMap[x] = roofGO;
     }
 
     GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)
