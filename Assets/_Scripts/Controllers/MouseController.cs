@@ -1,4 +1,4 @@
-using System.Linq;
+using EventCallbacks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,15 +9,36 @@ public class MouseController : Singleton<MouseController>
     Vector3 lastFramePosition;
     Vector3 currFramePosition;
 
-    bool buildOrDestroy;
-
-    GameObject selectedBuilding;
+    GameObject buildingPreview;
     BuildingBase buildingBase;
 
-    // Start is called before the first frame update
+    GameState state;
+
     void Start()
     {
         islandController = IslandController.Instance;
+
+        GameStateChangedEvent.RegisterListener(OnGameStateChanged);
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent gameStateEvent)
+    {
+        state = gameStateEvent.State;
+        buildingBase = GameManager.Instance.SelectedBuilding;
+
+        if (state == GameState.Build || state == GameState.Destroy)
+        {
+            CreatePreview();
+        }
+    }
+
+    private void CreatePreview()
+    {
+        Destroy(buildingPreview);
+        buildingPreview = Instantiate(buildingBase.Prefab, transform);
+
+        SpriteRenderer sr = buildingPreview.GetComponent<SpriteRenderer>();
+        sr.color = new Color(1f, 1f, 1f, .5f);
     }
 
     // Update is called once per frame
@@ -35,10 +56,16 @@ public class MouseController : Singleton<MouseController>
 
     void UpdateDraggingPreview()
     {
-        if (selectedBuilding == null) return; // No building currently selected
+        if (!(state == GameState.Build || state == GameState.Destroy))
+        {
+            return;
+        }
+
+        if (buildingPreview == null) return; // No building currently selected
         if (EventSystem.current.IsPointerOverGameObject()) return; // Mouse is over UI element
         if (Input.GetMouseButtonDown(1))
         {
+            GameManager.Instance.UpdateGameState(GameState.Play);
             // Cancel current build
             DestroyPreview();
             return;
@@ -49,23 +76,25 @@ public class MouseController : Singleton<MouseController>
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (buildOrDestroy)
+            if (state == GameState.Build)
                 islandController.Island.TryPlaceBuilding(selectedTile, buildingBase);
-            else
+            if (state == GameState.Destroy)
                 islandController.Island.TryDestroyBuilding(selectedTile);
 
             DestroyPreview();
+
+            GameManager.Instance.UpdateGameState(GameState.Play);
         }
         else
         {
-            selectedBuilding.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
+            buildingPreview.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
         }
     }
 
     void DestroyPreview()
     {
-        Destroy(selectedBuilding);
-        selectedBuilding = null;
+        Destroy(buildingPreview);
+        buildingPreview = null;
     }
 
     void UpdateCameraMovement()
@@ -78,24 +107,5 @@ public class MouseController : Singleton<MouseController>
 
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
-    }
-
-    public void SetMode_Build(BuildingBase buildingBase)
-    {
-        this.buildingBase = buildingBase;
-        buildOrDestroy = true;
-        Destroy(selectedBuilding);
-        selectedBuilding = Instantiate(buildingBase.Prefab);
-        SpriteRenderer sr = selectedBuilding.GetComponent<SpriteRenderer>();
-        sr.color = Color.gray;
-    }
-
-    public void SetMode_Destroy()
-    {
-        buildOrDestroy = false;
-        Destroy(selectedBuilding);
-        selectedBuilding = Instantiate(DataSystem.Instance.BuildingBases.Single(b => b.name == "Square").Prefab);
-        SpriteRenderer sr = selectedBuilding.GetComponent<SpriteRenderer>();
-        sr.color = Color.red;
     }
 }

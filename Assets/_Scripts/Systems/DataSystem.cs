@@ -16,4 +16,9 @@ public class DataSystem : Singleton<DataSystem>
     {
         BuildingBases = Resources.LoadAll<BuildingBase>("BuildingBases").ToList();
     }
+
+    public BuildingBase GetBuildingBase(string name)
+    {
+        return BuildingBases.Single(b => b.name == name);
+    }
 }
