@@ -12,9 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
   m_Name: House
   m_EditorClassIdentifier: 
-  Cost: 50
-<<<<<<< Updated upstream
-  Prefab: {fileID: 2318292383146586920, guid: c6fd2430f938b3747befb7d6a8a50193, type: 3}
-=======
+  Cost: 1
   Prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
->>>>>>> Stashed changes
