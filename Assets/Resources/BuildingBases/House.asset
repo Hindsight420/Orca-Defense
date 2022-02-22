@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   Cost: 50
+<<<<<<< Updated upstream
   Prefab: {fileID: 2318292383146586920, guid: c6fd2430f938b3747befb7d6a8a50193, type: 3}
+=======
+  Prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
+>>>>>>> Stashed changes
