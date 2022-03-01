@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
-  m_Name: House
+  m_Name: Wood-WoodStorage
   m_EditorClassIdentifier: 
-  Cost: 1
-  Prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
+  Cost: 0
+  Prefab: {fileID: 916274151117480475, guid: 7f660c8296292c94aaeab8b005082dec, type: 3}
