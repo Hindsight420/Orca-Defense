@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Wood-Fishing Hut
   m_EditorClassIdentifier: 
   Cost: 1
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 916274151117480475, guid: 5c66247407b427d48bf935e29c399390, type: 3}
