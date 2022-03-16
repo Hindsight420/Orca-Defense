@@ -1,8 +1,5 @@
 using EventCallbacks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -59,6 +56,11 @@ public class GameManager : Singleton<GameManager>
     {
         //throw new NotImplementedException();
     }
+}
+
+public class GameStateChangedEvent : Event<GameStateChangedEvent>
+{
+    public GameState State;
 }
 
 public enum GameState

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class DataSystem : Singleton<DataSystem>
 {
@@ -14,7 +13,7 @@ public class DataSystem : Singleton<DataSystem>
 
     private void AssembleData()
     {
-        BuildingBases = Resources.LoadAll<BuildingBase>("BuildingBases").ToList();
+        BuildingBases = UnityEngine.Resources.LoadAll<BuildingBase>("BuildingBases").ToList();
     }
 
     public BuildingBase GetBuildingBase(string name)

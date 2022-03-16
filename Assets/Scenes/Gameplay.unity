@@ -459,7 +459,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 638502854}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BuildMenuController, Scripts
         m_MethodName: OnDestroyButtonClicked
         m_Mode: 1
@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 638502848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c21f399abd034fe4ca77b21d0b14fc39, type: 3}
+  m_Script: {fileID: 11500000, guid: 1257d3c9c0a08fe48a436447d64aa441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 4053961311485038181, guid: f611f55bf7a35a24a9178bf14d03e961, type: 3}
@@ -1090,7 +1090,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 664784004}
-  - component: {fileID: 664784005}
   m_Layer: 0
   m_Name: UIController
   m_TagString: Untagged
@@ -1113,18 +1112,6 @@ Transform:
   m_Father: {fileID: 1033292879}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &664784005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664784003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7842ad34ed307414b86b748cbd507275, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &793902677
 GameObject:
   m_ObjectHideFlags: 0

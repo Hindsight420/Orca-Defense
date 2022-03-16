@@ -37,11 +37,6 @@ namespace EventCallbacks
         public int VerbosityLevel;
     }
 
-    public class GameStateChangedEvent : Event<GameStateChangedEvent>
-    {
-        public GameState State;
-    }
-
     public class BuildingEventBase<T> : Event<T> where T : Event<T>
     {
         public Building building;
