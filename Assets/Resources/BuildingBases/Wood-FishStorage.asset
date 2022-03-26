@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
   m_Name: Wood-FishStorage
   m_EditorClassIdentifier: 
-  Cost: 0
+  Cost:
+  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
+    amount: 20
   Prefab: {fileID: 916274151117480475, guid: c2f3488b5e4834e44adc87244c52498a, type: 3}

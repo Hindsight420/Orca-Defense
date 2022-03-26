@@ -1,10 +1,19 @@
 using NUnit.Framework;
-using System;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+[TestFixture]
 public class ResourceTests
 {
+    [SerializeField] private ResourceType resourceType;
+
+    [OneTimeSetUp]
+    public void SetUpResourceTests()
+    {
+        resourceType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
+        resourceType.name = "Wood";
+    }
+
     [Test]
     [TestCase(0)]
     [TestCase(13)]
@@ -18,10 +27,10 @@ public class ResourceTests
             amount = 0;
         }
 
-        Resource wood1 = new(ResourceType.Wood, originalAmount);
-        Assert.AreEqual(amount, wood1.Amount);
+        ResourceValue r = new(resourceType, originalAmount);
+        Assert.AreEqual(amount, r.Amount);
 
-        int i = wood1;
+        int i = r;
         Assert.AreEqual(amount, i);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Island
 {
-    Dictionary<int, int> positionHeights;
+    public Dictionary<int, int> positionHeights;
 
     int width;
     int height;
@@ -13,7 +13,7 @@ public class Island
     public int Width { get => width; private set => width = value; }
     public int Height { get => height; private set => height = value; }
 
-    readonly Tile[,] Tiles;
+    public readonly Tile[,] Tiles;
     public List<Building> buildings;
     public Action<Building> cbOnBuildingCreated;
 
@@ -53,25 +53,11 @@ public class Island
         }
     }
 
-    public Tile GetHighestFreeTileAt(Vector3 coords)
-    {
-        int x = Mathf.RoundToInt(coords.x);
-        return GetHighestFreeTileAt(x);
-    }
-
-    public Tile GetHighestFreeTileAt(int x)
-    {
-        if (!positionHeights.ContainsKey(x)) return null;
-        int y = positionHeights[x];
-        return Tiles[x, y];
-    }
-
-    public void TryPlaceBuilding(Tile tile, BuildingBase buildingBase)
+    public void Build(Tile tile, BuildingBase buildingBase)
     {
         int x = tile.X;
         int y = tile.Y;
 
-        if (ValidateBuildingPlacement(tile, buildingBase) == false) return;
         positionHeights[x] = y + 1;
         tile.Building = new Building(x, y, buildingBase);
 
@@ -86,53 +72,22 @@ public class Island
         }
     }
 
-    bool ValidateBuildingPlacement(Tile tile, BuildingBase buildingBase)
+    public Tile GetHighestFreeTileAt(Vector3 coords)
     {
-
-        // Check if tile is occupied
-        if (tile.CanBuild(out string debugMessage) == false)
-        {
-            Debug.Log(debugMessage);
-            return false;
-        }
-
-        // Check if there's enough resources
-        if (ResourceController.Instance.DoIHaveEnough(buildingBase.Cost) == false)
-        {
-            Debug.Log($"Can't place {buildingBase.name} at {tile.X},{tile.Y} because you don't have enough crypto");
-            return false;
-        }
-
-        return true;
+        int x = Mathf.RoundToInt(coords.x);
+        return GetHighestFreeTileAt(x);
     }
 
-    public void TryDestroyBuilding(Tile tile)
+    public Tile GetHighestFreeTileAt(int x)
     {
-        // Check whether there's a building in the tile
-        if (!tile.IsOccupied)
-        {
-            Debug.Log($"Can't remove building at {tile.X},{tile.Y} because the tile is not occupied");
-            return;
-        }
-
-        // Check whether there's a building on top
-        Tile tileAbove = Tiles[tile.X, tile.Y + 1];
-        if (tileAbove.IsOccupied)
-        {
-            Debug.Log($"Can't remove {tile.Building} at {tile.X},{tile.Y} because the tile above is occupied");
-            return;
-        }
-
-        tileAbove.IsSupported = false;
-        positionHeights[tile.X] = tile.Y + 1;
-
-        tile.Building.Remove();
-        tile.Building = null;
+        if (!positionHeights.ContainsKey(x)) return null;
+        int y = positionHeights[x];
+        return Tiles[x, y];
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
-        Building b = buildingEvent.building;
+        Building b = buildingEvent.Building;
         buildings.Remove(b);
         positionHeights[b.X]--;
     }

@@ -27,6 +27,6 @@ public class Building
 
     public override string ToString()
     {
-        return buildingBase.name;
+        return $"Building ({buildingBase.name}: {x}, {y})";
     }
 }

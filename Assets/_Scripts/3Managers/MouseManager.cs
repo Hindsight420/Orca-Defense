@@ -1,10 +1,9 @@
-using EventCallbacks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseController : Singleton<MouseController>
+public class MouseManager : Singleton<MouseManager>
 {
-    IslandController islandController;
+    IslandManager islandManager;
 
     Vector3 lastFramePosition;
     Vector3 currFramePosition;
@@ -16,7 +15,7 @@ public class MouseController : Singleton<MouseController>
 
     void Start()
     {
-        islandController = IslandController.Instance;
+        islandManager = IslandManager.Instance;
 
         GameStateChangedEvent.RegisterListener(OnGameStateChanged);
     }
@@ -71,15 +70,15 @@ public class MouseController : Singleton<MouseController>
             return;
         };
 
-        Tile selectedTile = islandController.Island.GetTileAtCoords(currFramePosition);
+        Tile selectedTile = islandManager.Island.GetTileAtCoords(currFramePosition);
         if (selectedTile == null) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             if (state == GameState.Build)
-                islandController.Island.TryPlaceBuilding(selectedTile, buildingBase);
+                islandManager.TryPlaceBuilding(selectedTile, buildingBase);
             if (state == GameState.Destroy)
-                islandController.Island.TryDestroyBuilding(selectedTile);
+                islandManager.TryDestroyBuilding(selectedTile);
 
             DestroyPreview();
 

@@ -37,13 +37,24 @@ namespace EventCallbacks
         public int VerbosityLevel;
     }
 
+    public class ResourceValueChangedEvent : Event<ResourceValueChangedEvent>
+    {
+        public ResourceValue ResourceValue;
+
+        public void FireEvent(ResourceValue resourceValue)
+        {
+            ResourceValue = resourceValue;
+            FireEvent();
+        }
+    }
+
     public class BuildingEventBase<T> : Event<T> where T : Event<T>
     {
-        public Building building;
+        public Building Building;
 
         public void FireEvent(Building building)
         {
-            this.building = building;
+            Building = building;
             FireEvent();
         }
     }

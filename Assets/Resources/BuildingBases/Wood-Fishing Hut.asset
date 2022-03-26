@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
   m_Name: Wood-Fishing Hut
   m_EditorClassIdentifier: 
-  Cost: 1
+  Cost:
+  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
+    amount: 10
   Prefab: {fileID: 916274151117480475, guid: 5c66247407b427d48bf935e29c399390, type: 3}
