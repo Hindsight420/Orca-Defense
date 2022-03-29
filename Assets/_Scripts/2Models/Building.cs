@@ -2,20 +2,20 @@ using EventCallbacks;
 
 public class Building
 {
+    BuildingType buildingType;
     int x;
     int y;
-    BuildingBase buildingBase;
 
+    public BuildingType BuildingType { get => buildingType; private set => buildingType = value; }
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
-    public BuildingBase BuildingBase { get => buildingBase; private set => buildingBase = value; }
 
 
-    public Building(int x, int y, BuildingBase buildingBase)
+    public Building(int x, int y, BuildingType buildingType)
     {
         X = x;
         Y = y;
-        BuildingBase = buildingBase;
+        BuildingType = buildingType;
 
         new BuildingCreatedEvent().FireEvent(this);
     }
@@ -27,6 +27,6 @@ public class Building
 
     public override string ToString()
     {
-        return $"Building ({buildingBase.name}: {x}, {y})";
+        return $"Building ({buildingType}: {x}, {y})";
     }
 }

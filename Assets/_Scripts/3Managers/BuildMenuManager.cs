@@ -9,16 +9,16 @@ public class BuildMenuManager : MonoBehaviour
         View.InitializeButtons(OnBuildingButtonClicked);
     }
 
-    public void OnBuildingButtonClicked(BuildingBase buildingBase)
+    public void OnBuildingButtonClicked(BuildingType buildingType)
     {
-        GameManager.Instance.SelectedBuilding = buildingBase;
+        GameManager.Instance.SelectedBuilding = buildingType;
         GameManager.Instance.UpdateGameState(GameState.Build);
     }
 
     public void OnDestroyButtonClicked()
     {
         // TODO: Clean up this string reference
-        GameManager.Instance.SelectedBuilding = DataSystem.Instance.GetBuildingBase("Destroy");
+        GameManager.Instance.SelectedBuilding = DataSystem.Instance.GetBuildingType("Destroy");
         GameManager.Instance.UpdateGameState(GameState.Destroy);
     }
 }

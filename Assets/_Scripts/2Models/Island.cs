@@ -14,15 +14,12 @@ public class Island
     public int Height { get => height; private set => height = value; }
 
     public readonly Tile[,] Tiles;
-    public List<Building> buildings;
-    public Action<Building> cbOnBuildingCreated;
 
     public Island(int width, int height)
     {
         Width = width;
         Height = height;
         positionHeights = new Dictionary<int, int>();
-        buildings = new List<Building>();
 
         Tiles = new Tile[width, height];
         for (int x = 0; x < width; x++)
@@ -53,13 +50,13 @@ public class Island
         }
     }
 
-    public void Build(Tile tile, BuildingBase buildingBase)
+    public void Build(Tile tile, BuildingType buildingType)
     {
         int x = tile.X;
         int y = tile.Y;
 
         positionHeights[x] = y + 1;
-        tile.Building = new Building(x, y, buildingBase);
+        tile.Building = new Building(x, y, buildingType);
 
         try
         {
@@ -68,7 +65,7 @@ public class Island
         catch (IndexOutOfRangeException)
         {
             positionHeights.Remove(x);
-            Debug.Log($"There is no tile above {x}, {y} to support");
+            Debug.Log($"There is no tile above {tile} to support");
         }
     }
 
@@ -88,7 +85,6 @@ public class Island
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
-        buildings.Remove(b);
         positionHeights[b.X]--;
     }
 }

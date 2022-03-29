@@ -8,20 +8,20 @@ public class BuildMenuView : MonoBehaviour
 {
     [SerializeField] GameObject buttonPrefab;
 
-    public void InitializeButtons(Action<BuildingBase> onButtonClicked)
+    public void InitializeButtons(Action<BuildingType> onButtonClicked)
     {
-        foreach (BuildingBase buildingBase in DataSystem.Instance.BuildingBases)
+        foreach (BuildingType buildingType in DataSystem.Instance.BuildingTypes)
         {
-            if (buildingBase.name == "Destroy") continue;
-            InitializeButton(buildingBase, () => onButtonClicked(buildingBase));
+            if (buildingType.name == "Destroy") continue;
+            InitializeButton(buildingType, () => onButtonClicked(buildingType));
         }
     }
 
-    void InitializeButton(BuildingBase buildingBase, UnityAction callback)
+    void InitializeButton(BuildingType buildingType, UnityAction callback)
     {
         GameObject buttonGO = Instantiate(buttonPrefab, transform);
-        buttonGO.name = $"Button - {buildingBase.name}";
+        buttonGO.name = $"Button - {buildingType}";
         buttonGO.GetComponent<Button>().onClick.AddListener(callback);
-        buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = buildingBase.name;
+        buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = buildingType.name;
     }
 }

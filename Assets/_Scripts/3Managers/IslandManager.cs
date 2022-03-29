@@ -16,12 +16,6 @@ public class IslandManager : Singleton<IslandManager>
 
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
         BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
-
-        // Instantiate any buildings that already exist (from loading an existing save)
-        foreach (Building building in Island.buildings)
-        {
-            new BuildingCreatedEvent().FireEvent(building);
-        }
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
@@ -34,26 +28,26 @@ public class IslandManager : Singleton<IslandManager>
         view.OnBuildingCreated(buildingEvent);
     }
 
-    public void TryPlaceBuilding(Tile tile, BuildingBase buildingBase)
+    public void TryPlaceBuilding(Tile tile, BuildingType buildingType)
     {
-        if (ResourceManager.Instance.CheckResourcesAvailability(buildingBase.Cost) == false)
+        if (ResourceManager.Instance.CheckResourcesAvailability(buildingType.Cost) == false)
         {
-            Debug.Log($"Can't place {buildingBase.name} at {tile.X},{tile.Y} because you don't have enough crypto");
+            Debug.Log($"Can't place {buildingType} in {tile} because you don't have enough resources");
             return;
         }
 
-        if (tile.CanBuild(out string debugMessage) == false)
+        if (tile.CanBuild() == false)
         {
-            Debug.Log(debugMessage);
+            Debug.Log($"Can't place {buildingType} in {tile} because it's not available for building");
             return;
         }
 
-        PlaceBuilding(tile, buildingBase);
+        PlaceBuilding(tile, buildingType);
     }
 
-    void PlaceBuilding(Tile tile, BuildingBase buildingBase)
+    void PlaceBuilding(Tile tile, BuildingType BuildingType)
     {
-        Island.Build(tile, buildingBase);
+        Island.Build(tile, BuildingType);
     }
 
     public void TryDestroyBuilding(Tile tile)
@@ -61,7 +55,7 @@ public class IslandManager : Singleton<IslandManager>
         // Check whether there's a building in the tile
         if (!tile.IsOccupied)
         {
-            Debug.Log($"Can't remove building at {tile.X},{tile.Y} because the tile is not occupied");
+            Debug.Log($"There's no building in {tile} to destroy");
             return;
         }
 
@@ -69,7 +63,7 @@ public class IslandManager : Singleton<IslandManager>
         Tile tileAbove = Island.Tiles[tile.X, tile.Y + 1];
         if (tileAbove.IsOccupied)
         {
-            Debug.Log($"Can't remove {tile.Building} at {tile.X},{tile.Y} because the tile above is occupied");
+            Debug.Log($"Can't remove {tile.Building} at {tile} because the tile above is occupied");
             return;
         }
 

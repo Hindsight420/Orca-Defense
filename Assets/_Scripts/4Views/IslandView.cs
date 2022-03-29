@@ -56,9 +56,9 @@ public class IslandView : MonoBehaviour
     GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)
     {
         Building building = buildingEvent.Building;
-        GameObject building_go = Instantiate(building.BuildingBase.Prefab);
+        GameObject building_go = Instantiate(building.BuildingType.Prefab);
 
-        building_go.name = $"{building.BuildingBase.name}_{building.X}_{building.Y}";
+        building_go.name = $"{building.BuildingType.name}_{building.X}_{building.Y}";
         building_go.transform.position = new Vector3(building.X, building.Y, 0);
         building_go.transform.SetParent(transform);
 

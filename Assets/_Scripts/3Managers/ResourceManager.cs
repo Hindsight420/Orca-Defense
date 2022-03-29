@@ -65,12 +65,12 @@ public class ResourceManager : Singleton<ResourceManager>
 
     void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
-        ExpendResources(buildingEvent.Building.BuildingBase.Cost);
+        ExpendResources(buildingEvent.Building.BuildingType.Cost);
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
-        AddResources(buildingEvent.Building.BuildingBase.Cost);
+        AddResources(buildingEvent.Building.BuildingType.Cost);
     }
 
     public bool CheckResourcesAvailability(List<ResourceValue> resourceValues)

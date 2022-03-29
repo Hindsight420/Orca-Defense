@@ -9,7 +9,7 @@ public class MouseManager : Singleton<MouseManager>
     Vector3 currFramePosition;
 
     GameObject buildingPreview;
-    BuildingBase buildingBase;
+    BuildingType buildingType;
 
     GameState state;
 
@@ -23,7 +23,7 @@ public class MouseManager : Singleton<MouseManager>
     private void OnGameStateChanged(GameStateChangedEvent gameStateEvent)
     {
         state = gameStateEvent.State;
-        buildingBase = GameManager.Instance.SelectedBuilding;
+        buildingType = GameManager.Instance.SelectedBuilding;
 
         if (state == GameState.Build || state == GameState.Destroy)
         {
@@ -34,7 +34,7 @@ public class MouseManager : Singleton<MouseManager>
     private void CreatePreview()
     {
         Destroy(buildingPreview);
-        buildingPreview = Instantiate(buildingBase.Prefab, transform);
+        buildingPreview = Instantiate(buildingType.Prefab, transform);
 
         SpriteRenderer sr = buildingPreview.GetComponent<SpriteRenderer>();
         sr.color = new Color(1f, 1f, 1f, .5f);
@@ -76,7 +76,7 @@ public class MouseManager : Singleton<MouseManager>
         if (Input.GetMouseButtonDown(0))
         {
             if (state == GameState.Build)
-                islandManager.TryPlaceBuilding(selectedTile, buildingBase);
+                islandManager.TryPlaceBuilding(selectedTile, buildingType);
             if (state == GameState.Destroy)
                 islandManager.TryDestroyBuilding(selectedTile);
 

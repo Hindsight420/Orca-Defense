@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45ead0015feae3c43bec1a7ee2b71724, type: 3}
-  m_Name: Square
+  m_Script: {fileID: 0}
+  m_Name: Destroy
   m_EditorClassIdentifier: 
-  Cost: []
-  Prefab: {fileID: 916274151117480475, guid: b0bffa5a7163b5d47a9a5dd8415059ad, type: 3}

@@ -3,7 +3,7 @@ using System.Linq;
 
 public class DataSystem : Singleton<DataSystem>
 {
-    public List<BuildingBase> BuildingBases { get; private set; }
+    public List<BuildingType> BuildingTypes { get; private set; }
     public List<ResourceType> ResourceTypes { get; private set; }
 
     protected override void Awake()
@@ -14,13 +14,13 @@ public class DataSystem : Singleton<DataSystem>
 
     private void AssembleData()
     {
-        BuildingBases = UnityEngine.Resources.LoadAll<BuildingBase>("BuildingBases").ToList();
+        BuildingTypes = UnityEngine.Resources.LoadAll<BuildingType>("BuildingTypes").ToList();
         ResourceTypes = UnityEngine.Resources.LoadAll<ResourceType>("ResourceTypes").ToList();
     }
 
-    public BuildingBase GetBuildingBase(string name)
+    public BuildingType GetBuildingType(string name)
     {
-        return BuildingBases.Single(b => b.name == name);
+        return BuildingTypes.Single(b => b.name == name);
     }
 
     public ResourceType GetResourceType(string name)

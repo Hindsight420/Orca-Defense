@@ -5,7 +5,7 @@ public class GameManager : Singleton<GameManager>
 {
     public GameState State;
 
-    public BuildingBase SelectedBuilding;
+    public BuildingType SelectedBuilding;
 
     void Start()
     {

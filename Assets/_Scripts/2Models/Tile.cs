@@ -31,23 +31,17 @@ public class Tile
         if (y == 0) IsSupported = true;
     }
 
-    public bool CanBuild(out string debugMessage)
+    public bool CanBuild()
     {
-        bool canBuild = true;
-        string message = $"Tile_{X}_{Y} is ";
         if (IsOccupied)
-        {
-            canBuild = false;
-            message += $"occupied";
-        }
-
+            return false;
         if (!IsSupported)
-        {
-            canBuild = false;
-            message += $"not supported";
-        }
+            return false;
+        return true;
+    }
 
-        debugMessage = canBuild ? "" : message;
-        return canBuild;
+    public override string ToString()
+    {
+        return $"Tile: {X}, {Y}";
     }
 }

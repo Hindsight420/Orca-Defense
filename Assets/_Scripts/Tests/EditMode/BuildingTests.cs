@@ -6,27 +6,27 @@ using UnityEngine;
 public class BuildingTests
 {
     // TODO: initialize this variable
-    [SerializeField]private BuildingBase buildingBase;
+    [SerializeField]private BuildingType buildingType;
 
     [OneTimeSetUp]
     public void SetUpBuildingTests()
     {
-        buildingBase = (BuildingBase)ScriptableObject.CreateInstance(nameof(BuildingBase));
-        buildingBase.name = "TestBuilding";
+        buildingType = (BuildingType)ScriptableObject.CreateInstance(nameof(BuildingType));
+        buildingType.name = "TestBuilding";
 
-        buildingBase.Cost = new List<ResourceValue>();
+        buildingType.Cost = new List<ResourceValue>();
         ResourceType resourceType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
         resourceType.name = "Wood";
-        buildingBase.Cost.Add(new ResourceValue(resourceType, 50));
+        buildingType.Cost.Add(new ResourceValue(resourceType, 50));
     }
 
     [Test]
     [TestCase(4, 7)]
     public void TestBuildingConstructor(int x, int y)
     {
-        Building building = new(x, y, buildingBase);
+        Building building = new(x, y, buildingType);
 
-        Assert.AreEqual(building.BuildingBase, buildingBase);
+        Assert.AreEqual(building.BuildingType, buildingType);
         Assert.AreEqual(building.X, x);
         Assert.AreEqual(building.Y, y);
     }
@@ -34,7 +34,7 @@ public class BuildingTests
     [Test]
     public void TestBuildingDestructor()
     {
-        Building building = new(4, 7, buildingBase);
+        Building building = new(4, 7, buildingType);
         bool eventTriggered = false;
         BuildingRemovedEvent.RegisterListener((BuildingRemovedEvent) => eventTriggered = true);
         building.Remove();
