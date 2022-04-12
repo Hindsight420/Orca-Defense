@@ -9,6 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: e2ba1e0692cd676478eac1975703b33d, type: 3}
   m_Name: Destroy
   m_EditorClassIdentifier: 
+  Prefab: {fileID: 1897880056861038059, guid: a6162b27c59399744809e74edb1f3210, type: 3}
+  Cost: []
+  hasRoof: 0
