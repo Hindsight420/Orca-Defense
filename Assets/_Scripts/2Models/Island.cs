@@ -1,6 +1,8 @@
 using EventCallbacks;
+using OrcaDefense.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Island
@@ -35,7 +37,7 @@ public class Island
         BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
     }
 
-    public Tile GetTileAtCoords(Vector3 coords)
+    public Tile GetTileAtCoords(Vector2 coords)
     {
         int x = Mathf.RoundToInt(coords.x);
         int y = Mathf.RoundToInt(coords.y);
@@ -48,6 +50,11 @@ public class Island
             // Debug.Log($"There's no tile here {coords}");
             return null;
         }
+    }
+
+    public Tile GetTileAt(int x, int y)
+    {
+        return GetTileAtCoords(new Vector2(x, y));
     }
 
     public void Build(Tile tile, BuildingType buildingType)
@@ -80,6 +87,32 @@ public class Island
         if (!positionHeights.ContainsKey(x)) return null;
         int y = positionHeights[x];
         return Tiles[x, y];
+    }
+
+    public Tile[] GetAdjacentTiles(int x, int y)
+    {
+        var nullsIncluded = new Tile[] { Right(x, y), Left(x, y), Up(x, y), Down(x, y)};
+
+        return nullsIncluded.Where(t => t != null).ToArray();
+    }
+
+    public Tile Right(int x, int y)
+    {
+        return x > 0 ? Tiles[x - 1, y] : null;
+    }
+
+    public Tile Left(int x, int y)
+    {
+        return x < width ? Tiles[x + 1, y] : null;
+    }
+
+    public Tile Up(int x, int y)
+    {
+        return y < height ? Tiles[x, y + 1] : null;
+    }
+    public Tile Down(int x, int y)
+    {
+        return y > 0 ? Tiles[x, y - 1] : null;
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)

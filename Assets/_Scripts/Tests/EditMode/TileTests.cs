@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using OrcaDefense.Models;
 
 public class TileTests
 {

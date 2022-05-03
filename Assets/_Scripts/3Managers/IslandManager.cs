@@ -1,4 +1,7 @@
 using EventCallbacks;
+using OrcaDefense.Models;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class IslandManager : Singleton<IslandManager>
@@ -42,11 +45,25 @@ public class IslandManager : Singleton<IslandManager>
             return;
         }
 
+        var surrounding = Island.GetAdjacentTiles(tile.X, tile.Y).Select(x => x.Validator);
+        var buildingErrors = new List<string>();
+        foreach (IBuildingValidator b in surrounding)
+        {
+            var errors = b.ValidateAdjacency(buildingType.BuildingEnum);
+            if(errors != null)
+            {
+                buildingErrors.AddRange(errors);
+            }
+        }
+
+        buildingErrors.ForEach(x => Debug.Log(x));
+
         PlaceBuilding(tile, buildingType);
     }
 
     void PlaceBuilding(Tile tile, BuildingType BuildingType)
     {
+        tile.Validator = BuildingType.BuildingValidator;
         Island.Build(tile, BuildingType);
     }
 
