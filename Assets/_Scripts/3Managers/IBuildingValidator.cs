@@ -1,7 +1,4 @@
-﻿using OrcaDefense.Models;
-using System;
-
-public interface IBuildingValidator
+﻿public interface IBuildingValidator
 {
 	//Does this building care if we build it next to it's neighbours?
 	string[] ValidateAdjacencies(Island map, int x, int y);

@@ -49,6 +49,11 @@ namespace OrcaDefense.Models
         {
             return $"Tile: {X}, {Y}";
         }
-    }
 
+        public override bool Equals(object obj)
+        {
+            Tile t = obj as Tile;
+            return t.X == X && t.Y == Y;
+        }
+    }
 }
