@@ -52,18 +52,21 @@ namespace OrcaDefense.Models
 
         public override bool Equals(object other)
         {
+            if (other is null) return false;
             Tile t = other as Tile;
             return X == t.X && Y == t.Y;
         }
 
         public static bool operator ==(Tile t1, Tile t2)
         {
-            return t1.X == t2.X && t1.Y == t2.Y;
+            if (t1 is null) return t2 is null;
+            return t1.Equals(t2);
         }
 
         public static bool operator !=(Tile t1, Tile t2)
         {
-            return !(t1.X == t2.X && t1.Y == t2.Y);
+            if (t1 is null) return t2 is null;
+            return !t1.Equals(t2);
         }
     }
 }
