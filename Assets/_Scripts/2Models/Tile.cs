@@ -50,10 +50,14 @@ namespace OrcaDefense.Models
             return $"Tile: {X}, {Y}";
         }
 
-        public override bool Equals(object obj)
+        public static bool operator ==(Tile t1, Tile t2)
         {
-            Tile t = obj as Tile;
-            return t.X == X && t.Y == Y;
+            return t1.X == t2.X && t1.Y == t2.Y;
+        }
+
+        public static bool operator !=(Tile t1, Tile t2)
+        {
+            return !(t1.X == t2.X && t1.Y == t2.Y);
         }
     }
 }
