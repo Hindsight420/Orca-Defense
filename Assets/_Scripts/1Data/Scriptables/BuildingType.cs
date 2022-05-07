@@ -1,3 +1,4 @@
+using OrcaDefense.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class BuildingType : ScriptableObject
 {
     public BuildingType()
     {
-        BuildingValidator = GetValidatorByBuildingType(BuildingEnum);
+        BuildingValidator = GetValidatorByBuildingType(BuildingEnum, null);
     }
 
     public BuildingType Construct()
@@ -32,12 +33,12 @@ public class BuildingType : ScriptableObject
         return $"Building Type: {name}";
     }
 
-    private IBuildingValidator GetValidatorByBuildingType(BuildingTypeEnum type)
+    private IBuildingValidator GetValidatorByBuildingType(BuildingTypeEnum type, Tile t)
     {
         return type switch
         {
-            BuildingTypeEnum.FishingHut => new FishingHutValidator(),
-            _ => new BaseBuildingValidator(),
+            BuildingTypeEnum.FishingHut => new FishingHutValidator(t),
+            _ => new BaseBuildingValidator(t),
         };
     }
 }

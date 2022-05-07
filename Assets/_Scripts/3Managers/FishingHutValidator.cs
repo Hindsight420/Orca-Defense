@@ -1,18 +1,21 @@
 ﻿using OrcaDefense.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class FishingHutValidator: BaseBuildingValidator, IBuildingValidator
 {
-	public FishingHutValidator()
+	public FishingHutValidator(Tile tile) : base (tile)
 	{
 		
 	}
 
-	public override string[] ValidateAdjacency(BuildingTypeEnum buildingToBuild)
+	public override string[] ValidatePosition(Island map)
 	{
-		return buildingToBuild == BuildingTypeEnum.FishingHut ? 
-			new string[] { "Testing two next to each other" } :
-			null;
+		var errors = new List<string>();
+		errors.AddRange(base.ValidatePosition(map));
+		if(_tile.Y == 0) errors.Add("Fishing huts must be built on the ice!");
+
+		return errors.ToArray();
 	}
 }
