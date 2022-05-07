@@ -1,7 +1,5 @@
 using NUnit.Framework;
 using OrcaDefense.Models;
-using System;
-using System.Linq;
 
 public class IslandTests
 {

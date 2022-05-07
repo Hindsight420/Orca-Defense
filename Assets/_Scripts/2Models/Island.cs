@@ -92,7 +92,6 @@ public class Island
     public Tile[] GetAdjacentTiles(int x, int y)
     {
         var nullsIncluded = new Tile[] { Right(x, y), Left(x, y), Up(x, y), Down(x, y) };
-
         return nullsIncluded.Where(t => t != null).ToArray();
     }
 

@@ -65,8 +65,7 @@ namespace OrcaDefense.Models
 
         public static bool operator !=(Tile t1, Tile t2)
         {
-            if (t1 is null) return t2 is null;
-            return !t1.Equals(t2);
+            return !(t1 == t2);
         }
     }
 }
