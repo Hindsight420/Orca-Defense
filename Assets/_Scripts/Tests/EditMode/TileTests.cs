@@ -34,4 +34,14 @@ public class TileTests
         bool expectedOutcome = !isOccupied && isSupported;
         Assert.AreEqual(tile.CanBuild(), expectedOutcome);
     }
+
+    [Test]
+    public void TestTileComparison()
+    {
+        Tile t1 = new(1, 1);
+        Tile t2 = new(1, 1);
+        Tile t3 = new(1, 2);
+        Assert.IsTrue(t1 == t2);
+        Assert.IsTrue(t1 != t3);
+    }
 }

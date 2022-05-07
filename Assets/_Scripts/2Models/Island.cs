@@ -91,28 +91,27 @@ public class Island
 
     public Tile[] GetAdjacentTiles(int x, int y)
     {
-        var nullsIncluded = new Tile[] { Right(x, y), Left(x, y), Up(x, y), Down(x, y)};
-
+        var nullsIncluded = new Tile[] { Right(x, y), Left(x, y), Up(x, y), Down(x, y) };
         return nullsIncluded.Where(t => t != null).ToArray();
     }
 
     public Tile Right(int x, int y)
     {
-        return x > 0 ? Tiles[x - 1, y] : null;
+        return x < width - 1 ? Tiles[++x, y] : null;
     }
 
     public Tile Left(int x, int y)
     {
-        return x < width ? Tiles[x + 1, y] : null;
+        return x > 0 ? Tiles[--x, y] : null;
     }
 
     public Tile Up(int x, int y)
     {
-        return y < height ? Tiles[x, y + 1] : null;
+        return y < height - 1 ? Tiles[x, ++y] : null;
     }
     public Tile Down(int x, int y)
     {
-        return y > 0 ? Tiles[x, y - 1] : null;
+        return y > 0 ? Tiles[x, --y] : null;
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
