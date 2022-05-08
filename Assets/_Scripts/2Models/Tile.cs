@@ -49,5 +49,10 @@ namespace OrcaDefense.Models
         {
             return !(t1 == t2);
         }
+
+        public override int GetHashCode()
+        {
+            return int.Parse(X.ToString() + Y.ToString());
+        }
     }
 }

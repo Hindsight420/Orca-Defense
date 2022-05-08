@@ -34,23 +34,25 @@ public class IslandManager : Singleton<IslandManager>
     public void TryPlaceBuilding(Tile tile, BuildingType buildingType)
     {
         //TODO: This needs to be moved at a later point.
-        var buildingErrors = tile.Validator.ValidateResources(buildingType);
+        var validator = buildingType.GetBuildingValidator(tile);
+        var buildingErrors = validator.ValidateResources(buildingType);
         if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
         
-        buildingErrors = tile.Validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
+        buildingErrors = validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
         if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
 
-        PlaceBuilding(tile, buildingType);
+        PlaceBuilding(tile, buildingType, validator);
     }
 
-    void PlaceBuilding(Tile tile, BuildingType BuildingType)
+    void PlaceBuilding(Tile tile, BuildingType BuildingType, IBuildingValidator newValidator)
     {
-        tile.Validator = BuildingType.BuildingValidator;
+        tile.Validator = newValidator;
         Island.Build(tile, BuildingType);
     }
 
     public void TryDestroyBuilding(Tile tile)
     {
+        if (tile.Building is null) { Debug.Log("Nothing to destroy"); return; }
         // Check whether there's a building in the tile
         var errors = tile.Validator.ValidateDestroyable(Island);
         if (errors.Any()) { errors.ForEach(x => Debug.Log(x)); return; }

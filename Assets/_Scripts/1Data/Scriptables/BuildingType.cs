@@ -6,27 +6,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Building Type")]
 public class BuildingType : ScriptableObject
 {
-    public BuildingType()
-    {
-        BuildingValidator = GetValidatorByBuildingType(BuildingEnum, null);
-    }
-
-    public BuildingType Construct()
-    {
-        return new BuildingType();
-    }
-
     public GameObject Prefab;
 
     public List<ResourceValue> Cost;
 
     public bool hasRoof;
 
-    private BuildingTypeEnum BuildingTypeEnum;
+    public BuildingTypeEnum BuildingEnum;
 
-    public BuildingTypeEnum BuildingEnum { get => BuildingTypeEnum; }
-
-    public IBuildingValidator BuildingValidator { get; }
+    public IBuildingValidator GetBuildingValidator(Tile t)
+    {
+        return GetValidatorByBuildingType(BuildingEnum, t);
+    }
 
     public override string ToString()
     {
@@ -47,7 +38,6 @@ public class BuildingType : ScriptableObject
 public enum BuildingTypeEnum
 {
     FishingHut,
-    Terrain,
-    CuckShed
+    Default,
 }
 

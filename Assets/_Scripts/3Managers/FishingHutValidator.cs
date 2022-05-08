@@ -14,7 +14,7 @@ public class FishingHutValidator: BaseBuildingValidator, IBuildingValidator
 	{
 		var errors = new List<string>();
 		errors.AddRange(base.ValidatePosition(map));
-		if(_tile.Y == 0) errors.Add("Fishing huts must be built on the ice!");
+		if (_tile.Y != 0) { errors.Add("Fishing huts must be built on the ice!"); }
 
 		return errors.ToArray();
 	}

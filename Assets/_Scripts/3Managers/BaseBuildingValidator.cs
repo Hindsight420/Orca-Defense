@@ -19,13 +19,13 @@ public class BaseBuildingValidator : IBuildingValidator
     //Does this building care if we build it next to it's neighbours?
     public virtual string[] ValidateAdjacencies(Island map)
     {
-        return null;
+        return new string[] { };
     }
 
     //Does this building care if we build X building next to it?
     public virtual string[] ValidateAdjacency(BuildingTypeEnum buildingToBuild)
     {
-        return null;
+        return new string[] { };
     }
 
     //Can the building be placed in this position?
@@ -44,7 +44,7 @@ public class BaseBuildingValidator : IBuildingValidator
     //Can the given building be built on top?
     public virtual string[] ValidateCanBuildOnTop(Island map)
     {
-        return null;
+        return new string[] { };
     }
 
     public virtual List<string> ValidateResources(BuildingType buildingType)
@@ -54,7 +54,7 @@ public class BaseBuildingValidator : IBuildingValidator
             return new List<string>() { $"Can't place {buildingType} in because you don't have enough resources" };
         }
 
-        return null;
+        return new List<string>();
     }
 
     public List<string> ValidateBuildingPosition(Island map, BuildingTypeEnum buildingToBuild)
@@ -73,6 +73,6 @@ public class BaseBuildingValidator : IBuildingValidator
         {
             return new List<string>() { "Cannot destroy this building as there is one above it!" };
         }
-        return null;
+        return new List<string>();
     }
 }
