@@ -17,19 +17,19 @@ public class BaseBuildingValidator : IBuildingValidator
     }
 
     //Does this building care if we build it next to it's neighbours?
-    public virtual string[] ValidateAdjacencies(Island map)
+    public virtual List<string> ValidateAdjacencies(Island map)
     {
-        return new string[] { };
+        return new List<string>();
     }
 
     //Does this building care if we build X building next to it?
-    public virtual string[] ValidateAdjacency(BuildingTypeEnum buildingToBuild)
+    public virtual List<string> ValidateAdjacency(BuildingTypeEnum buildingToBuild)
     {
-        return new string[] { };
+        return new List<string>();
     }
 
     //Can the building be placed in this position?
-    public virtual string[] ValidatePosition(Island map)
+    public virtual List<string> ValidatePosition(Island map)
     {
         //IsOccupied
         var errors = new List<string>();
@@ -38,13 +38,13 @@ public class BaseBuildingValidator : IBuildingValidator
         //IsSupported
         if (_tile.Y != 0 && map.Down(_tile.X, _tile.Y).Building is null) { errors.Add("Tile is not supported!"); }
 
-        return errors.ToArray();
+        return errors;
     }
 
     //Can the given building be built on top?
-    public virtual string[] ValidateCanBuildOnTop(Island map)
+    public virtual List<string> ValidateCanBuildOnTop(Island map)
     {
-        return new string[] { };
+        return new List<string>();
     }
 
     public virtual List<string> ValidateResources(BuildingType buildingType)
