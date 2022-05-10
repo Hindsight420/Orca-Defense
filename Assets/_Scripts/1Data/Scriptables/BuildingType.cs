@@ -1,3 +1,4 @@
+using OrcaDefense.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,39 +6,30 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Building Type")]
 public class BuildingType : ScriptableObject
 {
-    public BuildingType()
-    {
-        BuildingValidator = GetValidatorByBuildingType(BuildingEnum);
-    }
-
-    public BuildingType Construct()
-    {
-        return new BuildingType();
-    }
-
     public GameObject Prefab;
 
     public List<ResourceValue> Cost;
 
     public bool hasRoof;
 
-    private BuildingTypeEnum BuildingTypeEnum;
+    public BuildingTypeEnum BuildingEnum;
 
-    public BuildingTypeEnum BuildingEnum { get => BuildingTypeEnum; }
-
-    public IBuildingValidator BuildingValidator { get; }
+    public IBuildingValidator GetBuildingValidator(Tile t)
+    {
+        return GetValidatorByBuildingType(BuildingEnum, t);
+    }
 
     public override string ToString()
     {
         return $"Building Type: {name}";
     }
 
-    private IBuildingValidator GetValidatorByBuildingType(BuildingTypeEnum type)
+    private IBuildingValidator GetValidatorByBuildingType(BuildingTypeEnum type, Tile t)
     {
         return type switch
         {
-            BuildingTypeEnum.FishingHut => new FishingHutValidator(),
-            _ => new BaseBuildingValidator(),
+            BuildingTypeEnum.FishingHut => new FishingHutValidator(t),
+            _ => new BaseBuildingValidator(t),
         };
     }
 }
@@ -46,7 +38,6 @@ public class BuildingType : ScriptableObject
 public enum BuildingTypeEnum
 {
     FishingHut,
-    Terrain,
-    CuckShed
+    Default,
 }
 

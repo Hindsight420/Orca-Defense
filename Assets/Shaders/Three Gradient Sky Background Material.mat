@@ -43,7 +43,7 @@ Material:
     - _Top_Origin: 0.69
     - _Top_Spread: -0.41
     m_Colors:
-    - _Bottom_Color: {r: 0.013616939, g: 0.16328815, b: 0.3207547, a: 0}
-    - _Middle_Color: {r: 0, g: 0.19529578, b: 0.5754717, a: 0}
-    - _Top_Color: {r: 0, g: 0.22012585, b: 0.6132076, a: 0}
+    - _Bottom_Color: {r: 0.011764706, g: 0.16470589, b: 0.32156864, a: 0}
+    - _Middle_Color: {r: 0, g: 0.19607843, b: 0.5764706, a: 0}
+    - _Top_Color: {r: 0, g: 0.21960784, b: 0.6117647, a: 0}
   m_BuildTextureStacks: []

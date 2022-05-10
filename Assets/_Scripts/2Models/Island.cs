@@ -64,16 +64,6 @@ public class Island
 
         positionHeights[x] = y + 1;
         tile.Building = new Building(x, y, buildingType);
-
-        try
-        {
-            Tiles[x, y + 1].IsSupported = true;
-        }
-        catch (IndexOutOfRangeException)
-        {
-            positionHeights.Remove(x);
-            Debug.Log($"There is no tile above {tile} to support");
-        }
     }
 
     public Tile GetHighestFreeTileAt(Vector3 coords)

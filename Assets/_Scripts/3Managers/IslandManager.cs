@@ -33,66 +33,37 @@ public class IslandManager : Singleton<IslandManager>
 
     public void TryPlaceBuilding(Tile tile, BuildingType buildingType)
     {
-        if (ResourceManager.Instance.CheckResourcesAvailability(buildingType.Cost) == false)
-        {
-            Debug.Log($"Can't place {buildingType} in {tile} because you don't have enough resources");
-            return;
-        }
+        //TODO: This needs to be moved at a later point.
+        var validator = buildingType.GetBuildingValidator(tile);
+        var buildingErrors = validator.ValidateResources(buildingType);
+        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
+        
+        buildingErrors = validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
+        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
 
-        if (tile.CanBuild() == false)
-        {
-            Debug.Log($"Can't place {buildingType} in {tile} because it's not available for building");
-            return;
-        }
-
-        var surrounding = Island.GetAdjacentTiles(tile.X, tile.Y).Select(x => x.Validator);
-        var buildingErrors = new List<string>();
-        foreach (IBuildingValidator b in surrounding)
-        {
-            var errors = b.ValidateAdjacency(buildingType.BuildingEnum);
-            if(errors != null)
-            {
-                buildingErrors.AddRange(errors);
-            }
-        }
-
-        buildingErrors.ForEach(x => Debug.Log(x));
-
-        PlaceBuilding(tile, buildingType);
+        PlaceBuilding(tile, buildingType, validator);
     }
 
-    void PlaceBuilding(Tile tile, BuildingType BuildingType)
+    void PlaceBuilding(Tile tile, BuildingType BuildingType, IBuildingValidator newValidator)
     {
-        tile.Validator = BuildingType.BuildingValidator;
+        tile.Validator = newValidator;
         Island.Build(tile, BuildingType);
     }
 
     public void TryDestroyBuilding(Tile tile)
     {
+        if (tile.Building is null) { Debug.Log("Nothing to destroy"); return; }
         // Check whether there's a building in the tile
-        if (!tile.IsOccupied)
-        {
-            Debug.Log($"There's no building in {tile} to destroy");
-            return;
-        }
+        var errors = tile.Validator.ValidateDestroyable(Island);
+        if (errors.Any()) { errors.ForEach(x => Debug.Log(x)); return; }
 
-        // Check whether there's a building on top
-        Tile tileAbove = Island.Tiles[tile.X, tile.Y + 1];
-        if (tileAbove.IsOccupied)
-        {
-            Debug.Log($"Can't remove {tile.Building} at {tile} because the tile above is occupied");
-            return;
-        }
-
-        DestroyBuilding(tile, tileAbove);
+        DestroyBuilding(tile);
     }
 
-    void DestroyBuilding(Tile tile, Tile tileAbove)
+    void DestroyBuilding(Tile tile)
     {
-        tileAbove.IsSupported = false;
-        Island.positionHeights[tile.X] = tile.Y + 1;
-
         tile.Building.Remove();
         tile.Building = null;
+        tile.Validator = new BaseBuildingValidator(tile);
     }
 }

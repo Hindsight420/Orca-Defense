@@ -2,9 +2,6 @@ namespace OrcaDefense.Models
 {
     public class Tile
     {
-        bool isOccupied;
-        bool isSupported;
-
         Building building;
 
         public readonly int X;
@@ -13,16 +10,12 @@ namespace OrcaDefense.Models
 
         // TODO: clean up this mess
 
-        public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
-        public bool IsSupported { get => isSupported; set => isSupported = value; }
-
         public Building Building
         {
             get => building;
             set
             {
                 building = value;
-                isOccupied = (building != null);
             }
         }
 
@@ -31,18 +24,7 @@ namespace OrcaDefense.Models
             X = x;
             Y = y;
 
-            if (y == 0) IsSupported = true;
-
-            Validator = new BaseBuildingValidator();
-        }
-
-        public bool CanBuild()
-        {
-            if (IsOccupied)
-                return false;
-            if (!IsSupported)
-                return false;
-            return true;
+            Validator = new BaseBuildingValidator(this);
         }
 
         public override string ToString()
@@ -66,6 +48,11 @@ namespace OrcaDefense.Models
         public static bool operator !=(Tile t1, Tile t2)
         {
             return !(t1 == t2);
+        }
+
+        public override int GetHashCode()
+        {
+            return int.Parse(X.ToString() + Y.ToString());
         }
     }
 }

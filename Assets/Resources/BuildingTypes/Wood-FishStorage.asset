@@ -17,3 +17,4 @@ MonoBehaviour:
   - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
     amount: 20
   hasRoof: 0
+  BuildingEnum: 1
