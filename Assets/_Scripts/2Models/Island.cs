@@ -39,8 +39,14 @@ public class Island
 
     public Tile GetTileAtCoords(Vector2 coords)
     {
-        int x = Mathf.RoundToInt(coords.x);
-        int y = Mathf.RoundToInt(coords.y);
+        int x = Mathf.FloorToInt(coords.x);
+        int y = Mathf.FloorToInt(coords.y);
+
+        return GetTileAtCoords(x, y);
+    }
+
+    public Tile GetTileAtCoords(int x, int y)
+    {
         try
         {
             return Tiles[x, y];
@@ -50,11 +56,6 @@ public class Island
             // Debug.Log($"There's no tile here {coords}");
             return null;
         }
-    }
-
-    public Tile GetTileAt(int x, int y)
-    {
-        return GetTileAtCoords(new Vector2(x, y));
     }
 
     public void Build(Tile tile, BuildingType buildingType)
