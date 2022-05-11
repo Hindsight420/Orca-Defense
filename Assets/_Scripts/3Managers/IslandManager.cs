@@ -11,6 +11,7 @@ public class IslandManager : Singleton<IslandManager>
 
     public Island Island;
     [SerializeField] IslandView view;
+    [SerializeField] Logger Logger;
 
     void Start()
     {
@@ -36,10 +37,10 @@ public class IslandManager : Singleton<IslandManager>
         //TODO: This needs to be moved at a later point.
         var validator = buildingType.GetBuildingValidator(tile);
         var buildingErrors = validator.ValidateResources(buildingType);
-        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
+        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Logger.LogMessage(x, Logger.LogType.Error)); return; }
         
         buildingErrors = validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
-        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
+        if (buildingErrors.Any()) { buildingErrors.ForEach(x => Logger.LogMessage(x, Logger.LogType.Error)); return; }
 
         PlaceBuilding(tile, buildingType, validator);
     }
@@ -52,10 +53,10 @@ public class IslandManager : Singleton<IslandManager>
 
     public void TryDestroyBuilding(Tile tile)
     {
-        if (tile.Building is null) { Debug.Log("Nothing to destroy"); return; }
+        if (tile.Building is null) { Logger.LogMessage("Nothing to destroy!", Logger.LogType.Error); return; }
         // Check whether there's a building in the tile
         var errors = tile.Validator.ValidateDestroyable(Island);
-        if (errors.Any()) { errors.ForEach(x => Debug.Log(x)); return; }
+        if (errors.Any()) { errors.ForEach(x => Logger.LogMessage(x, Logger.LogType.Error)); return; }
 
         DestroyBuilding(tile);
     }
