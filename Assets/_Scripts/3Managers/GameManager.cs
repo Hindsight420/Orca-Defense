@@ -1,5 +1,6 @@
 using EventCallbacks;
 using System;
+using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -7,9 +8,10 @@ public class GameManager : Singleton<GameManager>
 
     public BuildingType SelectedBuilding;
 
-    void Start()
+    protected override void Awake()
     {
-        UpdateGameState(GameState.Play);
+        base.Awake();
+        State = GameState.Play;
     }
 
     public void UpdateGameState(GameState state)
@@ -35,6 +37,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         new GameStateChangedEvent() { State = state }.FireEvent();
+        Debug.Log($"Gamestate changed to {state}");
     }
 
     private void HandlePause()
