@@ -14,6 +14,9 @@ public class BuildingType : ScriptableObject
 
     public BuildingTypeEnum BuildingEnum;
 
+    public List<ResourceValue> Income;
+    public int? TicksPerIncome;
+
     public IBuildingValidator GetBuildingValidator(Tile t)
     {
         return GetValidatorByBuildingType(BuildingEnum, t);

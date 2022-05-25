@@ -17,3 +17,8 @@ MonoBehaviour:
   - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
     amount: 15
   hasRoof: 0
+  BuildingEnum: 0
+  Income:
+  - Type: {fileID: 11400000, guid: fc89f182eada9c64ebae07338c6e7396, type: 2}
+    amount: 5
+  TicksPerIncome: 50

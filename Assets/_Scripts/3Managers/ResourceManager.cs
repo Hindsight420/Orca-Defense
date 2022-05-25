@@ -14,6 +14,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
         BuildingRemovedEvent.RegisterListener(OnBuildingRemoved);
+        IncomeEvent.RegisterListener(OnIncome);
     }
 
     void Start()
@@ -71,6 +72,11 @@ public class ResourceManager : Singleton<ResourceManager>
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
         AddResources(buildingEvent.Building.BuildingType.Cost);
+    }
+
+    void OnIncome(IncomeEvent incomeEvent)
+    {
+        incomeEvent.ResourceValues.ForEach(resource => AddResources(resource));
     }
 
     public bool CheckResourcesAvailability(List<ResourceValue> resourceValues)
