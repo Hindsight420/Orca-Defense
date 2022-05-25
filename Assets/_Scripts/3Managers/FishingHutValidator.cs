@@ -10,10 +10,10 @@ public class FishingHutValidator: BaseBuildingValidator, IBuildingValidator
 		
 	}
 
-	public override List<string> ValidatePosition(Island map)
+	public override List<string> ValidateTile(Island map)
 	{
 		var errors = new List<string>();
-		errors.AddRange(base.ValidatePosition(map));
+		errors.AddRange(base.ValidateTile(map));
 		if (_tile.Y != 0) { errors.Add("Fishing huts must be built on the ice!"); }
 
 		return errors;

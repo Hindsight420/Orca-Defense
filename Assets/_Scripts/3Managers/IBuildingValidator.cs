@@ -8,6 +8,6 @@ public interface IBuildingValidator
 
 	List<string> ValidateDestroyable(Island map);
 
-	bool ShouldRenderRoof(Island map);
+	bool ShouldRenderRoof(Island map, Building building);
 
 }

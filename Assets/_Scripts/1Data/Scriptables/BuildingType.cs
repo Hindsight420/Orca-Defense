@@ -7,12 +7,9 @@ using UnityEngine;
 public class BuildingType : ScriptableObject
 {
     public GameObject Prefab;
-
-    public List<ResourceValue> Cost;
-
-    public bool hasRoof;
-
     public BuildingTypeEnum BuildingEnum;
+    public bool HasRoof;
+    public List<ResourceValue> Cost;
 
     public IBuildingValidator GetBuildingValidator(Tile t)
     {

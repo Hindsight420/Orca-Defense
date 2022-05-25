@@ -64,7 +64,9 @@ public class Island
         int y = tile.Y;
 
         positionHeights[x] = y + 1;
-        tile.Building = new Building(x, y, buildingType);
+        Building b = new(buildingType, tile);
+
+        new BuildingCreatedEvent().FireEvent(b);
     }
 
     public Tile GetHighestFreeTileAt(Vector3 coords)
@@ -100,6 +102,7 @@ public class Island
     {
         return y < height - 1 ? Tiles[x, ++y] : null;
     }
+
     public Tile Down(int x, int y)
     {
         return y > 0 ? Tiles[x, --y] : null;

@@ -37,7 +37,7 @@ public class IslandManager : Singleton<IslandManager>
         var validator = buildingType.GetBuildingValidator(tile);
         var buildingErrors = validator.ValidateResources(buildingType);
         if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
-        
+
         buildingErrors = validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
         if (buildingErrors.Any()) { buildingErrors.ForEach(x => Debug.Log(x)); return; }
 
@@ -62,8 +62,10 @@ public class IslandManager : Singleton<IslandManager>
 
     void DestroyBuilding(Tile tile)
     {
-        tile.Building.Remove();
+        Building b = tile.Building;
         tile.Building = null;
         tile.Validator = new BaseBuildingValidator(tile);
+
+        new BuildingRemovedEvent().FireEvent(b);
     }
 }
