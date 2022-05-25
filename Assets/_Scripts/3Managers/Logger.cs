@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Logger : MonoBehaviour
+public class Logger : Singleton<Logger>
 {
     [SerializeField]
     private GameObject LogPrefab;

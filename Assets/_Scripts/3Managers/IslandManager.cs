@@ -11,7 +11,7 @@ public class IslandManager : Singleton<IslandManager>
 
     public Island Island;
     [SerializeField] IslandView view;
-    [SerializeField] Logger Logger;
+    private Logger Logger { get => Logger.Instance; }
 
     void Start()
     {
