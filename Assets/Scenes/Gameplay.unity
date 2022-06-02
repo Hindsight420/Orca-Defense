@@ -447,7 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebebfcd439d2dbe46871f4f0af267eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogPrefab: {fileID: 3381922285400669118, guid: 47c938a2e141b7a4ca70993c631c0fde, type: 3}
+  LogPrefab: {fileID: 0}
 --- !u!1 &234045892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1294,7 @@ MonoBehaviour:
   Width: 15
   Height: 10
   view: {fileID: 158765419}
-  Logger: {fileID: 232236236}
+  Logger: {fileID: 0}
 --- !u!114 &793902681
 MonoBehaviour:
   m_ObjectHideFlags: 0
