@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace EventCallbacks
 {
@@ -35,6 +36,17 @@ namespace EventCallbacks
     public class DebugEvent : Event<DebugEvent>
     {
         public int VerbosityLevel;
+    }
+
+    public class IncomeEvent : Event<IncomeEvent>
+    {
+        public List<ResourceValue> ResourceValues;
+
+        public void FireEvent(List<ResourceValue> resourceValues)
+        {
+            ResourceValues = resourceValues;
+            FireEvent();
+        }
     }
 
     public class ResourceValueChangedEvent : Event<ResourceValueChangedEvent>
