@@ -55,9 +55,9 @@ public class BaseBuildingValidator : IBuildingValidator
     }
 
     //Should this building render a roof?
-    public virtual bool ShouldRenderRoof(Island map, Building building)
+    public virtual bool ShouldRenderRoof(Island map, BuildingType buildingType)
     {
-        return map.Up(_tile.X, _tile.Y).Building is null && building is not null && building.BuildingType.HasRoof;
+        return map.Up(_tile.X, _tile.Y).Building is null && _tile.Building is not null && buildingType.HasRoof;
     }
 
     //Can the given building be built on top?

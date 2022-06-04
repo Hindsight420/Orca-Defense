@@ -41,7 +41,7 @@ public class IslandView : MonoBehaviour
         UpdateRoof(b);
 
         // Update the roof on the building below
-        Building buildingBelow = Island.Down(b.X, b.Y).Building;
+        Building buildingBelow = Island.Down(b.X, b.Y)?.Building;
         if (buildingBelow is not null) UpdateRoof(buildingBelow);
     }
 
@@ -53,7 +53,7 @@ public class IslandView : MonoBehaviour
         roofGameObjectMap.TryGetValue(t, out GameObject roofGO);
 
         // Should we render a roof?
-        if (t.Validator.ShouldRenderRoof(Island, b) == false)
+        if (t.Validator.ShouldRenderRoof(Island, b.BuildingType) == false)
         {
             // No roof to remove?
             if (roofGO is null) return;
