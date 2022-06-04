@@ -1,3 +1,4 @@
+using Assets._Scripts._3Managers;
 using EventCallbacks;
 using OrcaDefense.Models;
 
@@ -13,6 +14,8 @@ public class Building
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
 
+    int startTick;
+
     public Building(BuildingType buildingType, Tile tile)
     {
         BuildingType = buildingType;
@@ -20,6 +23,29 @@ public class Building
         tile.Building = this;
         X = tile.X;
         Y = tile.Y;
+
+        new BuildingCreatedEvent().FireEvent(this);
+        if (buildingType.TicksPerIncome is not null && buildingType.Income is not null )
+        {
+            TimeTicker.OnTick += OnTick;
+            startTick = TimeTicker.CurrentTick;
+        }
+    }
+
+    private void OnTick(object obj, int tick)
+    {
+        if (TimeTicker.GetInnerTick(startTick) % BuildingType.TicksPerIncome == 0)
+        {
+            if (BuildingType.Income != null)
+            {
+                new IncomeEvent().FireEvent(BuildingType.Income);
+            }
+        }
+    }
+
+    public void Remove()
+    {
+        new BuildingRemovedEvent().FireEvent(this);
     }
 
     public override string ToString()

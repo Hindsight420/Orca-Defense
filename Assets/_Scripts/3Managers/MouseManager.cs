@@ -17,6 +17,7 @@ public class MouseManager : Singleton<MouseManager>
     void Start()
     {
         islandManager = IslandManager.Instance;
+        state = GameManager.Instance.State;
 
         GameStateChangedEvent.RegisterListener(OnGameStateChanged);
     }
@@ -41,64 +42,22 @@ public class MouseManager : Singleton<MouseManager>
         sr.color = new Color(1f, 1f, 1f, .5f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currFramePosition.z = 0;
 
         UpdateCameraMovement();
-        UpdateDraggingPreview();
+        UpdateBuild();
 
         lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         lastFramePosition.z = 0;
     }
 
-    void UpdateDraggingPreview()
-    {
-        if (!(state == GameState.Build || state == GameState.Destroy))
-        {
-            return;
-        }
-
-        if (buildingPreview == null) return; // No building currently selected
-        if (EventSystem.current.IsPointerOverGameObject()) return; // Mouse is over UI element
-        if (Input.GetMouseButtonDown(1))
-        {
-            GameManager.Instance.UpdateGameState(GameState.Play);
-            // Cancel current build
-            DestroyPreview();
-            return;
-        };
-
-        Tile selectedTile = islandManager.Island.GetTileAtCoords(currFramePosition);
-        if (selectedTile == null) return;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (state == GameState.Build)
-                islandManager.TryPlaceBuilding(selectedTile, buildingType);
-            if (state == GameState.Destroy)
-                islandManager.TryDestroyBuilding(selectedTile);
-
-            DestroyPreview();
-
-            GameManager.Instance.UpdateGameState(GameState.Play);
-        }
-        else
-        {
-            buildingPreview.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
-        }
-    }
-
-    void DestroyPreview()
-    {
-        Destroy(buildingPreview);
-        buildingPreview = null;
-    }
-
     void UpdateCameraMovement()
     {
+        if (state != GameState.Play) return;
+
         if (Input.GetMouseButton(1))
         {
             Vector3 diff = lastFramePosition - currFramePosition;
@@ -107,5 +66,59 @@ public class MouseManager : Singleton<MouseManager>
 
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
+    }
+
+    void UpdateBuild()
+    {
+        if (state != GameState.Build && state != GameState.Destroy) return;
+
+        // No building currently selected
+        if (buildingPreview == null) return;
+
+        // Right click to cancel build
+        if (Input.GetMouseButtonDown(1))
+        {
+            CancelBuild();
+            return;
+        };
+
+        // Mouse is over UI element
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
+        Tile selectedTile = islandManager.Island.GetTileAtCoords(currFramePosition);
+        if (selectedTile == null) return;
+
+        // Left click to build
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (state == GameState.Build)
+                islandManager.TryPlaceBuilding(selectedTile, buildingType);
+            if (state == GameState.Destroy)
+                islandManager.TryDestroyBuilding(selectedTile);
+
+            // Hold shift to remain in build mode
+            if (!Input.GetKey(KeyCode.LeftShift))
+            {
+                DestroyPreview();
+                GameManager.Instance.UpdateGameState(GameState.Play);
+            }
+        }
+        else
+        {
+            buildingPreview.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
+        }
+    }
+
+    void CancelBuild()
+    {
+        GameManager.Instance.UpdateGameState(GameState.Play);
+        DestroyPreview();
+        return;
+    }
+
+    void DestroyPreview()
+    {
+        Destroy(buildingPreview);
+        buildingPreview = null;
     }
 }

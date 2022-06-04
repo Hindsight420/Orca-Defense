@@ -11,6 +11,9 @@ public class BuildingType : ScriptableObject
     public bool HasRoof;
     public List<ResourceValue> Cost;
 
+    public List<ResourceValue> Income;
+    public int? TicksPerIncome;
+
     public IBuildingValidator GetBuildingValidator(Tile t)
     {
         return GetValidatorByBuildingType(BuildingEnum, t);
