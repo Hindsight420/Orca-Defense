@@ -8,6 +8,8 @@ public class Logger : Singleton<Logger>
 {
     [SerializeField]
     private GameObject LogPrefab;
+    private float timeOfLastLog;
+    private readonly float MINIMUM_TIME_BETWEEN_LOGS = 1f;
 
     public enum LogType
     {
@@ -18,22 +20,30 @@ public class Logger : Singleton<Logger>
 
     public void LogMessage (string message, LogType logType)
     {
-        var log = Instantiate(LogPrefab, transform);
-        log.GetComponent<LogMessage>().Initialise(message, logType);
+        StartCoroutine(LogMessageCoroutine(message, logType));
     }
 
-    private IEnumerator LogMultipleMessagesAsync (List<string> messages, LogType logType)
+    public IEnumerator LogMessageCoroutine (string message, LogType logType)
     {
-        foreach (string message in messages)
+        if (Time.time - timeOfLastLog < MINIMUM_TIME_BETWEEN_LOGS)
         {
-            LogMessage(message, logType);
-            yield return new WaitForSeconds(0.5f);
+            var timeUntilNextLogAllowed = MINIMUM_TIME_BETWEEN_LOGS - (Time.time - timeOfLastLog);
+            Debug.Log(timeUntilNextLogAllowed);
+            timeOfLastLog = Time.time + timeUntilNextLogAllowed;
+            yield return new WaitForSeconds(timeUntilNextLogAllowed);
         }
+
+        var log = Instantiate(LogPrefab, transform);
+        log.GetComponent<LogMessage>().Initialise(message, logType);
+        timeOfLastLog = Time.time;
     }
 
     public void LogMessages (List<string> messages, LogType logType)
     {
         if (!messages.Any()) { return; }
-        StartCoroutine(LogMultipleMessagesAsync(messages, logType));
+        foreach (string message in messages)
+        {
+            LogMessage(message, logType);
+        }
     }
 }
