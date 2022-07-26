@@ -1,12 +1,13 @@
 using EventCallbacks;
 using NUnit.Framework;
+using OrcaDefense.Models;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingTests
 {
     // TODO: initialize this variable
-    [SerializeField]private BuildingType buildingType;
+    [SerializeField] private BuildingType buildingType;
 
     [OneTimeSetUp]
     public void SetUpBuildingTests()
@@ -24,21 +25,10 @@ public class BuildingTests
     [TestCase(4, 7)]
     public void TestBuildingConstructor(int x, int y)
     {
-        Building building = new(x, y, buildingType);
+        Building building = new(buildingType, new Tile(x, y));
 
         Assert.AreEqual(building.BuildingType, buildingType);
         Assert.AreEqual(building.X, x);
         Assert.AreEqual(building.Y, y);
-    }
-
-    [Test]
-    public void TestBuildingDestructor()
-    {
-        Building building = new(4, 7, buildingType);
-        bool eventTriggered = false;
-        BuildingRemovedEvent.RegisterListener((BuildingRemovedEvent) => eventTriggered = true);
-        building.Remove();
-
-        Assert.IsTrue(eventTriggered);
     }
 }

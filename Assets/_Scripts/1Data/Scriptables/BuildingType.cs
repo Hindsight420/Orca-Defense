@@ -6,16 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Building Type")]
 public class BuildingType : ScriptableObject
 {
-    public GameObject Prefab;
+    readonly public GameObject Prefab;
+    readonly public BuildingTypeEnum BuildingEnum;
+    readonly public bool HasRoof;
+    readonly public List<ResourceValue> Cost;
 
-    public List<ResourceValue> Cost;
-
-    public bool hasRoof;
-
-    public BuildingTypeEnum BuildingEnum;
-
-    public List<ResourceValue> Income;
-    public int? TicksPerIncome;
+    readonly public List<ResourceValue> Income;
+    readonly public int? TicksPerIncome;
 
     public IBuildingValidator GetBuildingValidator(Tile t)
     {
