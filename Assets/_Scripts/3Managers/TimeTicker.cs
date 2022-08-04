@@ -10,7 +10,6 @@ namespace Assets._Scripts._3Managers
     public class TimeTicker : MonoBehaviour
     {
         public static event EventHandler<int> OnTick;
-        public static readonly int START_OF_THE_GAME = 0;
 
         private const float TICK_TIMER_MAX = 0.2f;
 

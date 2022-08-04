@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         new GameStateChangedEvent() { State = state }.FireEvent();
+        Debug.Log($"Gamestate changed to {state}");
     }
 
     private void HandlePause()

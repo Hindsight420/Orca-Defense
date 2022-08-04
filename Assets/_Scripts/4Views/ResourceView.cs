@@ -10,11 +10,9 @@ public class ResourceView : MonoBehaviour
     [SerializeField] GameObject counterPrefab;
 
     Dictionary<ResourceType, TextMeshProUGUI> resourceValueComponentMap;
-    private SeasonManager seasonManager;
 
     private void Start()
     {
-        seasonManager = SeasonManager.Instance;
         ResourceValueChangedEvent.RegisterListener(OnResourceValueChanged);
     }
 
