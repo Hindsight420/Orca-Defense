@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ba1e0692cd676478eac1975703b33d, type: 3}
   m_Name: Wood-House
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
-  BuildingEnum: 1
-  HasRoof: 1
-  Cost:
-  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
-    amount: 10
+  prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
+  buildingEnum: 1
+  hasRoof: 1
+  cost: []
+  income: []

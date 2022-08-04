@@ -15,10 +15,9 @@ public class BuildingTests
         buildingType = (BuildingType)ScriptableObject.CreateInstance(nameof(BuildingType));
         buildingType.name = "TestBuilding";
 
-        buildingType.Cost = new List<ResourceValue>();
         ResourceType resourceType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
         resourceType.name = "Wood";
-        buildingType.Cost.Add(new ResourceValue(resourceType, 50));
+        //buildingType.Cost.Add(new ResourceValue(resourceType, 50));
     }
 
     [Test]
