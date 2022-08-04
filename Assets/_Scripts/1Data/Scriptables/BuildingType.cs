@@ -9,7 +9,7 @@ public class BuildingType : ScriptableObject
     readonly public GameObject Prefab;
     readonly public BuildingTypeEnum BuildingEnum;
     readonly public bool HasRoof;
-    readonly public List<ResourceValue> Cost;
+    public List<ResourceValue> Cost;
 
     readonly public List<ResourceValue> Income;
     readonly public int? TicksPerIncome;
