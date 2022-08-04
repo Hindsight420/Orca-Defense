@@ -24,7 +24,6 @@ public class Building
         X = tile.X;
         Y = tile.Y;
 
-        new BuildingCreatedEvent().FireEvent(this);
         if (buildingType.TicksPerIncome is not null && buildingType.Income is not null )
         {
             TimeTicker.OnTick += OnTick;

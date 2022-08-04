@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wood-House
   m_EditorClassIdentifier: 
   prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
-  buildingEnum: 0
+  buildingEnum: 1
   hasRoof: 1
   cost: []
   income: []
