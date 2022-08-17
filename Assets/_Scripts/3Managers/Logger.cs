@@ -8,6 +8,10 @@ public class Logger : Singleton<Logger>
 {
     [SerializeField]
     private GameObject LogPrefab;
+    private float timeOfLastLog;
+    private readonly float MINIMUM_TIME_BETWEEN_LOGS = 1f;
+    private readonly Queue MessageQueue = new();
+    private bool isCurrentlyLogging;
 
     public enum LogType
     {
@@ -16,24 +20,41 @@ public class Logger : Singleton<Logger>
         Information
     }
 
-    public void LogMessage (string message, LogType logType)
+    internal void LogMessage(string message, LogType logType)
     {
-        var log = Instantiate(LogPrefab, transform);
-        log.GetComponent<LogMessage>().Initialise(message, logType);
+        LogMessages(new List<string> { message }, logType);
     }
 
-    private IEnumerator LogMultipleMessagesAsync (List<string> messages, LogType logType)
+    public void LogMessages(List<string> messages, LogType logType)
     {
+        if (!messages.Any()) return;
         foreach (string message in messages)
         {
-            LogMessage(message, logType);
-            yield return new WaitForSeconds(0.5f);
+            var logMessage = Instantiate(LogPrefab, transform).GetComponent<LogMessage>();
+            logMessage.Initialise(message, logType);
+
+            MessageQueue.Enqueue(logMessage);
         }
+
+        if (!isCurrentlyLogging) StartCoroutine(LogMessagesCoroutine());
     }
 
-    public void LogMessages (List<string> messages, LogType logType)
+    public IEnumerator LogMessagesCoroutine()
     {
-        if (!messages.Any()) { return; }
-        StartCoroutine(LogMultipleMessagesAsync(messages, logType));
+        isCurrentlyLogging = true;
+        if (Time.time - timeOfLastLog < MINIMUM_TIME_BETWEEN_LOGS)
+        {
+            var timeUntilNextLogAllowed = MINIMUM_TIME_BETWEEN_LOGS - (Time.time - timeOfLastLog);
+            Debug.Log(timeUntilNextLogAllowed);
+            timeOfLastLog = Time.time + timeUntilNextLogAllowed;
+            yield return new WaitForSeconds(timeUntilNextLogAllowed);
+        }
+
+        LogMessage logMessage = (LogMessage)MessageQueue.Dequeue();
+        logMessage.Show();
+
+        timeOfLastLog = Time.time;
+        if (MessageQueue.Count > 0) StartCoroutine(LogMessagesCoroutine());
+        else isCurrentlyLogging = false;
     }
 }

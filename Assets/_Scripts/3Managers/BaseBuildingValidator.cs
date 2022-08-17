@@ -10,16 +10,15 @@ public class BaseBuildingValidator : IBuildingValidator
         _tile = tile;
     }
 
-    //Should this building render a roof?
-    public virtual bool ShouldRenderRoof(Island map)
+    public List<string> ValidateBuildingPosition(Island map, BuildingTypeEnum buildingType)
     {
-        return map.Up(_tile.X, _tile.Y).Building is null;
-    }
+        var errors = new List<string>();
+        errors.AddRange(ValidateTile(map));
+        errors.AddRange(ValidateSupport(map));
+        errors.AddRange(ValidateAdjacencies(map));
+        errors.AddRange(ValidateAdjacency(buildingType));
 
-    //Does this building care if we build it next to it's neighbours?
-    public virtual List<string> ValidateAdjacencies(Island map)
-    {
-        return new List<string>();
+        return errors;
     }
 
     //Does this building care if we build X building next to it?
@@ -28,17 +27,37 @@ public class BaseBuildingValidator : IBuildingValidator
         return new List<string>();
     }
 
-    //Can the building be placed in this position?
-    public virtual List<string> ValidatePosition(Island map)
+    //Does this building care if we build it next to it's neighbours?
+    public virtual List<string> ValidateAdjacencies(Island map)
     {
-        //IsOccupied
-        var errors = new List<string>();
-        if (_tile.Building != null) { errors.Add("There's already a building there!"); }
+        return new List<string>();
+    }
 
-        //IsSupported
-        if (_tile.Y != 0 && map.Down(_tile.X, _tile.Y).Building is null) { errors.Add("Tile is not supported!"); }
+    //Can the building be placed in this position?
+    public virtual List<string> ValidateTile(Island map)
+    {
+        if (_tile.Building == null)
+            return new List<string>();
 
-        return errors;
+        return new List<string>() { "There's already a building there!" };
+    }
+
+    public virtual List<string> ValidateSupport(Island map)
+    {
+        if (_tile.Y == 0)
+            return new List<string>();
+
+        var buildingBelow = map.Down(_tile.X, _tile.Y).Building;
+        if (buildingBelow is not null && buildingBelow.BuildingType.HasRoof)
+            return new List<string>();
+
+        return new List<string>() { "Tile is not supported!" };
+    }
+
+    //Should this building render a roof?
+    public virtual bool ShouldRenderRoof(Island map, BuildingType buildingType)
+    {
+        return map.Up(_tile.X, _tile.Y).Building is null && _tile.Building is not null && buildingType.HasRoof;
     }
 
     //Can the given building be built on top?
@@ -49,30 +68,17 @@ public class BaseBuildingValidator : IBuildingValidator
 
     public virtual List<string> ValidateResources(BuildingType buildingType)
     {
-        if (ResourceManager.Instance.CheckResourcesAvailability(buildingType.Cost) == false)
-        {
-            return new List<string>() { $"Can't place {buildingType} in because you don't have enough resources" };
-        }
+        if (ResourceManager.Instance.CheckResourcesAvailability(buildingType.Cost) != false)
+            return new List<string>();
 
-        return new List<string>();
-    }
-
-    public List<string> ValidateBuildingPosition(Island map, BuildingTypeEnum buildingToBuild)
-    {
-        var errors = new List<string>();
-        errors.AddRange(ValidateAdjacencies(map));
-        errors.AddRange(ValidateAdjacency(buildingToBuild));
-        errors.AddRange(ValidatePosition(map));
-
-        return errors;
+        return new List<string>() { $"Can't place {buildingType} in because you don't have enough resources" };
     }
 
     public List<string> ValidateDestroyable(Island map)
     {
-        if(map.Up(_tile.X, _tile.Y).Building is not null)
-        {
-            return new List<string>() { "Cannot destroy this building as there is one above it!" };
-        }
-        return new List<string>();
+        if (map.Up(_tile.X, _tile.Y).Building is null)
+            return new List<string>();
+
+        return new List<string>() { "Cannot destroy this building as there is one above it!" };
     }
 }
