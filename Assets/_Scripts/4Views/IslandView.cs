@@ -6,7 +6,7 @@ using UnityEngine;
 public class IslandView : MonoBehaviour
 {
     Dictionary<Building, GameObject> buildingGameObjectMap;
-    Dictionary<int, GameObject> roofGameObjectMap;
+    Dictionary<Tile, GameObject> roofGameObjectMap;
 
     public Island Island;
     public GameObject RoofPrefab;
@@ -17,41 +17,61 @@ public class IslandView : MonoBehaviour
         roofGameObjectMap = new();
     }
 
+    public void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
+    {
+        Building b = buildingEvent.Building;
+        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
+        buildingGameObjectMap.Add(buildingEvent.Building, building_go);
+
+        UpdateRoofs(b);
+    }
+
     public void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
         buildingGameObjectMap.Remove(b, out GameObject building_go);
         Destroy(building_go);
 
-        UpdateRoof(buildingEvent.Building.X);
+        UpdateRoofs(b);
     }
 
-    public void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
+    void UpdateRoofs(Building b)
     {
-        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
+        // Update the roof on this building
+        UpdateRoof(b);
 
-        buildingGameObjectMap.Add(buildingEvent.Building, building_go);
-
-        UpdateRoof(buildingEvent.Building.X);
+        // Update the roof on the building below
+        Building buildingBelow = Island.Down(b.X, b.Y)?.Building;
+        if (buildingBelow is not null) UpdateRoof(buildingBelow);
     }
 
-    void UpdateRoof(int x)
+    void UpdateRoof(Building b)
     {
-        Tile t = Island.GetHighestFreeTileAt(x);
+        if (b is null) return;
 
-        roofGameObjectMap.TryGetValue(x, out GameObject roofGO);
+        Tile t = b.Tile;
+        roofGameObjectMap.TryGetValue(t, out GameObject roofGO);
 
-        // Destroy the roof if there's no buildings
-        if (t.Y == 0)
+        // Should we render a roof?
+        if (t.Validator.ShouldRenderRoof(Island, b.BuildingType) == false)
         {
-            roofGameObjectMap[x] = null;
+            // No roof to remove?
+            if (roofGO is null) return;
+
+            // Remove roof
+            roofGameObjectMap[t] = null;
             Destroy(roofGO);
+            return;
         }
 
-        roofGO = roofGO != null ? roofGO : Instantiate(RoofPrefab, transform);
-        roofGO.transform.position = new Vector3(t.X, t.Y);
+        // Already a roof?
+        if (roofGO is not null) return;
 
-        roofGameObjectMap[x] = roofGO;
+        // Create roof
+        roofGO = roofGO != null ? roofGO : Instantiate(RoofPrefab, transform);
+        roofGO.transform.position = new Vector3(t.X, t.Y + 1);
+
+        roofGameObjectMap[t] = roofGO;
     }
 
     GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)

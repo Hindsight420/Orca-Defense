@@ -26,12 +26,12 @@ public class SeasonManager : Singleton<SeasonManager>
         logger = Logger.Instance;
     }
 
-    private int GetTicksPerCurrentSeason ()
+    private int GetTicksPerCurrentSeason()
     {
         return currentSeason == Season.Bright ? TicksPerBrightSeason : TicksPerDarkSeason;
     }
 
-    private void NextSeason ()
+    private void NextSeason()
     {
         int season = (int)currentSeason;
         currentSeason = (Season)((season + 1) % 2);

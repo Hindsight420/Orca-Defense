@@ -6,20 +6,31 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Building Type")]
 public class BuildingType : ScriptableObject
 {
-    public GameObject Prefab;
+    [SerializeField]
+    private GameObject prefab;
+    [SerializeField]
+    private BuildingTypeEnum buildingEnum;
+    [SerializeField]
+    private bool hasRoof;
+    [SerializeField]
+    private List<ResourceValue> cost;
+    [SerializeField]
+    private List<ResourceValue> income;
+    [SerializeField]
+    private int? ticksPerIncome;
 
-    public List<ResourceValue> Cost;
+    //Accessors for the above
+    public GameObject Prefab { get => prefab; }
+    public BuildingTypeEnum BuildingEnum { get => buildingEnum; }
+    public bool HasRoof { get => hasRoof; }
+    public List<ResourceValue> Cost { get => cost; }
+    public List<ResourceValue> Income { get => income; }
+    public int? TicksPerIncome { get => ticksPerIncome; }
 
-    public bool hasRoof;
-
-    public BuildingTypeEnum BuildingEnum;
-
-    public List<ResourceValue> Income;
-    public int? TicksPerIncome;
 
     public IBuildingValidator GetBuildingValidator(Tile t)
     {
-        return GetValidatorByBuildingType(BuildingEnum, t);
+        return GetValidatorByBuildingType(buildingEnum, t);
     }
 
     public override string ToString()

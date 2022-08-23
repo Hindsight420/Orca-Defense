@@ -63,8 +63,10 @@ public class IslandManager : Singleton<IslandManager>
 
     void DestroyBuilding(Tile tile)
     {
-        tile.Building.Remove();
+        Building b = tile.Building;
         tile.Building = null;
         tile.Validator = new BaseBuildingValidator(tile);
+
+        new BuildingRemovedEvent().FireEvent(b);
     }
 }
