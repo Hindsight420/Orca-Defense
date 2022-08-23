@@ -23,6 +23,8 @@ public class PenguinFactory : MonoBehaviour
     [SerializeField]
     List<Sprite> Body;
 
+    private static float PenguinZOffset = 0;
+
     Vector3 Position => Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
     // Start is called before the first frame update
@@ -43,7 +45,7 @@ public class PenguinFactory : MonoBehaviour
     void GeneratePenguin (Vector2 position)
     {
         var pen = Instantiate(PenguinPrefab);
-        pen.transform.position = position;
+        pen.transform.position = new Vector3(position.x, position.y, PenguinZOffset);
 
         var penScript = pen.GetComponent<PenguinBody>();
         penScript.BeakBottom.sprite = BeakBottoms[Random.Range(0, BeakBottoms.Count)];
@@ -55,5 +57,8 @@ public class PenguinFactory : MonoBehaviour
         var wings = Wings[Random.Range(0, Wings.Count)];
         penScript.WingLeft.sprite = wings;
         penScript.WingRight.sprite = wings;
+
+
+        PenguinZOffset += 0.5f;
     }
 }
