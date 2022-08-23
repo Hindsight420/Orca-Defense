@@ -13,7 +13,10 @@ public class SeasonManager : Singleton<SeasonManager>
     private int TicksPerDarkSeason;
 
     public float SeasonProgressionPercentage { get => CurrentSeasonProgressionPercentage(); }
+    public Quaternion[] CurrentSeasonRotationBounds { get => GetCurrentSeasonRotationBounds(); }
+
     public Season CurrentSeason { get => currentSeason; }
+    public Season NextSeason { get => (Season)(((int)CurrentSeason + 1) % 2); }
     private Season currentSeason;
     private Logger logger;
 
@@ -31,25 +34,34 @@ public class SeasonManager : Singleton<SeasonManager>
         return currentSeason == Season.Bright ? TicksPerBrightSeason : TicksPerDarkSeason;
     }
 
-    private void NextSeason()
+    private void GoToNextSeason()
     {
         int season = (int)currentSeason;
-        currentSeason = (Season)((season + 1) % 2);
+        currentSeason = NextSeason;
         logger.LogMessage($"Season has changed to {currentSeason} season", Logger.LogType.Debug);
         OnSeasonChange?.Invoke(this, currentSeason);
     }
 
     private float CurrentSeasonProgressionPercentage()
     {
-        return TimeTicker.GetInnerTick(TimeTicker.START_OF_THE_GAME) / GetTicksPerCurrentSeason();
+        return (((float) TimeTicker.GetInnerTick(TimeTicker.START_OF_THE_GAME)) % GetTicksPerCurrentSeason()) / ((float) GetTicksPerCurrentSeason());
     }
 
     private void OnTick(object obj, int tick)
     {
         if (TimeTicker.GetInnerTick(TimeTicker.START_OF_THE_GAME) % GetTicksPerCurrentSeason() == 0)
         {
-            NextSeason();
+            GoToNextSeason();
         }
+    }
+
+    private Quaternion[] GetCurrentSeasonRotationBounds()
+    {
+        var rotationForBrightSeason = Quaternion.Euler(0, 0, 180f);
+        var rotationForDarkSeason = Quaternion.Euler(0, 0, 360f);
+
+        return currentSeason == Season.Bright ? new Quaternion[] { Quaternion.Euler(0,0,0), rotationForBrightSeason } 
+                                            : new Quaternion[] { rotationForBrightSeason, rotationForDarkSeason };
     }
 }
 

@@ -12,7 +12,8 @@ namespace Assets._Scripts._3Managers
         public static event EventHandler<int> OnTick;
         public static readonly int START_OF_THE_GAME = 0;
 
-        private const float TICK_TIMER_MAX = 0.2f;
+        [SerializeField]
+        private float TICK_INTERVAL_SECOND = 0.2f;
 
         private static int tick;
         private float tickTimer;
@@ -27,10 +28,10 @@ namespace Assets._Scripts._3Managers
         private void Update()
         {
             tickTimer += Time.deltaTime;
-            if (tickTimer >= TICK_TIMER_MAX)
+            if (tickTimer >= TICK_INTERVAL_SECOND)
             {
                 tick++;
-                tickTimer -= TICK_TIMER_MAX;
+                tickTimer -= TICK_INTERVAL_SECOND;
 
                 OnTick?.Invoke(this, tick);
             }
