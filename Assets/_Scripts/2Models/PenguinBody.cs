@@ -5,33 +5,33 @@ using UnityEngine;
 public class PenguinBody : MonoBehaviour
 {
     [SerializeField]
-    private SpriteRenderer WingRight;
+    public SpriteRenderer WingRight;
     [SerializeField]
-    private SpriteRenderer WingLeft;
+    public SpriteRenderer WingLeft;
     [SerializeField]
-    private SpriteRenderer LegLeft;
+    public SpriteRenderer LegLeft;
     [SerializeField]
-    private SpriteRenderer LegRight;
+    public SpriteRenderer LegRight;
     [SerializeField]
-    private SpriteRenderer FootLeft;
+    public SpriteRenderer FootLeft;
     [SerializeField]
-    private SpriteRenderer FootRight;
+    public SpriteRenderer FootRight;
     [SerializeField]
-    private SpriteRenderer EyeLeft;
+    public SpriteRenderer EyeLeft;
     [SerializeField]
-    private SpriteRenderer EyeRight;
+    public SpriteRenderer EyeRight;
     [SerializeField]
-    private SpriteRenderer PupilLeft;
+    public SpriteRenderer PupilLeft;
     [SerializeField]
-    private SpriteRenderer PupilRight;
+    public SpriteRenderer PupilRight;
     [SerializeField]
-    private SpriteRenderer BeakTop;
+    public SpriteRenderer BeakTop;
     [SerializeField]
-    private SpriteRenderer BeakBottom;
+    public SpriteRenderer BeakBottom;
     [SerializeField]
-    private SpriteRenderer Head;
+    public SpriteRenderer Head;
     [SerializeField]
-    private SpriteRenderer Body;
+    public SpriteRenderer Body;
 
 
     // Start is called before the first frame update
