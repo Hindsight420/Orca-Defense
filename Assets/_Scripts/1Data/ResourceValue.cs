@@ -36,6 +36,24 @@ public class ResourceValue
         Amount = _amount;
     }
 
+    public void TransferTo(ResourceValue target)
+    {
+        TransferTo(target, Amount);
+    }
+
+    public void TransferTo(ResourceValue target, int amount)
+    {
+        Math.Clamp(amount, 0, Amount);
+        Amount -= amount;
+        target.amount += amount;
+    }
+
+    public override bool Equals(object obj) => obj is ResourceValue value ? Equals(value) : base.Equals(obj);
+
+    public bool Equals(ResourceValue target) => Type == target.Type && Amount == target.Amount;
+
+    public override int GetHashCode() => HashCode.Combine(Type, Amount);
+
     public override string ToString()
     {
         return $"Resource ({Type.name}: {Amount})";
