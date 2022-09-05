@@ -48,7 +48,7 @@ public class IslandManager : Singleton<IslandManager>
     void PlaceBuilding(Tile tile, BuildingType BuildingType, IBuildingValidator newValidator)
     {
         tile.Validator = newValidator;
-        Island.Build(tile, BuildingType);
+        Island.CreateBuilding(tile, BuildingType);
     }
 
     public void TryDestroyBuilding(Tile tile)

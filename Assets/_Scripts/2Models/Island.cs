@@ -1,3 +1,4 @@
+using Assets._Scripts._3Managers;
 using EventCallbacks;
 using OrcaDefense.Models;
 using System;
@@ -8,6 +9,7 @@ using UnityEngine;
 public class Island
 {
     public Dictionary<int, int> positionHeights;
+    List<Building> constructionQueue = new();
 
     int width;
     int height;
@@ -58,7 +60,7 @@ public class Island
         }
     }
 
-    public void Build(Tile tile, BuildingType buildingType)
+    public void CreateBuilding(Tile tile, BuildingType buildingType)
     {
         int x = tile.X;
         int y = tile.Y;
@@ -66,7 +68,20 @@ public class Island
         positionHeights[x] = y + 1;
         Building b = new(buildingType, tile);
 
+        constructionQueue.Add(b);
         new BuildingCreatedEvent().FireEvent(b);
+    }
+
+    // Temporary method of constructing a building
+    // We should employ penguins to do this later
+    public void ConstructBuildingOverTime(Building b)
+    {
+
+    }
+
+    private void OnTick(object sender, int e)
+    {
+        throw new NotImplementedException();
     }
 
     public Tile GetHighestFreeTileAt(Vector3 coords)

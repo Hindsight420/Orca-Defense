@@ -40,7 +40,7 @@ public class Building
     }
 
     private Logger Logger { get => Logger.Instance; }
-    readonly int startTick;
+    int startTick;
 
     public Building(BuildingType buildingType, Tile tile, BuildingState state = BuildingState.Planned)
     {
@@ -51,12 +51,6 @@ public class Building
         Y = tile.Y;
         State = state;
         ConstructionResources.AddRange(buildingType.Cost.Select(r => { r.Amount = 0; return r; }));
-
-        if (buildingType.TicksPerIncome is not null && buildingType.Income is not null)
-        {
-            TimeTicker.OnTick += OnTick;
-            startTick = TimeTicker.CurrentTick;
-        }
     }
 
     public void AddResources(List<ResourceValue> resources)
@@ -95,6 +89,12 @@ public class Building
         }
 
         State = BuildingState.Constructed;
+
+        if (buildingType.TicksPerIncome is not null && buildingType.Income is not null)
+        {
+            TimeTicker.OnTick += OnTick;
+            startTick = TimeTicker.CurrentTick;
+        }
     }
 
     private void OnTick(object obj, int tick)
