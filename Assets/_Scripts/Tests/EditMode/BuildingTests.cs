@@ -18,14 +18,14 @@ public class BuildingTests
         //buildingType.Cost.Add(new ResourceValue(resourceType, 50));
     }
 
-    [Test]
-    [TestCase(4, 7)]
-    public void TestBuildingConstructor(int x, int y)
-    {
-        Building building = new(buildingType, new Tile(x, y));
+    //[Test]
+    //[TestCase(4, 7)]
+    //public void TestBuildingConstructor(int x, int y)
+    //{
+    //    Building building = new(buildingType, new Tile(x, y));
 
-        Assert.AreEqual(building.Type, buildingType);
-        Assert.AreEqual(building.X, x);
-        Assert.AreEqual(building.Y, y);
-    }
+    //    Assert.AreEqual(building.Type, buildingType);
+    //    Assert.AreEqual(building.X, x);
+    //    Assert.AreEqual(building.Y, y);
+    //}
 }
