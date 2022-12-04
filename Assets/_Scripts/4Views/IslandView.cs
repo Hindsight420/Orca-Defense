@@ -20,8 +20,16 @@ public class IslandView : MonoBehaviour
     public void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
-        GameObject building_go = UpdateBuildingGameObject(buildingEvent);
+        GameObject building_go = UpdateBuildingGameObject(b);
         buildingGameObjectMap.Add(buildingEvent.Building, building_go);
+
+        UpdateRoofs(b);
+    }
+
+    public void OnBuildingChanged(BuildingChangedEvent buildingEvent)
+    {
+        Building b = buildingEvent.Building;
+        UpdateBuildingGameObject(b);
 
         UpdateRoofs(b);
     }
@@ -53,7 +61,7 @@ public class IslandView : MonoBehaviour
         roofGameObjectMap.TryGetValue(t, out GameObject roofGO);
 
         // Should we render a roof?
-        if (t.Validator.ShouldRenderRoof(Island, b.BuildingType) == false)
+        if (t.Validator.ShouldRenderRoof(Island, b.Type) == false)
         {
             // No roof to remove?
             if (roofGO is null) return;
@@ -74,14 +82,16 @@ public class IslandView : MonoBehaviour
         roofGameObjectMap[t] = roofGO;
     }
 
-    GameObject UpdateBuildingGameObject(BuildingCreatedEvent buildingEvent)
+    GameObject UpdateBuildingGameObject(Building b)
     {
-        Building building = buildingEvent.Building;
-        GameObject building_go = Instantiate(building.BuildingType.Prefab);
+        if (!buildingGameObjectMap.TryGetValue(b, out GameObject building_go)) 
+            building_go = Instantiate(b.Type.Prefab);
 
-        building_go.name = $"{building.BuildingType.name}_{building.X}_{building.Y}";
-        building_go.transform.position = new Vector3(building.X, building.Y, 0);
+        building_go.name = $"{b.Type.name}_{b.X}_{b.Y}";
+        building_go.transform.position = new Vector3(b.X, b.Y, 0);
         building_go.transform.SetParent(transform);
+        SpriteRenderer sr = building_go.GetComponent<SpriteRenderer>();
+        sr.color = b.State == BuildingState.Planned ? new Color(1f, 1f, 1f, .5f) : new Color(1f, 1f, 1f, 0f);
 
         return building_go;
     }

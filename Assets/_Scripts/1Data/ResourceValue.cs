@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -35,6 +37,29 @@ public class ResourceValue
         Type = _type;
         Amount = _amount;
     }
+
+    public void TransferTo(ResourceValue target, int amount)
+    {
+        Math.Clamp(amount, 0, Amount);
+        Amount -= amount;
+        target.amount += amount;
+    }
+
+    public void TransferTo(ResourceValue target)
+    {
+        TransferTo(target, Amount);
+    }
+
+    public void TransferTo(List<ResourceValue> targetList, int amount)
+    {
+        TransferTo(targetList.First(r => r.Type == Type), amount);
+    }
+
+    public override bool Equals(object obj) => obj is ResourceValue value ? Equals(value) : base.Equals(obj);
+
+    public bool Equals(ResourceValue target) => Type == target.Type && Amount == target.Amount;
+
+    public override int GetHashCode() => HashCode.Combine(Type, Amount);
 
     public override string ToString()
     {

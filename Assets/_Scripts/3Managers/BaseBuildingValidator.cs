@@ -48,7 +48,7 @@ public class BaseBuildingValidator : IBuildingValidator
             return new List<string>();
 
         var buildingBelow = map.Down(_tile.X, _tile.Y).Building;
-        if (buildingBelow is not null && buildingBelow.BuildingType.HasRoof)
+        if (buildingBelow is not null && buildingBelow.Type.HasRoof)
             return new List<string>();
 
         return new List<string>() { "Tile is not supported!" };
