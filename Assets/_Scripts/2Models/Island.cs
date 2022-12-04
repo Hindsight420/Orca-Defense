@@ -1,4 +1,3 @@
-using Assets._Scripts._3Managers;
 using EventCallbacks;
 using OrcaDefense.Models;
 using System;
@@ -60,7 +59,7 @@ public class Island
         }
     }
 
-    public void CreateBuilding(Tile tile, BuildingType buildingType)
+    public Building CreateBuilding(Tile tile, BuildingType buildingType)
     {
         int x = tile.X;
         int y = tile.Y;
@@ -70,18 +69,8 @@ public class Island
 
         constructionQueue.Add(b);
         new BuildingCreatedEvent().FireEvent(b);
-    }
 
-    // Temporary method of constructing a building
-    // We should employ penguins to do this later
-    public void ConstructBuildingOverTime(Building b)
-    {
-
-    }
-
-    private void OnTick(object sender, int e)
-    {
-        throw new NotImplementedException();
+        return b;
     }
 
     public Tile GetHighestFreeTileAt(Vector3 coords)

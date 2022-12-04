@@ -6,14 +6,15 @@ using System.Linq;
 
 public class Building
 {
-    BuildingType buildingType;
+    BuildingType type;
     Tile tile;
     int x;
     int y;
     BuildingState state;
     List<ResourceValue> constructionResources = new();
+    List<ResourceValue> remainingResources = new();
 
-    public BuildingType BuildingType { get => buildingType; private set => buildingType = value; }
+    public BuildingType Type { get => type; private set => type = value; }
     public Tile Tile { get => tile; private set => tile = value; }
     public int X { get => x; private set => x = value; }
     public int Y { get => y; private set => y = value; }
@@ -38,19 +39,26 @@ public class Building
             constructionResources = value;
         }
     }
+    public List<ResourceValue> RemainingResources { get => remainingResources; set => remainingResources = value; }
 
     private Logger Logger { get => Logger.Instance; }
+
     int startTick;
 
     public Building(BuildingType buildingType, Tile tile, BuildingState state = BuildingState.Planned)
     {
-        BuildingType = buildingType;
+        Type = buildingType;
         Tile = tile;
         tile.Building = this;
         X = tile.X;
         Y = tile.Y;
-        State = state;
-        ConstructionResources.AddRange(buildingType.Cost.Select(r => { r.Amount = 0; return r; }));
+        this.state = state;
+
+        foreach (ResourceValue resourceValue in buildingType.Cost)
+        {
+            ConstructionResources.Add(new(resourceValue.Type));
+            RemainingResources.Add(new(resourceValue.Type, resourceValue.Amount));
+        }
     }
 
     public void AddResources(List<ResourceValue> resources)
@@ -61,11 +69,15 @@ public class Building
 
             // Maybe add a try catch block for these 2 lines? In case we add an invalid resource.
             ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
-            ResourceValue requiredResourceValue = BuildingType.Cost.First(r => r.Type == type);
+            ResourceValue requiredResourceValue = Type.Cost.First(r => r.Type == type);
 
             resource.TransferTo(currentResourceValue);
             if (currentResourceValue > requiredResourceValue) // Not a safety precaution, but we need to know if this ever happens
                 Logger.LogMessage($"{this} received too many resources: {currentResourceValue - requiredResourceValue}.", Logger.LogType.Error);
+
+            ResourceValue remainingResource = RemainingResources.First(r => r.Type == type);
+            remainingResource.Amount = requiredResourceValue - currentResourceValue;
+            if (remainingResource.Amount == 0) RemainingResources.Remove(remainingResource);
         }
     }
 
@@ -77,20 +89,20 @@ public class Building
             return;
         }
 
-        foreach (ResourceValue resource in BuildingType.Cost)
+        foreach (ResourceValue requiredResourceValue in Type.Cost)
         {
-            ResourceType type = resource.Type;
+            ResourceType type = requiredResourceValue.Type;
             ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
-            if (currentResourceValue != resource)
+            if (!currentResourceValue.Equals(requiredResourceValue))
             {
-                Logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {currentResourceValue}. Expected: {resource}.", Logger.LogType.Error);
+                Logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {currentResourceValue}. Expected: {requiredResourceValue}.", Logger.LogType.Error);
                 return;
             }
         }
 
         State = BuildingState.Constructed;
 
-        if (buildingType.TicksPerIncome is not null && buildingType.Income is not null)
+        if (type.TicksPerIncome is not null && type.Income is not null)
         {
             TimeTicker.OnTick += OnTick;
             startTick = TimeTicker.CurrentTick;
@@ -99,11 +111,11 @@ public class Building
 
     private void OnTick(object obj, int tick)
     {
-        if (TimeTicker.GetInnerTick(startTick) % BuildingType.TicksPerIncome == 0)
+        if (TimeTicker.GetInnerTick(startTick) % Type.TicksPerIncome == 0)
         {
-            if (BuildingType.Income != null)
+            if (Type.Income != null)
             {
-                new IncomeEvent().FireEvent(BuildingType.Income);
+                new IncomeEvent().FireEvent(Type.Income);
             }
         }
     }
@@ -115,7 +127,7 @@ public class Building
 
     public override string ToString()
     {
-        return $"Building ({buildingType}: {x}, {y})";
+        return $"Building ({type}: {x}, {y})";
     }
 }
 
