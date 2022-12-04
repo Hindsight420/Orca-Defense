@@ -16,6 +16,6 @@ MonoBehaviour:
   buildingEnum: 1
   hasRoof: 0
   cost:
-  - Type: {fileID: 0}
+  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
     amount: 20
   income: []
