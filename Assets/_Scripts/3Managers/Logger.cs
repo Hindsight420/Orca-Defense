@@ -39,6 +39,26 @@ public class Logger : Singleton<Logger>
         if (!isCurrentlyLogging) StartCoroutine(LogMessagesCoroutine());
     }
 
+    public void LogError (string message)
+    {
+        LogMessage(message, LogType.Error);
+    }
+
+    public void LogErrors(List<string> messages)
+    {
+        LogMessages(messages, LogType.Error);
+    }
+
+    public void LogDebug(string message)
+    {
+        LogMessage(message, LogType.Debug);
+    }
+
+    public void LogDebug(List<string> messages)
+    {
+        LogMessages(messages, LogType.Debug);
+    }
+
     public IEnumerator LogMessagesCoroutine()
     {
         isCurrentlyLogging = true;
