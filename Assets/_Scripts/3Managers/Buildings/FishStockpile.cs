@@ -6,7 +6,7 @@ public class FishStockpile : Stockpile<Fish>
 {
     private void Awake()
     {
-        ConfigureStore(15);
+        ConfigureStore(50);
     }
 
     private void Update()
