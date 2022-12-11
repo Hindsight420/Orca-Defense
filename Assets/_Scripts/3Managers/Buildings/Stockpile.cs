@@ -29,6 +29,11 @@ public abstract class Stockpile<T>: MonoBehaviour
     /// </summary>
     protected void AddToStore()
     {
+        if (CurrentCapacity >= StorageCapacity)
+        {
+            return;
+        }
+
         CurrentCapacity++;
         var go = Instantiate(ResourcePrefab, NewResourceSpawnLocation);
         var resource = go.GetComponent<T>();
