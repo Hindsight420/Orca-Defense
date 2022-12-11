@@ -7,6 +7,7 @@ public class ResourceManager : Singleton<ResourceManager>
     public ResourceView View;
 
     readonly List<ResourceValue> resources = new();
+    readonly List<ResourceValue> resourcesInHolding = new();
 
     protected override void Awake()
     {
@@ -28,6 +29,7 @@ public class ResourceManager : Singleton<ResourceManager>
         foreach (ResourceType type in DataSystem.Instance.ResourceTypes)
         {
             resources.Add(new ResourceValue(type, 500)); // TODO: Clean up temporary, hardcoded starting value
+            resourcesInHolding.Add(new ResourceValue(type));
         }
     }
 
@@ -45,7 +47,8 @@ public class ResourceManager : Singleton<ResourceManager>
     void ExpendResources(ResourceValue resourceValue)
     {
         ResourceValue resource = GetResourceValue(resourceValue.Type);
-        resource.Amount -= resourceValue;
+        //resource.Amount -= resourceValue;
+        resource.TransferTo(resourcesInHolding, resourceValue);
 
         new ResourceValueChangedEvent().FireEvent(resource);
     }
@@ -64,14 +67,16 @@ public class ResourceManager : Singleton<ResourceManager>
         new ResourceValueChangedEvent().FireEvent(resource);
     }
 
+
+
     void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
-        ExpendResources(buildingEvent.Building.BuildingType.Cost);
+        ExpendResources(buildingEvent.Building.Type.Cost);
     }
 
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
-        AddResources(buildingEvent.Building.BuildingType.Cost);
+        AddResources(buildingEvent.Building.Type.Cost);
     }
 
     void OnIncome(IncomeEvent incomeEvent)

@@ -8,6 +8,7 @@ using UnityEngine;
 public class Island
 {
     public Dictionary<int, int> positionHeights;
+    List<Building> constructionQueue = new();
 
     int width;
     int height;
@@ -58,7 +59,7 @@ public class Island
         }
     }
 
-    public void Build(Tile tile, BuildingType buildingType)
+    public Building CreateBuilding(Tile tile, BuildingType buildingType)
     {
         int x = tile.X;
         int y = tile.Y;
@@ -66,7 +67,10 @@ public class Island
         positionHeights[x] = y + 1;
         Building b = new(buildingType, tile);
 
+        constructionQueue.Add(b);
         new BuildingCreatedEvent().FireEvent(b);
+
+        return b;
     }
 
     public Tile GetHighestFreeTileAt(Vector3 coords)

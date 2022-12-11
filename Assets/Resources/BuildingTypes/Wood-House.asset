@@ -15,5 +15,7 @@ MonoBehaviour:
   prefab: {fileID: 6395731410237515148, guid: 61beeff68d2a7b343a92f33f5d21d569, type: 3}
   buildingEnum: 1
   hasRoof: 1
-  cost: []
+  cost:
+  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
+    amount: 40
   income: []
