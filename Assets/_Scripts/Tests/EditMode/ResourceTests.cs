@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -32,5 +33,36 @@ public class ResourceTests
 
         int i = r;
         Assert.AreEqual(amount, i);
+    }
+
+    [Test]
+    public void TestResourceListConstructor()
+    {
+        ResourceList resourceList = new();
+        Assert.AreEqual(new(), resourceList.ResourceValueList);
+    }
+
+    [Test]
+    public void TestResourceListConstructorWithValues()
+    {
+        List<ResourceValue> resourceValues = new();
+        resourceValues.Add(new(resourceType, 5));
+        ResourceList resourceList = new(resourceValues);
+
+        Assert.AreEqual(resourceValues, resourceList.ResourceValueList);
+    }
+
+    [Test]
+    public void TestResourceListTransferTo()
+    {
+        ResourceList resourceList1 = new();
+        List<ResourceValue> resourceValues = new();
+        resourceValues.Add(new(resourceType, 5));
+        ResourceList resourceList2 = new(resourceValues);
+
+        resourceList2.TransferTo(resourceList1);
+
+        Assert.AreEqual(resourceList1.Count, 0);
+        Assert.AreEqual(resourceList2.ResourceValueList, resourceValues);
     }
 }

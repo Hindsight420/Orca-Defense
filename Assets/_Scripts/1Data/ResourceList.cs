@@ -7,6 +7,7 @@ public class ResourceList
 {
     private readonly List<ResourceValue> resourceValueList;
     public List<ResourceValue> ResourceValueList { get => resourceValueList; }
+    public int Count { get => resourceValueList.Count; }
 
     public ResourceList() : this(new()) { }
 
@@ -48,7 +49,7 @@ public class ResourceList
     public override string ToString()
     {
         string listOfResources = "\n";
-        foreach(ResourceValue resource in resourceValueList)
+        foreach (ResourceValue resource in resourceValueList)
         {
             listOfResources += resource;
             listOfResources += "\n";
