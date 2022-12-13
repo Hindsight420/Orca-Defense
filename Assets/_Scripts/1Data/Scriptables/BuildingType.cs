@@ -13,9 +13,9 @@ public class BuildingType : ScriptableObject
     [SerializeField]
     private bool hasRoof;
     [SerializeField]
-    private List<ResourceValue> cost;
+    private ResourceList cost;
     [SerializeField]
-    private List<ResourceValue> income;
+    private ResourceList income;
     [SerializeField]
     private int? ticksPerIncome;
 
@@ -23,8 +23,8 @@ public class BuildingType : ScriptableObject
     public GameObject Prefab { get => prefab; }
     public BuildingTypeEnum BuildingEnum { get => buildingEnum; }
     public bool HasRoof { get => hasRoof; }
-    public List<ResourceValue> Cost { get => cost; }
-    public List<ResourceValue> Income { get => income; }
+    public ResourceList Cost { get => cost; }
+    public ResourceList Income { get => income; }
     public int? TicksPerIncome { get => ticksPerIncome; }
 
 

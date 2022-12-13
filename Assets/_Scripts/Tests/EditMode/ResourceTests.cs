@@ -56,13 +56,12 @@ public class ResourceTests
     public void TestResourceListTransferTo()
     {
         ResourceList resourceList1 = new();
-        List<ResourceValue> resourceValues = new();
-        resourceValues.Add(new(resourceType, 5));
-        ResourceList resourceList2 = new(resourceValues);
+        ResourceValue resource = new(resourceType, 5);
+        ResourceList resourceList2 = new(resource);
 
         resourceList2.TransferTo(resourceList1);
 
-        Assert.AreEqual(resourceList1.Count, 0);
-        Assert.AreEqual(resourceList2.ResourceValueList, resourceValues);
+        Assert.AreEqual(resourceList2.Count, 0);
+        Assert.AreEqual(resourceList1.ResourceValueList, resource);
     }
 }

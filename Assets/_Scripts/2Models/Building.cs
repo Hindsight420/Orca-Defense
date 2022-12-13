@@ -11,8 +11,8 @@ public class Building
     int x;
     int y;
     BuildingState state;
-    List<ResourceValue> constructionResources = new();
-    List<ResourceValue> remainingResources = new();
+    ResourceList constructionResources = new();
+    ResourceList remainingResources = new();
 
     public BuildingType Type { get => type; private set => type = value; }
     public Tile Tile { get => tile; private set => tile = value; }
@@ -26,7 +26,7 @@ public class Building
             new BuildingChangedEvent().FireEvent(this);
         }
     }
-    public List<ResourceValue> ConstructionResources
+    public ResourceList ConstructionResources
     {
         get => constructionResources;
         private set
@@ -39,7 +39,7 @@ public class Building
             constructionResources = value;
         }
     }
-    public List<ResourceValue> RemainingResources { get => remainingResources; set => remainingResources = value; }
+    public ResourceList RemainingResources { get => remainingResources; set => remainingResources = value; }
 
     private Logger Logger { get => Logger.Instance; }
 
@@ -54,31 +54,34 @@ public class Building
         Y = tile.Y;
         this.state = state;
 
-        foreach (ResourceValue resourceValue in buildingType.Cost)
+        foreach (ResourceValue resourceValue in buildingType.Cost.ResourceValueList)
         {
-            ConstructionResources.Add(new(resourceValue.Type));
-            RemainingResources.Add(new(resourceValue.Type, resourceValue.Amount));
+            ConstructionResources.AddResource(new(resourceValue.Type));
+            RemainingResources.AddResource(new(resourceValue.Type, resourceValue.Amount));
         }
     }
 
-    public void AddResources(List<ResourceValue> resources)
+    public void AddResources(ResourceList resources)
     {
-        foreach (ResourceValue resource in resources)
-        {
-            ResourceType type = resource.Type;
+        resources.TransferTo(ConstructionResources);
+        RemainingResources = Type.Cost.Minus(ConstructionResources);
 
-            // Maybe add a try catch block for these 2 lines? In case we add an invalid resource.
-            ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
-            ResourceValue requiredResourceValue = Type.Cost.First(r => r.Type == type);
+        //foreach (ResourceValue resource in resources)
+        //{
+        //    ResourceType type = resource.Type;
 
-            resource.TransferTo(currentResourceValue);
-            if (currentResourceValue > requiredResourceValue) // Not a safety precaution, but we need to know if this ever happens
-                Logger.LogMessage($"{this} received too many resources: {currentResourceValue - requiredResourceValue}.", Logger.LogType.Error);
+        //    // Maybe add a try catch block for these 2 lines? In case we add an invalid resource.
+        //    //ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
+        //    //ResourceValue requiredResourceValue = Type.Cost.First(r => r.Type == type);
 
-            ResourceValue remainingResource = RemainingResources.First(r => r.Type == type);
-            remainingResource.Amount = requiredResourceValue - currentResourceValue;
-            if (remainingResource.Amount == 0) RemainingResources.Remove(remainingResource);
-        }
+        //    //resource.TransferTo(currentResourceValue);
+        //    if (currentResourceValue > requiredResourceValue) // Not a safety precaution, but we need to know if this ever happens
+        //        Logger.LogMessage($"{this} received too many resources: {currentResourceValue - requiredResourceValue}.", Logger.LogType.Error);
+
+        //    //ResourceValue remainingResource = RemainingResources.First(r => r.Type == type);
+        //    //remainingResource.Amount = requiredResourceValue - currentResourceValue;
+        //    //if (remainingResource.Amount == 0) RemainingResources.Remove(remainingResource);
+        //}
     }
 
     public void Construct()
@@ -89,17 +92,13 @@ public class Building
             return;
         }
 
-        foreach (ResourceValue requiredResourceValue in Type.Cost)
+        if (!ConstructionResources.Equals(Type.Cost))
         {
-            ResourceType type = requiredResourceValue.Type;
-            ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
-            if (!currentResourceValue.Equals(requiredResourceValue))
-            {
-                Logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {currentResourceValue}. Expected: {requiredResourceValue}.", Logger.LogType.Error);
-                return;
-            }
+            Logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {ConstructionResources}. Expected: {Type.Cost}.", Logger.LogType.Error);
+            return;
         }
-
+        
+        // Everything is in order, time to construct
         State = BuildingState.Constructed;
 
         if (type.TicksPerIncome is not null && type.Income is not null)

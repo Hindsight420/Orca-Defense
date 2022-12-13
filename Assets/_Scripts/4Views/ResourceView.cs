@@ -15,16 +15,16 @@ public class ResourceView : MonoBehaviour
     private void Start()
     {
         seasonManager = SeasonManager.Instance;
-        ResourceValueChangedEvent.RegisterListener(OnResourceValueChanged);
+        ResourcesChangedEvent.RegisterListener(OnResourceValueChanged);
     }
 
-    public void InitializeCounters(List<ResourceValue> resourceValues)
+    public void InitializeCounters(ResourceList resources)
     {
         resourceValueComponentMap = new();
 
         foreach (ResourceType resourceType in DataSystem.Instance.ResourceTypes)
         {
-            int amount = resourceValues.First(r => r.Type == resourceType).Amount;
+            int amount = resources.TryGetResource(resourceType).Amount;
             InitializeCounter(resourceType, amount);
         }
     }
@@ -41,10 +41,12 @@ public class ResourceView : MonoBehaviour
         resourceValueComponentMap.Add(resourceType, value);
     }
 
-    void OnResourceValueChanged(ResourceValueChangedEvent resourceValueChangedEvent)
+    void OnResourceValueChanged(ResourcesChangedEvent resourceValueChangedEvent)
     {
-        ResourceValue resourceValue = resourceValueChangedEvent.ResourceValue;
-        resourceValueComponentMap.TryGetValue(resourceValue.Type, out TextMeshProUGUI resourceValueComponent);
-        resourceValueComponent.text = resourceValue.Amount.ToString();
+        foreach (var resourceElement in resourceValueComponentMap)
+        {
+            ResourceValue resource = resourceValueChangedEvent.ResourceList.TryGetResource(resourceElement.Key);
+            resourceElement.Value.text = resource.Amount.ToString();
+        }
     }
 }

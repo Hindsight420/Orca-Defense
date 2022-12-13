@@ -6,8 +6,8 @@ public class ResourceManager : Singleton<ResourceManager>
 {
     public ResourceView View;
 
-    readonly List<ResourceValue> resources = new();
-    readonly List<ResourceValue> resourcesInHolding = new();
+    readonly ResourceList resources = new();
+    readonly ResourceList resourcesInHolding = new();
 
     protected override void Awake()
     {
@@ -28,46 +28,24 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         foreach (ResourceType type in DataSystem.Instance.ResourceTypes)
         {
-            resources.Add(new ResourceValue(type, 500)); // TODO: Clean up temporary, hardcoded starting value
-            resourcesInHolding.Add(new ResourceValue(type));
+            resources.AddResource(new ResourceValue(type, 500)); // TODO: Clean up temporary, hardcoded starting value
+            resourcesInHolding.AddResource(new ResourceValue(type));
         }
     }
 
-    ResourceValue GetResourceValue(ResourceType type)
+    void ExpendResources(ResourceList resources)
     {
-        return resources.First(r => r.Type == type);
+        this.resources.TransferTo(resourcesInHolding, resources);
+
+        new ResourcesChangedEvent().FireEvent(this.resources);
     }
 
-    void ExpendResources(List<ResourceValue> resourceValues)
+    void AddResources(ResourceList resources)
     {
-        foreach (ResourceValue resourceValue in resourceValues)
-            ExpendResources(resourceValue);
+        resources.TransferTo(this.resources);
+
+        new ResourcesChangedEvent().FireEvent(this.resources);
     }
-
-    void ExpendResources(ResourceValue resourceValue)
-    {
-        ResourceValue resource = GetResourceValue(resourceValue.Type);
-        //resource.Amount -= resourceValue;
-        resource.TransferTo(resourcesInHolding, resourceValue);
-
-        new ResourceValueChangedEvent().FireEvent(resource);
-    }
-
-    void AddResources(List<ResourceValue> resourceValues)
-    {
-        foreach (ResourceValue resourceValue in resourceValues)
-            AddResources(resourceValue);
-    }
-
-    void AddResources(ResourceValue resourceValue)
-    {
-        ResourceValue resource = resources.First(r => r.Type == resourceValue.Type);
-        resource.Amount += resourceValue;
-
-        new ResourceValueChangedEvent().FireEvent(resource);
-    }
-
-
 
     void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
@@ -81,18 +59,11 @@ public class ResourceManager : Singleton<ResourceManager>
 
     void OnIncome(IncomeEvent incomeEvent)
     {
-        incomeEvent.ResourceValues.ForEach(resource => AddResources(resource));
+        AddResources(incomeEvent.Resources);
     }
 
-    public bool CheckResourcesAvailability(List<ResourceValue> resourceValues)
+    public bool CheckResourcesAvailability(ResourceList resources)
     {
-        foreach (ResourceValue resourceValue in resourceValues)
-            if(!CheckResourcesAvailability(resourceValue)) return false;
-        return true;
-    }
-
-    public bool CheckResourcesAvailability(ResourceValue resourceValue)
-    {
-        return GetResourceValue(resourceValue.Type) >= resourceValue;
+        return this.resources.CheckResourcesAvailability(resources);
     }
 }

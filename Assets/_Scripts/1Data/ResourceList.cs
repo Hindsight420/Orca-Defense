@@ -9,32 +9,89 @@ public class ResourceList
     public List<ResourceValue> ResourceValueList { get => resourceValueList; }
     public int Count { get => resourceValueList.Count; }
 
-    public ResourceList() : this(new()) { }
-
-    public ResourceList(List<ResourceValue> resourceValues)
+    public ResourceList(List<ResourceValue> resources)
     {
-        resourceValueList = resourceValues;
+        resourceValueList = resources;
     }
 
-    public ResourceValue GetResource(ResourceType type)
+    public ResourceList() : this(new List<ResourceValue>()) { }
+
+    public ResourceList(ResourceValue resource) : this(new List<ResourceValue>() { resource }) { }
+
+    public ResourceValue TryGetResource(ResourceType type)
     {
-        return resourceValueList.First(r => r.Type == type);
+        try { return resourceValueList.First(r => r.Type == type); }
+        catch (InvalidOperationException) { return null; }
     }
 
-    public void TransferTo(ResourceList target, ResourceList resources)
+    public void AddResource(ResourceValue resource)
     {
-        foreach (ResourceValue resourceValue in resources.ResourceValueList)
+        ResourceValue targetResource = TryGetResource(resource.Type);
+        if (targetResource != null) targetResource.Amount += resource;
+        else resourceValueList.Add(resource);
+    }
+
+    public void AddResource(ResourceValue resource, ResourceValue amount)
+    {
+        ResourceValue targetResource = TryGetResource(resource.Type);
+        if (targetResource == null)
         {
-            ResourceType type = resourceValue.Type;
-            ResourceValue thisResource = GetResource(type);
-            ResourceValue targetResource = target.GetResource(type);
-            thisResource.TransferTo(targetResource, resourceValue.Amount);
+            targetResource = new(resource.Type);
+            resourceValueList.Add(targetResource);
         }
+
+        resource.TransferTo(targetResource, amount);
     }
 
     public void TransferTo(ResourceList target)
     {
-        TransferTo(target, this);
+        foreach (ResourceValue resourceValue in resourceValueList)
+        {
+            target.AddResource(resourceValue);
+        }
+    }
+
+    public void TransferTo(ResourceList target, ResourceList amount)
+    {
+        foreach (ResourceValue resourceValue in amount.ResourceValueList)
+        {
+            target.AddResource(resourceValue);
+        }
+    }
+
+    public bool CheckResourcesAvailability(ResourceList resources)
+    {
+        foreach(ResourceValue resource in resources.ResourceValueList)
+        {
+            if (TryGetResource(resource.Type) < resource.Amount)
+                return false;
+        }
+
+        return true;
+    }
+
+    public ResourceList Minus(ResourceList subtrahends)
+    {
+        ResourceList difference = Copy();
+        foreach(ResourceValue subtrahend in subtrahends.ResourceValueList)
+        {
+            ResourceValue minuend = difference.TryGetResource(subtrahend.Type);
+            minuend.Amount -= subtrahend;
+            if (minuend == 0) difference.ResourceValueList.Remove(minuend);
+        }
+
+        return difference;
+    }
+
+    public ResourceList Copy()
+    {
+        ResourceList copy = new();
+        foreach(ResourceValue resource in ResourceValueList)
+        {
+            copy.AddResource(resource.Copy());
+        }
+
+        return copy;
     }
 
     public override bool Equals(object obj) => obj is ResourceList value ? Equals(value) : base.Equals(obj);

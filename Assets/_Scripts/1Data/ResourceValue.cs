@@ -45,14 +45,24 @@ public class ResourceValue
         target.amount += amount;
     }
 
+    public void TransferTo(ResourceValue target, ResourceValue amount)
+    {
+        TransferTo(target, amount.Amount);
+    }
+
     public void TransferTo(ResourceValue target)
     {
         TransferTo(target, Amount);
     }
 
-    public void TransferTo(List<ResourceValue> targetList, int amount)
+    public void TransferTo(ResourceList targetList)
     {
-        TransferTo(targetList.First(r => r.Type == Type), amount);
+        targetList.AddResource(this);
+    }
+
+    public ResourceValue Copy()
+    {
+        return new(Type, Amount);
     }
 
     public override bool Equals(object obj) => obj is ResourceValue value ? Equals(value) : base.Equals(obj);
