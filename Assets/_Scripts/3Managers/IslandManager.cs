@@ -100,7 +100,7 @@ public class IslandManager : Singleton<IslandManager>
         ResourceList resourcesToAdd = new();
         foreach (ResourceValue resource in b.RemainingResources.ResourceValueList)
         {
-            resourcesToAdd.AddResource(new(resource.Type, 1));
+            resourcesToAdd.Add(new(resource.Type, 1));
         }
 
         b.AddResources(resourcesToAdd);

@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -36,32 +35,14 @@ public class ResourceTests
     }
 
     [Test]
-    public void TestResourceListConstructor()
+    public void Equals()
     {
-        ResourceList resourceList = new();
-        Assert.AreEqual(new(), resourceList.ResourceValueList);
-    }
+        ResourceValue 
+            resource1 = new(resourceType, 80), 
+            resource2 = new(resourceType, 80),
+            resource3 = new(resourceType, 100);
 
-    [Test]
-    public void TestResourceListConstructorWithValues()
-    {
-        List<ResourceValue> resourceValues = new();
-        resourceValues.Add(new(resourceType, 5));
-        ResourceList resourceList = new(resourceValues);
-
-        Assert.AreEqual(resourceValues, resourceList.ResourceValueList);
-    }
-
-    [Test]
-    public void TestResourceListTransferTo()
-    {
-        ResourceList resourceList1 = new();
-        ResourceValue resource = new(resourceType, 5);
-        ResourceList resourceList2 = new(resource);
-
-        resourceList2.TransferTo(resourceList1);
-
-        Assert.AreEqual(resourceList2.Count, 0);
-        Assert.AreEqual(resourceList1.ResourceValueList, resource);
+        Assert.AreEqual(resource1, resource2);
+        Assert.IsTrue(resource1 != resource3);
     }
 }

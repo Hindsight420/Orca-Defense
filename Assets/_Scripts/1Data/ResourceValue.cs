@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -45,19 +43,26 @@ public class ResourceValue
         target.amount += amount;
     }
 
-    public void TransferTo(ResourceValue target, ResourceValue amount)
-    {
-        TransferTo(target, amount.Amount);
-    }
-
     public void TransferTo(ResourceValue target)
     {
         TransferTo(target, Amount);
     }
 
+    public void TransferTo(ResourceList targetList, int amount)
+    {
+        ResourceValue target = targetList.TryGetResource(Type);
+        if (target == null)
+        {
+            target = new ResourceValue(Type);
+            targetList.ResourceValueList.Add(target);
+        }
+
+        TransferTo(target, amount);
+    }
+
     public void TransferTo(ResourceList targetList)
     {
-        targetList.AddResource(this);
+        TransferTo(targetList, Amount);
     }
 
     public ResourceValue Copy()

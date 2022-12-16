@@ -28,8 +28,8 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         foreach (ResourceType type in DataSystem.Instance.ResourceTypes)
         {
-            resources.AddResource(new ResourceValue(type, 500)); // TODO: Clean up temporary, hardcoded starting value
-            resourcesInHolding.AddResource(new ResourceValue(type));
+            resources.Add(new ResourceValue(type, 500)); // TODO: Clean up temporary, hardcoded starting value
+            resourcesInHolding.Add(new ResourceValue(type));
         }
     }
 

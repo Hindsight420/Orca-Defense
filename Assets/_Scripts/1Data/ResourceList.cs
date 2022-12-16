@@ -24,46 +24,42 @@ public class ResourceList
         catch (InvalidOperationException) { return null; }
     }
 
-    public void AddResource(ResourceValue resource)
+    public void Add(ResourceValue resource)
     {
         ResourceValue targetResource = TryGetResource(resource.Type);
         if (targetResource != null) targetResource.Amount += resource;
-        else resourceValueList.Add(resource);
-    }
-
-    public void AddResource(ResourceValue resource, ResourceValue amount)
-    {
-        ResourceValue targetResource = TryGetResource(resource.Type);
-        if (targetResource == null)
-        {
-            targetResource = new(resource.Type);
-            resourceValueList.Add(targetResource);
-        }
-
-        resource.TransferTo(targetResource, amount);
+        else resourceValueList.Add(resource.Copy());
     }
 
     public void TransferTo(ResourceList target)
     {
-        foreach (ResourceValue resourceValue in resourceValueList)
-        {
-            target.AddResource(resourceValue);
-        }
+        TransferTo(target, this);
     }
 
     public void TransferTo(ResourceList target, ResourceList amount)
     {
-        foreach (ResourceValue resourceValue in amount.ResourceValueList)
+        foreach (ResourceValue resourceAmount in amount.ResourceValueList)
         {
-            target.AddResource(resourceValue);
+            ResourceValue resourceValue = TryGetResource(resourceAmount.Type);
+            if (resourceAmount == null) continue;
+
+            resourceValue.TransferTo(target, resourceAmount);
         }
+
+        CleanUp();
     }
 
-    public bool CheckResourcesAvailability(ResourceList resources)
+    public void CleanUp()
     {
-        foreach(ResourceValue resource in resources.ResourceValueList)
+        ResourceValueList.RemoveAll(r => r.Amount == 0);
+    }
+
+    public bool CheckResourcesAvailability(ResourceList amount)
+    {
+        foreach(ResourceValue a in amount.ResourceValueList)
         {
-            if (TryGetResource(resource.Type) < resource.Amount)
+            ResourceValue resource = TryGetResource(a.Type);
+            if (resource == null || resource < a.Amount)
                 return false;
         }
 
@@ -77,9 +73,9 @@ public class ResourceList
         {
             ResourceValue minuend = difference.TryGetResource(subtrahend.Type);
             minuend.Amount -= subtrahend;
-            if (minuend == 0) difference.ResourceValueList.Remove(minuend);
         }
 
+        difference.CleanUp();
         return difference;
     }
 
@@ -88,30 +84,33 @@ public class ResourceList
         ResourceList copy = new();
         foreach(ResourceValue resource in ResourceValueList)
         {
-            copy.AddResource(resource.Copy());
+            copy.Add(resource.Copy());
         }
 
         return copy;
     }
 
-    public override bool Equals(object obj) => obj is ResourceList value ? Equals(value) : base.Equals(obj);
-
     public bool Equals(ResourceList target)
     {
-        return !resourceValueList.Except(target.ResourceValueList).Any();
+        return resourceValueList.SequenceEqual(target.ResourceValueList);
+    }
+
+    public override bool Equals(object obj) => obj is ResourceList value ? Equals(value) : base.Equals(obj);
+
+    public static bool operator ==(ResourceList resourceList1, ResourceList resourceList2)
+    {
+        return resourceList1.Equals(resourceList2);
+    }
+    
+    public static bool operator !=(ResourceList resourceList1, ResourceList resourceList2)
+    {
+        return !resourceList1.Equals(resourceList2);
     }
 
     public override int GetHashCode() => HashCode.Combine(resourceValueList);
 
     public override string ToString()
     {
-        string listOfResources = "\n";
-        foreach (ResourceValue resource in resourceValueList)
-        {
-            listOfResources += resource;
-            listOfResources += "\n";
-        }
-        return $"Resource list ({listOfResources})";
-
+        return string.Join(Environment.NewLine, resourceValueList);
     }
 }

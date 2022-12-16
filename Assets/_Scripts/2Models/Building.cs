@@ -56,8 +56,8 @@ public class Building
 
         foreach (ResourceValue resourceValue in buildingType.Cost.ResourceValueList)
         {
-            ConstructionResources.AddResource(new(resourceValue.Type));
-            RemainingResources.AddResource(new(resourceValue.Type, resourceValue.Amount));
+            ConstructionResources.Add(new(resourceValue.Type));
+            RemainingResources.Add(new(resourceValue.Type, resourceValue.Amount));
         }
     }
 
