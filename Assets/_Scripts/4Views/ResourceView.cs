@@ -9,18 +9,18 @@ public class ResourceView : MonoBehaviour
 {
     [SerializeField] GameObject counterPrefab;
 
-    Dictionary<ResourceType, TextMeshProUGUI> resourceValueComponentMap;
+    Dictionary<ResourceType, TextMeshProUGUI> resourceComponentMap;
     private SeasonManager seasonManager;
 
     private void Start()
     {
         seasonManager = SeasonManager.Instance;
-        ResourcesChangedEvent.RegisterListener(OnResourceValueChanged);
+        ResourcesChangedEvent.RegisterListener(OnResourceChanged);
     }
 
     public void InitializeCounters(ResourceList resources)
     {
-        resourceValueComponentMap = new();
+        resourceComponentMap = new();
 
         foreach (ResourceType resourceType in DataSystem.Instance.ResourceTypes)
         {
@@ -38,14 +38,14 @@ public class ResourceView : MonoBehaviour
 
         TextMeshProUGUI value = counterGO.GetComponentInChildren<TextMeshProUGUI>();
         value.text = amount.ToString();
-        resourceValueComponentMap.Add(resourceType, value);
+        resourceComponentMap.Add(resourceType, value);
     }
 
-    void OnResourceValueChanged(ResourcesChangedEvent resourceValueChangedEvent)
+    void OnResourceChanged(ResourcesChangedEvent resourceChangedEvent)
     {
-        foreach (var resourceElement in resourceValueComponentMap)
+        foreach (var resourceElement in resourceComponentMap)
         {
-            ResourceValue resource = resourceValueChangedEvent.ResourceList.TryGetResource(resourceElement.Key);
+            Resource resource = resourceChangedEvent.ResourceList.TryGetResource(resourceElement.Key);
             resourceElement.Value.text = resource.Amount.ToString();
         }
     }

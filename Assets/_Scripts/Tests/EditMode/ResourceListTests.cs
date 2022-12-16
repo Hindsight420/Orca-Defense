@@ -9,9 +9,9 @@ public class ResourceListTests
     private ResourceType fishType;
     private ResourceType stoneType;
 
-    private ResourceValue wood;
-    private ResourceValue fish;
-    private ResourceValue stone;
+    private Resource wood;
+    private Resource fish;
+    private Resource stone;
 
     private ResourceList empty;
     private ResourceList someWood;
@@ -33,26 +33,26 @@ public class ResourceListTests
 
         empty = new();
         someWood = new(wood);
-        all = new(new List<ResourceValue>() { wood, fish, stone });
+        all = new(new List<Resource>() { wood, fish, stone });
     }
 
     [Test]
     public void Constructor()
     {
         ResourceList resourceList = new();
-        Assert.AreEqual(new List<ResourceValue>(), resourceList.ResourceValueList);
+        Assert.AreEqual(new List<Resource>(), resourceList.Resources);
     }
 
     [Test]
     public void ConstructorWithValues()
     {
-        List<ResourceValue> listOfResources1 = new() { wood };
-        List<ResourceValue> listOfResources2 = new() { wood, fish };
+        List<Resource> listOfResources1 = new() { wood };
+        List<Resource> listOfResources2 = new() { wood, fish };
         ResourceList resourceList1 = new(wood);
         ResourceList resourceList2 = new(listOfResources2);
 
-        Assert.AreEqual(listOfResources1, resourceList1.ResourceValueList);
-        Assert.AreEqual(listOfResources2, resourceList2.ResourceValueList);
+        Assert.AreEqual(listOfResources1, resourceList1.Resources);
+        Assert.AreEqual(listOfResources2, resourceList2.Resources);
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class ResourceListTests
     [Test]
     public void TransferToWithAmount()
     {
-        ResourceList amount = new(new ResourceValue(woodType, 40));
+        ResourceList amount = new(new Resource(woodType, 40));
         all.TransferTo(empty, amount);
 
         Assert.AreEqual(40, empty.TryGetResource(woodType).Amount);

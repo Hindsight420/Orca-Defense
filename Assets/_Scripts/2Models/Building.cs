@@ -54,10 +54,10 @@ public class Building
         Y = tile.Y;
         this.state = state;
 
-        foreach (ResourceValue resourceValue in buildingType.Cost.ResourceValueList)
+        foreach (Resource resource in buildingType.Cost.Resources)
         {
-            ConstructionResources.Add(new(resourceValue.Type));
-            RemainingResources.Add(new(resourceValue.Type, resourceValue.Amount));
+            ConstructionResources.Add(new(resource.Type));
+            RemainingResources.Add(new(resource.Type, resource.Amount));
         }
     }
 
@@ -66,20 +66,20 @@ public class Building
         resources.TransferTo(ConstructionResources);
         RemainingResources = Type.Cost.Minus(ConstructionResources);
 
-        //foreach (ResourceValue resource in resources)
+        //foreach (Resource resource in resources)
         //{
         //    ResourceType type = resource.Type;
 
         //    // Maybe add a try catch block for these 2 lines? In case we add an invalid resource.
-        //    //ResourceValue currentResourceValue = ConstructionResources.First(r => r.Type == type);
-        //    //ResourceValue requiredResourceValue = Type.Cost.First(r => r.Type == type);
+        //    //Resource currentResource = ConstructionResources.First(r => r.Type == type);
+        //    //Resource requiredResource = Type.Cost.First(r => r.Type == type);
 
-        //    //resource.TransferTo(currentResourceValue);
-        //    if (currentResourceValue > requiredResourceValue) // Not a safety precaution, but we need to know if this ever happens
-        //        Logger.LogMessage($"{this} received too many resources: {currentResourceValue - requiredResourceValue}.", Logger.LogType.Error);
+        //    //resource.TransferTo(currentResource);
+        //    if (currentResource > requiredResource) // Not a safety precaution, but we need to know if this ever happens
+        //        Logger.LogMessage($"{this} received too many resources: {currentResource - requiredResource}.", Logger.LogType.Error);
 
-        //    //ResourceValue remainingResource = RemainingResources.First(r => r.Type == type);
-        //    //remainingResource.Amount = requiredResourceValue - currentResourceValue;
+        //    //Resource remainingResource = RemainingResources.First(r => r.Type == type);
+        //    //remainingResource.Amount = requiredResource - currentResource;
         //    //if (remainingResource.Amount == 0) RemainingResources.Remove(remainingResource);
         //}
     }

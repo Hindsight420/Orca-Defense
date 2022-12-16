@@ -98,7 +98,7 @@ public class IslandManager : Singleton<IslandManager>
 
         // Check which resources to add to the building
         ResourceList resourcesToAdd = new();
-        foreach (ResourceValue resource in b.RemainingResources.ResourceValueList)
+        foreach (Resource resource in b.RemainingResources.Resources)
         {
             resourcesToAdd.Add(new(resource.Type, 1));
         }

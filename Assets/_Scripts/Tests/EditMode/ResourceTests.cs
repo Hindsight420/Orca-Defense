@@ -27,7 +27,7 @@ public class ResourceTests
             amount = 0;
         }
 
-        ResourceValue r = new(resourceType, originalAmount);
+        Resource r = new(resourceType, originalAmount);
         Assert.AreEqual(amount, r.Amount);
 
         int i = r;
@@ -37,7 +37,7 @@ public class ResourceTests
     [Test]
     public void Equals()
     {
-        ResourceValue 
+        Resource 
             resource1 = new(resourceType, 80), 
             resource2 = new(resourceType, 80),
             resource3 = new(resourceType, 100);

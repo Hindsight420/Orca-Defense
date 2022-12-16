@@ -5,30 +5,30 @@ using System.Linq;
 [Serializable]
 public class ResourceList
 {
-    private readonly List<ResourceValue> resourceValueList;
-    public List<ResourceValue> ResourceValueList { get => resourceValueList; }
-    public int Count { get => resourceValueList.Count; }
+    private readonly List<Resource> resources;
+    public List<Resource> Resources { get => resources; }
+    public int Count { get => resources.Count; }
 
-    public ResourceList(List<ResourceValue> resources)
+    public ResourceList(List<Resource> resources)
     {
-        resourceValueList = resources;
+        this.resources = resources;
     }
 
-    public ResourceList() : this(new List<ResourceValue>()) { }
+    public ResourceList() : this(new List<Resource>()) { }
 
-    public ResourceList(ResourceValue resource) : this(new List<ResourceValue>() { resource }) { }
+    public ResourceList(Resource resource) : this(new List<Resource>() { resource }) { }
 
-    public ResourceValue TryGetResource(ResourceType type)
+    public Resource TryGetResource(ResourceType type)
     {
-        try { return resourceValueList.First(r => r.Type == type); }
+        try { return resources.First(r => r.Type == type); }
         catch (InvalidOperationException) { return null; }
     }
 
-    public void Add(ResourceValue resource)
+    public void Add(Resource resource)
     {
-        ResourceValue targetResource = TryGetResource(resource.Type);
+        Resource targetResource = TryGetResource(resource.Type);
         if (targetResource != null) targetResource.Amount += resource;
-        else resourceValueList.Add(resource.Copy());
+        else resources.Add(resource.Copy());
     }
 
     public void TransferTo(ResourceList target)
@@ -38,12 +38,12 @@ public class ResourceList
 
     public void TransferTo(ResourceList target, ResourceList amount)
     {
-        foreach (ResourceValue resourceAmount in amount.ResourceValueList)
+        foreach (Resource resourceAmount in amount.Resources)
         {
-            ResourceValue resourceValue = TryGetResource(resourceAmount.Type);
+            Resource resource = TryGetResource(resourceAmount.Type);
             if (resourceAmount == null) continue;
 
-            resourceValue.TransferTo(target, resourceAmount);
+            resource.TransferTo(target, resourceAmount);
         }
 
         CleanUp();
@@ -51,14 +51,14 @@ public class ResourceList
 
     public void CleanUp()
     {
-        ResourceValueList.RemoveAll(r => r.Amount == 0);
+        Resources.RemoveAll(r => r.Amount == 0);
     }
 
     public bool CheckResourcesAvailability(ResourceList amount)
     {
-        foreach(ResourceValue a in amount.ResourceValueList)
+        foreach(Resource a in amount.Resources)
         {
-            ResourceValue resource = TryGetResource(a.Type);
+            Resource resource = TryGetResource(a.Type);
             if (resource == null || resource < a.Amount)
                 return false;
         }
@@ -69,9 +69,9 @@ public class ResourceList
     public ResourceList Minus(ResourceList subtrahends)
     {
         ResourceList difference = Copy();
-        foreach(ResourceValue subtrahend in subtrahends.ResourceValueList)
+        foreach(Resource subtrahend in subtrahends.Resources)
         {
-            ResourceValue minuend = difference.TryGetResource(subtrahend.Type);
+            Resource minuend = difference.TryGetResource(subtrahend.Type);
             minuend.Amount -= subtrahend;
         }
 
@@ -82,7 +82,7 @@ public class ResourceList
     public ResourceList Copy()
     {
         ResourceList copy = new();
-        foreach(ResourceValue resource in ResourceValueList)
+        foreach(Resource resource in Resources)
         {
             copy.Add(resource.Copy());
         }
@@ -92,7 +92,7 @@ public class ResourceList
 
     public bool Equals(ResourceList target)
     {
-        return resourceValueList.SequenceEqual(target.ResourceValueList);
+        return resources.SequenceEqual(target.Resources);
     }
 
     public override bool Equals(object obj) => obj is ResourceList value ? Equals(value) : base.Equals(obj);
@@ -107,10 +107,10 @@ public class ResourceList
         return !resourceList1.Equals(resourceList2);
     }
 
-    public override int GetHashCode() => HashCode.Combine(resourceValueList);
+    public override int GetHashCode() => HashCode.Combine(resources);
 
     public override string ToString()
     {
-        return string.Join(Environment.NewLine, resourceValueList);
+        return string.Join(Environment.NewLine, resources);
     }
 }
