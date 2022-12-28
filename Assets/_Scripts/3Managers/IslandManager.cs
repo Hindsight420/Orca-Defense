@@ -83,6 +83,8 @@ public class IslandManager : Singleton<IslandManager>
             {
                 AddResourcesToBuilding(b);
             }
+
+            buildingsToConstruct.RemoveAll(b => b.State != BuildingState.Planned);
         }
     }
 
@@ -92,7 +94,6 @@ public class IslandManager : Singleton<IslandManager>
         if (b.RemainingResources.Count == 0)
         {
             b.Construct();
-            buildingsToConstruct.Remove(b);
             return;
         }
 
@@ -100,7 +101,7 @@ public class IslandManager : Singleton<IslandManager>
         ResourceList resourcesToAdd = new();
         foreach (Resource resource in b.RemainingResources.Resources)
         {
-            resourcesToAdd.Add(new(resource.Type, 1));
+            resourcesToAdd.Add(new Resource(resource.Type, 1));
         }
 
         b.AddResources(resourcesToAdd);

@@ -42,7 +42,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
     void AddResources(ResourceList resources)
     {
-        resources.TransferTo(this.resources);
+        this.resources.Add(resources);
 
         new ResourcesChangedEvent().FireEvent(this.resources);
     }

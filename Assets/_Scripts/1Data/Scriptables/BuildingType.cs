@@ -1,6 +1,5 @@
 using OrcaDefense.Models;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building Type")]
@@ -17,7 +16,7 @@ public class BuildingType : ScriptableObject
     [SerializeField]
     private ResourceList income;
     [SerializeField]
-    private int? ticksPerIncome;
+    private int ticksPerIncome;
 
     //Accessors for the above
     public GameObject Prefab { get => prefab; }

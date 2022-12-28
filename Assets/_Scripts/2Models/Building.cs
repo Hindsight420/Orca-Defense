@@ -54,34 +54,13 @@ public class Building
         Y = tile.Y;
         this.state = state;
 
-        foreach (Resource resource in buildingType.Cost.Resources)
-        {
-            ConstructionResources.Add(new(resource.Type));
-            RemainingResources.Add(new(resource.Type, resource.Amount));
-        }
+        RemainingResources = buildingType.Cost.Copy();
     }
 
     public void AddResources(ResourceList resources)
     {
         resources.TransferTo(ConstructionResources);
         RemainingResources = Type.Cost.Minus(ConstructionResources);
-
-        //foreach (Resource resource in resources)
-        //{
-        //    ResourceType type = resource.Type;
-
-        //    // Maybe add a try catch block for these 2 lines? In case we add an invalid resource.
-        //    //Resource currentResource = ConstructionResources.First(r => r.Type == type);
-        //    //Resource requiredResource = Type.Cost.First(r => r.Type == type);
-
-        //    //resource.TransferTo(currentResource);
-        //    if (currentResource > requiredResource) // Not a safety precaution, but we need to know if this ever happens
-        //        Logger.LogMessage($"{this} received too many resources: {currentResource - requiredResource}.", Logger.LogType.Error);
-
-        //    //Resource remainingResource = RemainingResources.First(r => r.Type == type);
-        //    //remainingResource.Amount = requiredResource - currentResource;
-        //    //if (remainingResource.Amount == 0) RemainingResources.Remove(remainingResource);
-        //}
     }
 
     public void Construct()
@@ -101,7 +80,7 @@ public class Building
         // Everything is in order, time to construct
         State = BuildingState.Constructed;
 
-        if (type.TicksPerIncome is not null && type.Income is not null)
+        if (type.TicksPerIncome != 0 && type.Income is not null)
         {
             TimeTicker.OnTick += OnTick;
             startTick = TimeTicker.CurrentTick;
@@ -112,7 +91,7 @@ public class Building
     {
         if (TimeTicker.GetInnerTick(startTick) % Type.TicksPerIncome == 0)
         {
-            if (Type.Income != null)
+            if (Type.Income is not null) // double check, irrelevant?
             {
                 new IncomeEvent().FireEvent(Type.Income);
             }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 [Serializable]
 public class ResourceList
 {
-    private readonly List<Resource> resources;
+    [SerializeField]
+    private List<Resource> resources;
     public List<Resource> Resources { get => resources; }
     public int Count { get => resources.Count; }
 
@@ -29,6 +31,11 @@ public class ResourceList
         Resource targetResource = TryGetResource(resource.Type);
         if (targetResource != null) targetResource.Amount += resource;
         else resources.Add(resource.Copy());
+    }
+    public void Add(ResourceList resources)
+    {
+        foreach (Resource resource in resources.Resources) 
+            Add(resource);
     }
 
     public void TransferTo(ResourceList target)
@@ -56,7 +63,7 @@ public class ResourceList
 
     public bool CheckResourcesAvailability(ResourceList amount)
     {
-        foreach(Resource a in amount.Resources)
+        foreach (Resource a in amount.Resources)
         {
             Resource resource = TryGetResource(a.Type);
             if (resource == null || resource < a.Amount)
@@ -69,7 +76,7 @@ public class ResourceList
     public ResourceList Minus(ResourceList subtrahends)
     {
         ResourceList difference = Copy();
-        foreach(Resource subtrahend in subtrahends.Resources)
+        foreach (Resource subtrahend in subtrahends.Resources)
         {
             Resource minuend = difference.TryGetResource(subtrahend.Type);
             minuend.Amount -= subtrahend;
@@ -82,7 +89,7 @@ public class ResourceList
     public ResourceList Copy()
     {
         ResourceList copy = new();
-        foreach(Resource resource in Resources)
+        foreach (Resource resource in Resources)
         {
             copy.Add(resource.Copy());
         }
@@ -101,7 +108,7 @@ public class ResourceList
     {
         return resourceList1.Equals(resourceList2);
     }
-    
+
     public static bool operator !=(ResourceList resourceList1, ResourceList resourceList2)
     {
         return !resourceList1.Equals(resourceList2);
