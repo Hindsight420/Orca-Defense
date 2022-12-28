@@ -9,6 +9,8 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
     private Logger _logger;
     private Transform _targetSelection;
     private RectTransform _selectionTransform;
+    [SerializeField]
+    private UI_SelectionPanel _selectionPanel;
 
     private WidthHeight PenguinSize = new WidthHeight(3, 5);
 
@@ -24,6 +26,7 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         if (_selectionTransform != null)
         {
             DisableSelf();
+            _selectionPanel.DisableInfoPanel();
         }
     }
 
@@ -33,6 +36,8 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         {
             case PenguinData: SelectPenguin(selectedObject); break;
         }
+
+        _selectionPanel.ConstructInfoPanel(selectedObject);
     }
 
     public void SelectPenguin(SelectableData penguinData)
