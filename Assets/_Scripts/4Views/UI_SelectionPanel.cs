@@ -24,13 +24,14 @@ public class UI_SelectionPanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void ConstructInfoPanel<T>(T selectedObject) where T : SelectableData
+    public void ConstructInfoPanel<T>(T selectedObject) where T : ISelectionData
     {
         ClearInfoPanel();
 
         switch (selectedObject)
         {
             case PenguinData: ConstructPenguinInfoPanel(selectedObject); break;
+            case FishStockpileData: ConstructStockpileInfoPanel(selectedObject); break;
         }
 
         EnableInfoPanel();
@@ -62,15 +63,44 @@ public class UI_SelectionPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void ConstructPenguinInfoPanel(SelectableData penguinData)
+    private void ConstructPenguinInfoPanel(ISelectionData penguinData)
     {
         if (penguinData is not PenguinData) { _logger.LogError("Attempted to select penguin without PenguinData"); return; }
         PenguinData data = (PenguinData)penguinData;
 
-        _title.text = data.Name;
+        _title.text = data.GetTitle();
         var description = Instantiate(descPrefab, transform);
         var descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
-        descriptionText.text = data.Description;
+        descriptionText.text = data.GetDescriptionOfPenguin();
+        descriptions.Add(description);
+    }
+
+    private void ConstructStockpileInfoPanel(ISelectionData stockpileData)
+    {
+        if (stockpileData is not FishStockpileData) { _logger.LogError("Attempted to select penguin without PenguinData"); return; }
+        FishStockpileData data = (FishStockpileData)stockpileData;
+
+        _title.text = data.GetTitle();
+
+        //e.g. Max Capacity: 50
+        var description = Instantiate(descPrefab, transform);
+        var descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
+        descriptionText.text = data.GetCapacityDescription();
+        descriptions.Add(description);
+
+        // e.g. Current Quantity 3/50 fish
+        description = Instantiate(descValuePairPrefab, transform); // Title
+        descriptionText = description.transform.Find("Title").GetComponentInChildren<TextMeshProUGUI>();
+        descriptionText.text = "Current Quantity";
+        
+        descriptionText = description.transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>(); // Value
+        descriptionText.text = data.GetStockpileCountDescription();
+        descriptions.Add(description);
+
+        //e.g. A stockpile used to hold fish.
+        description = Instantiate(descPrefab, transform);
+        descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
+        descriptionText.text = data.GetStockpileDescription();
         descriptions.Add(description);
     }
 }

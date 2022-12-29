@@ -1,5 +1,6 @@
 using Assets._Scripts._1Data;
 using Assets._Scripts.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,41 +14,58 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
     private UI_SelectionPanel _selectionPanel;
 
     private WidthHeight PenguinSize = new WidthHeight(3, 5);
+    private WidthHeight BuildingSize = new WidthHeight(2.5f,2.5f);
 
     protected override void Awake()
     {
         base.Awake();
         _logger = Logger.Instance;
         _selectionTransform = GetComponent<RectTransform>();
+        DisableSelf();
     }
 
     private void OnMouseDown()
     {
-        if (_selectionTransform != null)
+        if (_targetSelection != null)
         {
             DisableSelf();
             _selectionPanel.DisableInfoPanel();
         }
     }
 
-    public void SelectEntity<T>(T selectedObject) where T : SelectableData
+    public void SelectEntity<T>(T selectedObject) where T : ISelectionData
     {
         switch (selectedObject)
         {
             case PenguinData: SelectPenguin(selectedObject); break;
+            case FishStockpileData: SelectStockpile(selectedObject); break;
         }
 
         _selectionPanel.ConstructInfoPanel(selectedObject);
     }
 
-    public void SelectPenguin(SelectableData penguinData)
+    private void SelectStockpile(ISelectionData stockpileData)
+    {
+        if (stockpileData is not FishStockpileData) { _logger.LogError("Attempted to select stockpile without StockpileData"); return; }
+        FishStockpileData data = (FishStockpileData)stockpileData;
+
+        //_logger.LogDebug($"Penguin {data.Name} Selected");
+        _selectionTransform.sizeDelta = new Vector2(BuildingSize.Width, BuildingSize.Height);
+        _targetSelection = data.GetParent();
+        _selectionTransform.localPosition = new Vector3(0.5f, 0.5f, 9f);
+
+        EnableSelf();
+    }
+
+    private void SelectPenguin(ISelectionData penguinData)
     { 
         if (penguinData is not PenguinData) { _logger.LogError("Attempted to select penguin without PenguinData"); return; }
         PenguinData data = (PenguinData)penguinData;
 
         //_logger.LogDebug($"Penguin {data.Name} Selected");
         _selectionTransform.sizeDelta = new Vector2(PenguinSize.Width, PenguinSize.Height);
-        _targetSelection = data.ParentTransform;
+        _targetSelection = data.GetParent();
+        _selectionTransform.localPosition = new Vector3(0, 0, 9f);
 
         EnableSelf();
     }
@@ -58,18 +76,13 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         {
             gameObject.SetActive(true);
             _selectionTransform.SetParent(_targetSelection);
-            _selectionTransform.localPosition = new Vector3(0, 0, 0);
         }
     }
-
     private void DisableSelf ()
     {
         gameObject.SetActive(false);
         _selectionTransform.SetParent(null);
     }
-
-     
-
 }
 
 public enum UI_SelectType

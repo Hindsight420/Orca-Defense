@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PenguinBody : MonoBehaviour
+public class Penguin : DataEntity
 {
     [SerializeField]
     public SpriteRenderer WingRight;
@@ -41,8 +41,8 @@ public class PenguinBody : MonoBehaviour
         _penguinData = new PenguinData(transform);
     }
 
-    public void OnMouseDown()
+    public override ISelectionData GetSelectionData()
     {
-        UI_SelectInterface.Instance.SelectEntity(_penguinData);
-    } 
+        return _penguinData;
+    }
 }

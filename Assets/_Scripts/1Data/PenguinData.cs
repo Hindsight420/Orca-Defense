@@ -2,13 +2,18 @@
 
 namespace Assets._Scripts._1Data
 {
-    public class PenguinData : SelectableData
+    public class PenguinData : SelectionData
     {
         public PenguinData (Transform penguinTransform)
         { 
-            Name = "Pengu";
+            Title = "Pengu";
             Description = "Ice Fisher";
             ParentTransform = penguinTransform;
+        }
+
+        public string GetDescriptionOfPenguin ()
+        {
+            return Description;
         }
     }
 }
