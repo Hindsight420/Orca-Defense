@@ -40,22 +40,22 @@ namespace EventCallbacks
 
     public class IncomeEvent : Event<IncomeEvent>
     {
-        public List<ResourceValue> ResourceValues;
+        public ResourceList Resources;
 
-        public void FireEvent(List<ResourceValue> resourceValues)
+        public void FireEvent(ResourceList resources)
         {
-            ResourceValues = resourceValues;
+            Resources = resources;
             FireEvent();
         }
     }
 
-    public class ResourceValueChangedEvent : Event<ResourceValueChangedEvent>
+    public class ResourcesChangedEvent : Event<ResourcesChangedEvent>
     {
-        public ResourceValue ResourceValue;
+        public ResourceList ResourceList;
 
-        public void FireEvent(ResourceValue resourceValue)
+        public void FireEvent(ResourceList resources)
         {
-            ResourceValue = resourceValue;
+            ResourceList = resources;
             FireEvent();
         }
     }

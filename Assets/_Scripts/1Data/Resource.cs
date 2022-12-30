@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class ResourceValue
+public class Resource
 {
-    public static implicit operator int(ResourceValue instance) { return instance.Amount; }
+    public static implicit operator int(Resource instance) { return instance.Amount; }
 
     //public static Resource operator +(Resource r) => r;
     //public static Resource operator +(Resource r, int i) => r + i;
@@ -32,32 +30,49 @@ public class ResourceValue
         }
     }
 
-    public ResourceValue(ResourceType _type, int _amount = 0)
+    public Resource(ResourceType _type, int _amount = 0)
     {
         Type = _type;
         Amount = _amount;
     }
 
-    public void TransferTo(ResourceValue target, int amount)
+    public void TransferTo(Resource target, int amount)
     {
         Math.Clamp(amount, 0, Amount);
         Amount -= amount;
         target.amount += amount;
     }
 
-    public void TransferTo(ResourceValue target)
+    public void TransferTo(Resource target)
     {
         TransferTo(target, Amount);
     }
 
-    public void TransferTo(List<ResourceValue> targetList, int amount)
+    public void TransferTo(ResourceList targetList, int amount)
     {
-        TransferTo(targetList.First(r => r.Type == Type), amount);
+        Resource target = targetList.TryGetResource(Type);
+        if (target == null)
+        {
+            target = new Resource(Type);
+            targetList.Resources.Add(target);
+        }
+
+        TransferTo(target, amount);
     }
 
-    public override bool Equals(object obj) => obj is ResourceValue value ? Equals(value) : base.Equals(obj);
+    public void TransferTo(ResourceList targetList)
+    {
+        TransferTo(targetList, Amount);
+    }
 
-    public bool Equals(ResourceValue target) => Type == target.Type && Amount == target.Amount;
+    public Resource Copy()
+    {
+        return new(Type, Amount);
+    }
+
+    public override bool Equals(object obj) => obj is Resource value ? Equals(value) : base.Equals(obj);
+
+    public bool Equals(Resource target) => Type == target.Type && Amount == target.Amount;
 
     public override int GetHashCode() => HashCode.Combine(Type, Amount);
 

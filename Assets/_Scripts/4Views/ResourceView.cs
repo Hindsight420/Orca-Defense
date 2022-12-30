@@ -9,22 +9,22 @@ public class ResourceView : MonoBehaviour
 {
     [SerializeField] GameObject counterPrefab;
 
-    Dictionary<ResourceType, TextMeshProUGUI> resourceValueComponentMap;
+    Dictionary<ResourceType, TextMeshProUGUI> resourceComponentMap;
     private SeasonManager seasonManager;
 
     private void Start()
     {
         seasonManager = SeasonManager.Instance;
-        ResourceValueChangedEvent.RegisterListener(OnResourceValueChanged);
+        ResourcesChangedEvent.RegisterListener(OnResourceChanged);
     }
 
-    public void InitializeCounters(List<ResourceValue> resourceValues)
+    public void InitializeCounters(ResourceList resources)
     {
-        resourceValueComponentMap = new();
+        resourceComponentMap = new();
 
         foreach (ResourceType resourceType in DataSystem.Instance.ResourceTypes)
         {
-            int amount = resourceValues.First(r => r.Type == resourceType).Amount;
+            int amount = resources.TryGetResource(resourceType).Amount;
             InitializeCounter(resourceType, amount);
         }
     }
@@ -38,13 +38,15 @@ public class ResourceView : MonoBehaviour
 
         TextMeshProUGUI value = counterGO.GetComponentInChildren<TextMeshProUGUI>();
         value.text = amount.ToString();
-        resourceValueComponentMap.Add(resourceType, value);
+        resourceComponentMap.Add(resourceType, value);
     }
 
-    void OnResourceValueChanged(ResourceValueChangedEvent resourceValueChangedEvent)
+    void OnResourceChanged(ResourcesChangedEvent resourceChangedEvent)
     {
-        ResourceValue resourceValue = resourceValueChangedEvent.ResourceValue;
-        resourceValueComponentMap.TryGetValue(resourceValue.Type, out TextMeshProUGUI resourceValueComponent);
-        resourceValueComponent.text = resourceValue.Amount.ToString();
+        foreach (var resourceElement in resourceComponentMap)
+        {
+            Resource resource = resourceChangedEvent.ResourceList.TryGetResource(resourceElement.Key);
+            resourceElement.Value.text = resource.Amount.ToString();
+        }
     }
 }

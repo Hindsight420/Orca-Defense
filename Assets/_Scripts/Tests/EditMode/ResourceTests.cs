@@ -27,10 +27,22 @@ public class ResourceTests
             amount = 0;
         }
 
-        ResourceValue r = new(resourceType, originalAmount);
+        Resource r = new(resourceType, originalAmount);
         Assert.AreEqual(amount, r.Amount);
 
         int i = r;
         Assert.AreEqual(amount, i);
+    }
+
+    [Test]
+    public void Equals()
+    {
+        Resource 
+            resource1 = new(resourceType, 80), 
+            resource2 = new(resourceType, 80),
+            resource3 = new(resourceType, 100);
+
+        Assert.AreEqual(resource1, resource2);
+        Assert.IsTrue(resource1 != resource3);
     }
 }
