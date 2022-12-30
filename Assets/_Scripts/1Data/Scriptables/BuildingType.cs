@@ -24,7 +24,7 @@ public class BuildingType : ScriptableObject
     public bool HasRoof { get => hasRoof; }
     public ResourceList Cost { get => cost; }
     public ResourceList Income { get => income; }
-    public int? TicksPerIncome { get => ticksPerIncome; }
+    public int TicksPerIncome { get => ticksPerIncome; }
 
 
     public IBuildingValidator GetBuildingValidator(Tile t)
