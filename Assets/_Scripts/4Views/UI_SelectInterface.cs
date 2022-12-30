@@ -52,9 +52,8 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         //_logger.LogDebug($"Penguin {data.Name} Selected");
         _selectionTransform.sizeDelta = new Vector2(BuildingSize.Width, BuildingSize.Height);
         _targetSelection = data.GetParent();
-        _selectionTransform.localPosition = new Vector3(0.5f, 0.5f, 9f);
 
-        EnableSelf();
+        EnableSelf(0.5f, 0.5f);
     }
 
     private void SelectPenguin(ISelectionData penguinData)
@@ -65,17 +64,18 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         //_logger.LogDebug($"Penguin {data.Name} Selected");
         _selectionTransform.sizeDelta = new Vector2(PenguinSize.Width, PenguinSize.Height);
         _targetSelection = data.GetParent();
-        _selectionTransform.localPosition = new Vector3(0, 0, 9f);
 
         EnableSelf();
     }
 
-    private void EnableSelf ()
+    private void EnableSelf (float offsetX = 0, float offsetY = 0)
     {
         if (_targetSelection != null)
         {
             gameObject.SetActive(true);
             _selectionTransform.SetParent(_targetSelection);
+            _selectionTransform.localPosition = new Vector3(offsetX, offsetY, 9f);
+
         }
     }
     private void DisableSelf ()
