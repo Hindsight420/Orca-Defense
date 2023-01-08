@@ -22,6 +22,6 @@ public class BuildMenuView : MonoBehaviour
         GameObject buttonGO = Instantiate(buttonPrefab, transform);
         buttonGO.name = $"Button - {buildingType}";
         buttonGO.GetComponent<Button>().onClick.AddListener(callback);
-        buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = buildingType.name;
+        buttonGO.GetComponentsInChildren<Image>()[1].sprite = buildingType.Icon;
     }
 }

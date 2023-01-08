@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Wood-Fishing Hut
   m_EditorClassIdentifier: 
   prefab: {fileID: 916274151117480475, guid: 5c66247407b427d48bf935e29c399390, type: 3}
+  icon: {fileID: 21300000, guid: dd1b362f5034e8b4cb1126da84580b1e, type: 3}
   buildingEnum: 0
   hasRoof: 0
   cost:

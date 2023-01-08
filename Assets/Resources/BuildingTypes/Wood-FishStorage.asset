@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Wood-FishStorage
   m_EditorClassIdentifier: 
   prefab: {fileID: 916274151117480475, guid: c2f3488b5e4834e44adc87244c52498a, type: 3}
+  icon: {fileID: 21300000, guid: 417d8abec150af74e82d43ffdbd5b8d2, type: 3}
   buildingEnum: 1
   hasRoof: 0
-  cost: []
+  cost:
+  - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
+    amount: 5
   income: []

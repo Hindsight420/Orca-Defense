@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ba1e0692cd676478eac1975703b33d, type: 3}
   m_Name: Destroy
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 1897880056861038059, guid: a6162b27c59399744809e74edb1f3210, type: 3}
-  Cost: []
+  prefab: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4155847904a534443871ec68b8849eab, type: 3}
+  buildingEnum: 0
   hasRoof: 0
+  cost: []
+  income: []

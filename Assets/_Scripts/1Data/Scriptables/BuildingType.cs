@@ -9,6 +9,8 @@ public class BuildingType : ScriptableObject
     [SerializeField]
     private GameObject prefab;
     [SerializeField]
+    private Sprite icon;
+    [SerializeField]
     private BuildingTypeEnum buildingEnum;
     [SerializeField]
     private bool hasRoof;
@@ -21,6 +23,7 @@ public class BuildingType : ScriptableObject
 
     //Accessors for the above
     public GameObject Prefab { get => prefab; }
+    public Sprite Icon { get => icon; }
     public BuildingTypeEnum BuildingEnum { get => buildingEnum; }
     public bool HasRoof { get => hasRoof; }
     public List<ResourceValue> Cost { get => cost; }
