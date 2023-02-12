@@ -7,7 +7,8 @@ public class IslandView : MonoBehaviour
 {
     private Dictionary<Building, GameObject> _buildingGameObjectMap;
     private Dictionary<Tile, GameObject> _roofGameObjectMap;
-    private readonly GameObject _roofPrefab;
+    [SerializeField]
+    private GameObject roofPrefab;
 
     public Island Island { get; set; }
     void Awake()
@@ -75,7 +76,7 @@ public class IslandView : MonoBehaviour
         if (roofGO is not null) return;
 
         // Create roof
-        roofGO = roofGO != null ? roofGO : Instantiate(RoofPrefab, transform);
+        roofGO = roofGO != null ? roofGO : Instantiate(roofPrefab, transform);
         roofGO.transform.position = new Vector3(t.X, t.Y + 1);
 
         _roofGameObjectMap[t] = roofGO;

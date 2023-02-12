@@ -16,10 +16,13 @@ public class PenguinFactory : MonoBehaviour
     private List<Sprite> _head;
     [SerializeField]
     private List<Sprite> _body;
-
     private static float PenguinZOffset = 0;
+    private Vector3 _position;
 
-    private Vector3 _position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    private void Awake()
+    {
+        _position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
 
     void Update()
     {

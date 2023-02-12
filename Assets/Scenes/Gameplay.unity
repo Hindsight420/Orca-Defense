@@ -167,28 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d59d870b48b03846a311b9c6e982751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PenguinPrefab: {fileID: 1422612422139793060, guid: 8dd7fd8399061504d8b3c87d6feaed12, type: 3}
-  BeakTops:
-  - {fileID: 21300000, guid: 797ce2438f94e6942975475b39b8f8ac, type: 3}
-  - {fileID: 21300000, guid: 7737359754177b34fb60eb60d06f728d, type: 3}
-  - {fileID: 21300000, guid: 2bacf43a4bfdc8849909d97921fe394a, type: 3}
-  BeakBottoms:
-  - {fileID: 21300000, guid: 7a4c8c396b1ca9046a0d3157c04f01e8, type: 3}
-  - {fileID: 21300000, guid: f36e3185f1dc6304d9c24a58f0ab98b8, type: 3}
-  - {fileID: 21300000, guid: 30e6e47a9e0047c419cb6fb0b22c022f, type: 3}
-  Wings:
-  - {fileID: 21300000, guid: 3bcfd78437539c7408cf117003d91976, type: 3}
-  - {fileID: 21300000, guid: db18985864781a04a9037193db3cd138, type: 3}
-  - {fileID: 21300000, guid: 321812a43679979429bd3490d17f2bd6, type: 3}
-  - {fileID: 21300000, guid: 9f4cc0b87e6d76f4a81813007e59ad44, type: 3}
-  Head:
-  - {fileID: 21300000, guid: 491d2fcc467d3e748b95c52b03f31a01, type: 3}
-  - {fileID: 21300000, guid: 8dadd4c3121a05642849e6137e25c478, type: 3}
-  - {fileID: 21300000, guid: 2e43007791ce08c4a8eecc94f6005a82, type: 3}
-  Body:
-  - {fileID: 21300000, guid: 97516399b0b9ae64abd8236529e11462, type: 3}
-  - {fileID: 21300000, guid: a9b6495d992f260458f0a7bb37455ba4, type: 3}
-  - {fileID: 21300000, guid: 8cabd26977a4bb0499c7d8bebc7ca490, type: 3}
+  _penguinPrefab: {fileID: 0}
+  _beakTops: []
+  _beakBottoms: []
+  _wings: []
+  _head: []
+  _body: []
 --- !u!1 &158765417
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977bba8ce9f5dd9429c18901c8c06218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoofPrefab: {fileID: 6395731410237515148, guid: 506013e04b2d54b4c8ede2fecba37877, type: 3}
+  roofPrefab: {fileID: 6395731410237515148, guid: 506013e04b2d54b4c8ede2fecba37877, type: 3}
 --- !u!1 &167089110
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebebfcd439d2dbe46871f4f0af267eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogPrefab: {fileID: 3381922285400669118, guid: 47c938a2e141b7a4ca70993c631c0fde, type: 3}
+  _logPrefab: {fileID: 3381922285400669118, guid: 47c938a2e141b7a4ca70993c631c0fde, type: 3}
 --- !u!1 &234045892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,7 +1239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5333b732d5519f4cbc093fae42ffb93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 4053961311485038181, guid: f611f55bf7a35a24a9178bf14d03e961, type: 3}
+  _buttonPrefab: {fileID: 4053961311485038181, guid: f611f55bf7a35a24a9178bf14d03e961, type: 3}
 --- !u!1 &664784003
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,7 +1285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1257d3c9c0a08fe48a436447d64aa441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  View: {fileID: 638502854}
+  _view: {fileID: 638502854}
 --- !u!114 &664784006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,7 +1298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda986836aadfba4f94d4d6621b0262f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentTick: {fileID: 303245400}
+  _currentTick: {fileID: 303245400}
 --- !u!1 &793902677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,8 +1344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e6d9a75c5839834ebcd4e13a8536582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 15
-  Height: 10
   view: {fileID: 158765419}
 --- !u!114 &793902681
 MonoBehaviour:
@@ -1375,7 +1357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3326282f60539940a538afd8415f9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  View: {fileID: 1807695260}
+  _view: {fileID: 1807695260}
 --- !u!1 &1022803498
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,8 +1538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57fa4baabe9d54748ae9708a9d1656ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  State: 0
-  SelectedBuilding: {fileID: 0}
 --- !u!114 &1303110955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1582,8 +1562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6120b6dc996f0a94aa52497dc248fc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TicksPerBrightSeason: 500
-  TicksPerDarkSeason: 500
+  _ticksPerBrightSeason: 500
+  _ticksPerDarkSeason: 500
 --- !u!1 &1373277323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,7 +1728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d46aad82e73e8c44a2da03de5d1306c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TICK_INTERVAL_SECOND: 0.05
+  TICK_INTERVAL_SECOND: 0.2
 --- !u!1 &1517446908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,7 +1898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c641b7c3fc49644842fe2bb8dbe38d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterPrefab: {fileID: 1141212383282234574, guid: 7e05434086fd0db4394509680ff81eb4, type: 3}
+  _counterPrefab: {fileID: 1141212383282234574, guid: 7e05434086fd0db4394509680ff81eb4, type: 3}
 --- !u!114 &1807695261
 MonoBehaviour:
   m_ObjectHideFlags: 0

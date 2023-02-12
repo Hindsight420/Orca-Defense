@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BuildMenuManager : MonoBehaviour
 {
+    [SerializeField]
     private BuildMenuView _view;
 
     void Start()
