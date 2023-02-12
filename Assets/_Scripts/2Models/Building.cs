@@ -7,7 +7,7 @@ public class Building
     private BuildingState _state;
     private ResourceList _constructionResources = new();
     private int startTick;
-    private readonly Logger _logger = Logger.Instance;
+    private readonly Logger _logger;
 
     public BuildingType Type { get; }
     public Tile Tile { get; }
@@ -44,6 +44,7 @@ public class Building
         X = tile.X;
         Y = tile.Y;
         _state = state;
+        _logger = Logger.Instance;
 
         RemainingResources = buildingType.Cost.Copy();
     }

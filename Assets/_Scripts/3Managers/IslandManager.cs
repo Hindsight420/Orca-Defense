@@ -9,9 +9,11 @@ public class IslandManager : Singleton<IslandManager>
 {
     [SerializeField]
     private IslandView view;
-    private readonly int _width;
-    private readonly int _height;
-    private readonly Logger _logger = Logger.Instance;
+    [SerializeField]
+    private int _width;
+    [SerializeField]
+    private int _height;
+    private Logger _logger;
     private readonly List<Building> _buildingsToConstruct = new();
     private const int TICKS_PER_RESOURCE = 5; // time between adding resources to buildings
     private int _startTick;
@@ -22,6 +24,7 @@ public class IslandManager : Singleton<IslandManager>
     {
         Island = new Island(_width, _height);
         view.Island = Island;
+        _logger = Logger.Instance;
 
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
         BuildingChangedEvent.RegisterListener(OnBuildingChanged);

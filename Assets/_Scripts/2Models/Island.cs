@@ -12,7 +12,6 @@ public class Island
 
     public int Width { get; }
     public int Height { get; }
-
     public readonly Tile[,] Tiles;
 
     public Island(int width, int height)

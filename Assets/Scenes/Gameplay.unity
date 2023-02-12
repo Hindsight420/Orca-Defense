@@ -1345,6 +1345,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   view: {fileID: 158765419}
+  _width: 15
+  _height: 10
 --- !u!114 &793902681
 MonoBehaviour:
   m_ObjectHideFlags: 0
