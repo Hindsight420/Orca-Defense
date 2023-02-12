@@ -16,9 +16,9 @@ MonoBehaviour:
   buildingEnum: 1
   hasRoof: 1
   cost:
-    resources:
+    _resources:
     - Type: {fileID: 11400000, guid: d097d422a01249d4fba2a2dc7ec8a72c, type: 2}
       amount: 40
   income:
-    resources: []
+    _resources: []
   ticksPerIncome: 0
