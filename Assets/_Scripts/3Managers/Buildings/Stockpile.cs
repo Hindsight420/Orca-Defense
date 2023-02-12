@@ -1,12 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stockpile<T>: MonoBehaviour
+public abstract class Stockpile<T> : MonoBehaviour
 {
-    protected int StorageCapacity { get; set; }
+    private int _storageCapacity;
     [SerializeField]
-    private int CurrentCapacity;
+    private int _currentCapacity;
     protected Queue<T> ResourceQueue { get; set; }
 
     [SerializeField]
@@ -15,26 +14,26 @@ public abstract class Stockpile<T>: MonoBehaviour
     private GameObject ResourcePrefab;
     private Logger _logger;
 
-    protected Stockpile<T> ConfigureStore (int capacity)
+    protected Stockpile<T> ConfigureStore(int capacity)
     {
-        StorageCapacity = capacity;
+        _storageCapacity = capacity;
         ResourceQueue = new Queue<T>();
         _logger = Logger.Instance;
 
         return this;
-    } 
+    }
 
     /// <summary>
     /// This will add a value to the Stockpile. Just adds one for now. Will probably need more work on it
     /// </summary>
     protected void AddToStore()
     {
-        if (CurrentCapacity >= StorageCapacity)
+        if (_currentCapacity >= _storageCapacity)
         {
             return;
         }
 
-        CurrentCapacity++;
+        _currentCapacity++;
         var go = Instantiate(ResourcePrefab, NewResourceSpawnLocation);
         var resource = go.GetComponent<T>();
 
@@ -46,7 +45,7 @@ public abstract class Stockpile<T>: MonoBehaviour
         ResourceQueue.Enqueue(resource);
 
         var rigidbody = go.GetComponent<Rigidbody2D>();
-        var randVector = new Vector2(Random.Range(-1,1), Random.Range(-1, 1));
+        var randVector = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
         rigidbody.AddForce(randVector);
     }
 

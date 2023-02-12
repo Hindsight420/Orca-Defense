@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class UI_SeasonManager : MonoBehaviour
@@ -23,6 +20,6 @@ public class UI_SeasonManager : MonoBehaviour
 
     private void OnSeasonChange(object obj, Season newSeason)
     {
-        
+
     }
 }

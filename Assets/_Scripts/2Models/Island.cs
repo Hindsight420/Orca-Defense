@@ -7,14 +7,11 @@ using UnityEngine;
 
 public class Island
 {
-    public Dictionary<int, int> positionHeights;
-    List<Building> constructionQueue = new();
+    private readonly List<Building> _constructionQueue = new();
+    private readonly Dictionary<int, int> _positionHeights = new();
 
-    int width;
-    int height;
-
-    public int Width { get => width; private set => width = value; }
-    public int Height { get => height; private set => height = value; }
+    public int Width { get; }
+    public int Height { get; }
 
     public readonly Tile[,] Tiles;
 
@@ -22,12 +19,11 @@ public class Island
     {
         Width = width;
         Height = height;
-        positionHeights = new Dictionary<int, int>();
 
         Tiles = new Tile[width, height];
         for (int x = 0; x < width; x++)
         {
-            positionHeights[x] = 0;
+            _positionHeights[x] = 0;
 
             for (int y = 0; y < height; y++)
             {
@@ -64,10 +60,10 @@ public class Island
         int x = tile.X;
         int y = tile.Y;
 
-        positionHeights[x] = y + 1;
+        _positionHeights[x] = y + 1;
         Building b = new(buildingType, tile);
 
-        constructionQueue.Add(b);
+        _constructionQueue.Add(b);
         new BuildingCreatedEvent().FireEvent(b);
 
         return b;
@@ -81,8 +77,8 @@ public class Island
 
     public Tile GetHighestFreeTileAt(int x)
     {
-        if (!positionHeights.ContainsKey(x)) return null;
-        int y = positionHeights[x];
+        if (!_positionHeights.ContainsKey(x)) return null;
+        int y = _positionHeights[x];
         return Tiles[x, y];
     }
 
@@ -94,7 +90,7 @@ public class Island
 
     public Tile Right(int x, int y)
     {
-        return x < width - 1 ? Tiles[++x, y] : null;
+        return x < Width - 1 ? Tiles[++x, y] : null;
     }
 
     public Tile Left(int x, int y)
@@ -104,7 +100,7 @@ public class Island
 
     public Tile Up(int x, int y)
     {
-        return y < height - 1 ? Tiles[x, ++y] : null;
+        return y < Height - 1 ? Tiles[x, ++y] : null;
     }
 
     public Tile Down(int x, int y)
@@ -115,6 +111,6 @@ public class Island
     void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
-        positionHeights[b.X]--;
+        _positionHeights[b.X]--;
     }
 }

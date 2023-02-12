@@ -1,17 +1,17 @@
 using NUnit.Framework;
-using OrcaDefense.Models;
 using UnityEngine;
 
 public class BuildingTests
 {
     // TODO: initialize this variable
-    [SerializeField] private BuildingType buildingType;
+    [SerializeField]
+    private BuildingType _buildingType;
 
     [OneTimeSetUp]
     public void SetUpBuildingTests()
     {
-        buildingType = ScriptableObject.CreateInstance<BuildingType>();
-        buildingType.name = "TestBuilding";
+        _buildingType = ScriptableObject.CreateInstance<BuildingType>();
+        _buildingType.name = "TestBuilding";
 
         ResourceType resourceType = ScriptableObject.CreateInstance<ResourceType>();
         resourceType.name = "Wood";

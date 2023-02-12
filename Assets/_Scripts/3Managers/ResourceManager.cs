@@ -1,13 +1,12 @@
 using EventCallbacks;
-using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
-    public ResourceView View;
-
-    readonly ResourceList resources = new();
-    readonly ResourceList resourcesInHolding = new();
+    [SerializeField]
+    private ResourceView _view;
+    private readonly ResourceList _resources = new();
+    private readonly ResourceList _resourcesInHolding = new();
 
     protected override void Awake()
     {
@@ -21,30 +20,30 @@ public class ResourceManager : Singleton<ResourceManager>
     void Start()
     {
         FillResourceList();
-        View.InitializeCounters(resources);
+        _view.InitializeCounters(_resources);
     }
 
     void FillResourceList()
     {
         foreach (ResourceType type in DataSystem.Instance.ResourceTypes)
         {
-            resources.Add(new Resource(type, 500)); // TODO: Clean up temporary, hardcoded starting value
-            resourcesInHolding.Add(new Resource(type));
+            _resources.Add(new Resource(type, 500)); // TODO: Clean up temporary, hardcoded starting value
+            _resourcesInHolding.Add(new Resource(type));
         }
     }
 
     void ExpendResources(ResourceList resources)
     {
-        this.resources.TransferTo(resourcesInHolding, resources);
+        this._resources.TransferTo(_resourcesInHolding, resources);
 
-        new ResourcesChangedEvent().FireEvent(this.resources);
+        new ResourcesChangedEvent().FireEvent(this._resources);
     }
 
     void AddResources(ResourceList resources)
     {
-        this.resources.Add(resources);
+        this._resources.Add(resources);
 
-        new ResourcesChangedEvent().FireEvent(this.resources);
+        new ResourcesChangedEvent().FireEvent(this._resources);
     }
 
     void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
@@ -64,6 +63,6 @@ public class ResourceManager : Singleton<ResourceManager>
 
     public bool CheckResourcesAvailability(ResourceList resources)
     {
-        return this.resources.CheckResourcesAvailability(resources);
+        return this._resources.CheckResourcesAvailability(resources);
     }
 }

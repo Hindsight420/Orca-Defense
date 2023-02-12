@@ -1,27 +1,26 @@
 using Assets._Scripts._3Managers;
 using EventCallbacks;
 using OrcaDefense.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class IslandManager : Singleton<IslandManager>
 {
-    public int Width;
-    public int Height;
+    [SerializeField]
+    private IslandView view;
+    private readonly int _width;
+    private readonly int _height;
+    private readonly Logger _logger = Logger.Instance;
+    private readonly List<Building> _buildingsToConstruct = new();
+    private const int TICKS_PER_RESOURCE = 5; // time between adding resources to buildings
+    private int _startTick;
 
-    public Island Island;
-    [SerializeField] IslandView view;
-    private Logger Logger { get => Logger.Instance; }
-
-    private List<Building> buildingsToConstruct = new();
-    private int startTick;
-    private const int ticksPerResource = 5; // time between adding resources to buildings
+    public Island Island { get; private set; }
 
     void Start()
     {
-        Island = new Island(Width, Height);
+        Island = new Island(_width, _height);
         view.Island = Island;
 
         BuildingCreatedEvent.RegisterListener(OnBuildingCreated);
@@ -49,10 +48,10 @@ public class IslandManager : Singleton<IslandManager>
         //TODO: This needs to be moved at a later point.
         var validator = buildingType.GetBuildingValidator(tile);
         var buildingErrors = validator.ValidateResources(buildingType);
-        if (buildingErrors.Any()) { Logger.LogMessages(buildingErrors, Logger.LogType.Error); return; }
+        if (buildingErrors.Any()) { _logger.LogMessages(buildingErrors, Logger.LogType.Error); return; }
 
         buildingErrors = validator.ValidateBuildingPosition(Island, buildingType.BuildingEnum);
-        if (buildingErrors.Any()) { Logger.LogMessages(buildingErrors, Logger.LogType.Error); return; }
+        if (buildingErrors.Any()) { _logger.LogMessages(buildingErrors, Logger.LogType.Error); return; }
 
         PlaceBuilding(tile, buildingType, validator);
     }
@@ -69,22 +68,22 @@ public class IslandManager : Singleton<IslandManager>
     // We should employ penguins to do this later
     private void ConstructBuildingOverTime(Building b)
     {
-        buildingsToConstruct.Add(b);
+        _buildingsToConstruct.Add(b);
 
         TimeTicker.OnTick += OnTick;
-        startTick = TimeTicker.CurrentTick;
+        _startTick = TimeTicker.CurrentTick;
     }
 
     private void OnTick(object sender, int e)
     {
-        if (TimeTicker.GetInnerTick(startTick) % ticksPerResource == 0)
+        if (TimeTicker.GetInnerTick(_startTick) % TICKS_PER_RESOURCE == 0)
         {
-            foreach (Building b in buildingsToConstruct)
+            foreach (Building b in _buildingsToConstruct)
             {
                 AddResourcesToBuilding(b);
             }
 
-            buildingsToConstruct.RemoveAll(b => b.State != BuildingState.Planned);
+            _buildingsToConstruct.RemoveAll(b => b.State != BuildingState.Planned);
         }
     }
 
@@ -109,10 +108,10 @@ public class IslandManager : Singleton<IslandManager>
 
     public void TryDestroyBuilding(Tile tile)
     {
-        if (tile.Building is null) { Logger.LogMessage("Nothing to destroy!", Logger.LogType.Error); return; }
+        if (tile.Building is null) { _logger.LogMessage("Nothing to destroy!", Logger.LogType.Error); return; }
         // Check whether there's a building in the tile
         var errors = tile.Validator.ValidateDestroyable(Island);
-        if (errors.Any()) { Logger.LogMessages(errors, Logger.LogType.Error); return; }
+        if (errors.Any()) { _logger.LogMessages(errors, Logger.LogType.Error); return; }
 
         DestroyBuilding(tile);
     }

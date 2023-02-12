@@ -11,9 +11,7 @@ namespace Assets._Scripts._3Managers
         private Logger.LogType _logType;
         private float _lifeTime;
         private float _startTime;
-        private float _startY;
-        private bool isActive;
-
+        private bool _isActive;
         //Best practice is to reference transform here as transform.xxx will actually call GetComponent<> behind the scenes
         private RectTransform _rectTransform;
 
@@ -26,11 +24,10 @@ namespace Assets._Scripts._3Managers
 
         public void Show()
         {
-            isActive = true;
+            _isActive = true;
             _textBody = gameObject.GetComponent<TextMeshProUGUI>();
             _rectTransform = GetComponent<RectTransform>();
             _startTime = Time.time;
-            _startY = _rectTransform.anchoredPosition.y;
 
             _textBody.text = _message;
             _textBody.color = GetMessageColour(_logType);
@@ -39,7 +36,7 @@ namespace Assets._Scripts._3Managers
 
         public void Update()
         {
-            if (!isActive) return;
+            if (!_isActive) return;
             var newPos = new Vector2(_rectTransform.anchoredPosition.x, _rectTransform.anchoredPosition.y - Time.deltaTime * 25f);
             _rectTransform.anchoredPosition = newPos;
             _textBody.alpha = 1 - (ElapsedTime / _lifeTime);

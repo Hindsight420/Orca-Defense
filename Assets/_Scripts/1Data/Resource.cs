@@ -16,7 +16,6 @@ public class Resource
     public int Amount
     {
         get => amount;
-
         set
         {
             if (value < 0) // resources shouldn't go under 0
@@ -25,7 +24,6 @@ public class Resource
                 Debug.LogError($"{this} tried to set to {value}, setting amount to 0 instead");
                 return;
             }
-
             amount = value;
         }
     }

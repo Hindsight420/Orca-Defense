@@ -1,42 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets._Scripts._3Managers
 {
     public class TimeTicker : MonoBehaviour
     {
-        public static event EventHandler<int> OnTick;
-        public static readonly int START_OF_THE_GAME = 0;
-
         [SerializeField]
         private float TICK_INTERVAL_SECOND = 0.2f;
+        private float _tickTimer;
 
-        private static int tick;
-        private float tickTimer;
-
-        public static int CurrentTick { get => tick; }
+        public static int CurrentTick { get; private set; }
+        public const int START_OF_THE_GAME = 0;
+        public static event EventHandler<int> OnTick;
 
         private void Awake()
         {
-            tick = 0;
+            CurrentTick = 0;
         }
 
         private void Update()
         {
-            tickTimer += Time.deltaTime;
-            if (tickTimer >= TICK_INTERVAL_SECOND)
+            _tickTimer += Time.deltaTime;
+            if (_tickTimer >= TICK_INTERVAL_SECOND)
             {
-                tick++;
-                tickTimer -= TICK_INTERVAL_SECOND;
+                CurrentTick++;
+                _tickTimer -= TICK_INTERVAL_SECOND;
 
-                OnTick?.Invoke(this, tick);
+                OnTick?.Invoke(this, CurrentTick);
             }
         }
 
-        public static int GetInnerTick(int startTick) => tick - startTick;
+        public static int GetInnerTick(int startTick) => CurrentTick - startTick;
     }
 }

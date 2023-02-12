@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FishStockpile : Stockpile<Fish>
@@ -16,5 +14,4 @@ public class FishStockpile : Stockpile<Fish>
             AddToStore();
         } 
     }
-
 }

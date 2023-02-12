@@ -5,23 +5,22 @@ using UnityEngine;
 
 public class IslandView : MonoBehaviour
 {
-    Dictionary<Building, GameObject> buildingGameObjectMap;
-    Dictionary<Tile, GameObject> roofGameObjectMap;
+    private Dictionary<Building, GameObject> _buildingGameObjectMap;
+    private Dictionary<Tile, GameObject> _roofGameObjectMap;
+    private readonly GameObject _roofPrefab;
 
-    public Island Island;
-    public GameObject RoofPrefab;
-
+    public Island Island { get; set; }
     void Awake()
     {
-        buildingGameObjectMap = new();
-        roofGameObjectMap = new();
+        _buildingGameObjectMap = new();
+        _roofGameObjectMap = new();
     }
 
     public void OnBuildingCreated(BuildingCreatedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
         GameObject building_go = UpdateBuildingGameObject(b);
-        buildingGameObjectMap.Add(buildingEvent.Building, building_go);
+        _buildingGameObjectMap.Add(buildingEvent.Building, building_go);
 
         UpdateRoofs(b);
     }
@@ -37,7 +36,7 @@ public class IslandView : MonoBehaviour
     public void OnBuildingRemoved(BuildingRemovedEvent buildingEvent)
     {
         Building b = buildingEvent.Building;
-        buildingGameObjectMap.Remove(b, out GameObject building_go);
+        _buildingGameObjectMap.Remove(b, out GameObject building_go);
         Destroy(building_go);
 
         UpdateRoofs(b);
@@ -58,7 +57,7 @@ public class IslandView : MonoBehaviour
         if (b is null) return;
 
         Tile t = b.Tile;
-        roofGameObjectMap.TryGetValue(t, out GameObject roofGO);
+        _roofGameObjectMap.TryGetValue(t, out GameObject roofGO);
 
         // Should we render a roof?
         if (t.Validator.ShouldRenderRoof(Island, b.Type) == false)
@@ -67,7 +66,7 @@ public class IslandView : MonoBehaviour
             if (roofGO is null) return;
 
             // Remove roof
-            roofGameObjectMap[t] = null;
+            _roofGameObjectMap[t] = null;
             Destroy(roofGO);
             return;
         }
@@ -79,12 +78,12 @@ public class IslandView : MonoBehaviour
         roofGO = roofGO != null ? roofGO : Instantiate(RoofPrefab, transform);
         roofGO.transform.position = new Vector3(t.X, t.Y + 1);
 
-        roofGameObjectMap[t] = roofGO;
+        _roofGameObjectMap[t] = roofGO;
     }
 
     GameObject UpdateBuildingGameObject(Building b)
     {
-        if (!buildingGameObjectMap.TryGetValue(b, out GameObject building_go)) 
+        if (!_buildingGameObjectMap.TryGetValue(b, out GameObject building_go)) 
             building_go = Instantiate(b.Type.Prefab);
 
         building_go.name = $"{b.Type.name}_{b.X}_{b.Y}";
