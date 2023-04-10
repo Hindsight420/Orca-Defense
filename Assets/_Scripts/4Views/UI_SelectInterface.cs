@@ -1,8 +1,5 @@
 using Assets._Scripts._1Data;
 using Assets._Scripts.Utility;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_SelectInterface : Singleton<UI_SelectInterface>
@@ -83,9 +80,4 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         gameObject.SetActive(false);
         _selectionTransform.SetParent(null);
     }
-}
-
-public enum UI_SelectType
-{
-    Penguin
 }
