@@ -4,30 +4,27 @@ using UnityEngine.EventSystems;
 
 public class MouseManager : Singleton<MouseManager>
 {
-    IslandManager islandManager;
-
-    Vector3 lastFramePosition;
-    Vector3 currFramePosition;
-
-    GameObject buildingPreview;
-    BuildingType buildingType;
-
-    GameState state;
+    private IslandManager _islandManager;
+    private Vector3 _lastFramePosition;
+    private Vector3 _currFramePosition;
+    private GameObject _buildingPreview;
+    private BuildingType _buildingType;
+    private GameState _state;
 
     void Start()
     {
-        islandManager = IslandManager.Instance;
-        state = GameManager.Instance.State;
+        _islandManager = IslandManager.Instance;
+        _state = GameManager.Instance.State;
 
         GameStateChangedEvent.RegisterListener(OnGameStateChanged);
     }
 
     private void OnGameStateChanged(GameStateChangedEvent gameStateEvent)
     {
-        state = gameStateEvent.State;
-        buildingType = GameManager.Instance.SelectedBuilding;
+        _state = gameStateEvent.State;
+        _buildingType = GameManager.Instance.SelectedBuilding;
 
-        if (state == GameState.Build || state == GameState.Destroy)
+        if (_state == GameState.Build || _state == GameState.Destroy)
         {
             CreatePreview();
         }
@@ -35,32 +32,32 @@ public class MouseManager : Singleton<MouseManager>
 
     private void CreatePreview()
     {
-        Destroy(buildingPreview);
-        buildingPreview = Instantiate(buildingType.PreviewPrefab, transform);
+        Destroy(_buildingPreview);
+        _buildingPreview = Instantiate(_buildingType.Prefab, transform);
 
-        SpriteRenderer sr = buildingPreview.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = _buildingPreview.GetComponent<SpriteRenderer>();
         sr.color = new Color(1f, 1f, 1f, .5f);
     }
 
     void Update()
     {
-        currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        currFramePosition.z = 0;
+        _currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _currFramePosition.z = 0;
 
         UpdateCameraMovement();
         UpdateBuild();
 
-        lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        lastFramePosition.z = 0;
+        _lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _lastFramePosition.z = 0;
     }
 
     void UpdateCameraMovement()
     {
-        if (state != GameState.Play) return;
+        if (_state != GameState.Play) return;
 
         if (Input.GetMouseButton(1))
         {
-            Vector3 diff = lastFramePosition - currFramePosition;
+            Vector3 diff = _lastFramePosition - _currFramePosition;
             Camera.main.transform.Translate(diff);
         }
 
@@ -70,10 +67,10 @@ public class MouseManager : Singleton<MouseManager>
 
     void UpdateBuild()
     {
-        if (state != GameState.Build && state != GameState.Destroy) return;
+        if (_state != GameState.Build && _state != GameState.Destroy) return;
 
         // No building currently selected
-        if (buildingPreview == null) return;
+        if (_buildingPreview == null) return;
 
         // Right click to cancel build
         if (Input.GetMouseButtonDown(1))
@@ -85,16 +82,16 @@ public class MouseManager : Singleton<MouseManager>
         // Mouse is over UI element
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
-        Tile selectedTile = islandManager.Island.GetTileAtCoords(currFramePosition);
+        Tile selectedTile = _islandManager.Island.GetTileAtCoords(_currFramePosition);
         if (selectedTile == null) return;
 
         // Left click to build
         if (Input.GetMouseButtonDown(0))
         {
-            if (state == GameState.Build)
-                islandManager.TryPlaceBuilding(selectedTile, buildingType);
-            if (state == GameState.Destroy)
-                islandManager.TryDestroyBuilding(selectedTile);
+            if (_state == GameState.Build)
+                _islandManager.TryPlaceBuilding(selectedTile, _buildingType);
+            if (_state == GameState.Destroy)
+                _islandManager.TryDestroyBuilding(selectedTile);
 
             // Hold shift to remain in build mode
             if (!Input.GetKey(KeyCode.LeftShift))
@@ -105,7 +102,7 @@ public class MouseManager : Singleton<MouseManager>
         }
         else
         {
-            buildingPreview.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
+            _buildingPreview.transform.position = new Vector3(selectedTile.X, selectedTile.Y, 0);
         }
     }
 
@@ -118,7 +115,7 @@ public class MouseManager : Singleton<MouseManager>
 
     void DestroyPreview()
     {
-        Destroy(buildingPreview);
-        buildingPreview = null;
+        Destroy(_buildingPreview);
+        _buildingPreview = null;
     }
 }

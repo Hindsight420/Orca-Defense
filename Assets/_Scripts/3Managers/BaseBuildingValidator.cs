@@ -1,13 +1,12 @@
 ﻿using OrcaDefense.Models;
-using System;
 using System.Collections.Generic;
 
 public class BaseBuildingValidator : IBuildingValidator
 {
-    protected readonly Tile _tile;
+    protected readonly Tile Tile;
     public BaseBuildingValidator(Tile tile)
     {
-        _tile = tile;
+        Tile = tile;
     }
 
     public List<string> ValidateBuildingPosition(Island map, BuildingTypeEnum buildingType)
@@ -36,7 +35,7 @@ public class BaseBuildingValidator : IBuildingValidator
     //Can the building be placed in this position?
     public virtual List<string> ValidateTile(Island map)
     {
-        if (_tile.Building == null)
+        if (Tile.Building == null)
             return new List<string>();
 
         return new List<string>() { "There's already a building there!" };
@@ -44,10 +43,10 @@ public class BaseBuildingValidator : IBuildingValidator
 
     public virtual List<string> ValidateSupport(Island map)
     {
-        if (_tile.Y == 0)
+        if (Tile.Y == 0)
             return new List<string>();
 
-        var buildingBelow = map.Down(_tile.X, _tile.Y).Building;
+        var buildingBelow = map.Down(Tile.X, Tile.Y).Building;
         if (buildingBelow is not null && buildingBelow.Type.HasRoof)
             return new List<string>();
 
@@ -57,7 +56,7 @@ public class BaseBuildingValidator : IBuildingValidator
     //Should this building render a roof?
     public virtual bool ShouldRenderRoof(Island map, BuildingType buildingType)
     {
-        return map.Up(_tile.X, _tile.Y).Building is null && _tile.Building is not null && buildingType.HasRoof;
+        return map.Up(Tile.X, Tile.Y).Building is null && Tile.Building is not null && buildingType.HasRoof;
     }
 
     //Can the given building be built on top?
@@ -76,7 +75,7 @@ public class BaseBuildingValidator : IBuildingValidator
 
     public List<string> ValidateDestroyable(Island map)
     {
-        if (map.Up(_tile.X, _tile.Y).Building is null)
+        if (map.Up(Tile.X, Tile.Y).Building is null)
             return new List<string>();
 
         return new List<string>() { "Cannot destroy this building as there is one above it!" };

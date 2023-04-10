@@ -1,12 +1,10 @@
 using EventCallbacks;
 using System;
-using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public GameState State;
-
-    public BuildingType SelectedBuilding;
+    public GameState State { get; private set; }
+    public BuildingType SelectedBuilding { get; set; }
 
     protected override void Awake()
     {

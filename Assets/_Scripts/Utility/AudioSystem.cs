@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class AudioSystem : Singleton<AudioSystem>
 {
-    [SerializeField] private AudioSource _musicSource;
-    [SerializeField] private AudioSource _soundsSource;
-    
+    [SerializeField]
+    private AudioSource _musicSource;
+    [SerializeField]
+    private AudioSource _soundsSource;
+
     public void PlayMusic(AudioClip clip)
     {
         _musicSource.clip = clip;

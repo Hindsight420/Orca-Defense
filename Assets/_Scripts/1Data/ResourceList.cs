@@ -7,13 +7,14 @@ using UnityEngine;
 public class ResourceList
 {
     [SerializeField]
-    private List<Resource> resources;
-    public List<Resource> Resources { get => resources; }
-    public int Count { get => resources.Count; }
+    private List<Resource> _resources;
+
+    public List<Resource> Resources { get => _resources; }
+    public int Count { get => _resources.Count; }
 
     public ResourceList(List<Resource> resources)
     {
-        this.resources = resources;
+        _resources = resources;
     }
 
     public ResourceList() : this(new List<Resource>()) { }
@@ -22,7 +23,7 @@ public class ResourceList
 
     public Resource TryGetResource(ResourceType type)
     {
-        try { return resources.First(r => r.Type == type); }
+        try { return _resources.First(r => r.Type == type); }
         catch (InvalidOperationException) { return null; }
     }
 
@@ -30,8 +31,9 @@ public class ResourceList
     {
         Resource targetResource = TryGetResource(resource.Type);
         if (targetResource != null) targetResource.Amount += resource;
-        else resources.Add(resource.Copy());
+        else _resources.Add(resource.Copy());
     }
+
     public void Add(ResourceList resources)
     {
         foreach (Resource resource in resources.Resources) 
@@ -99,7 +101,7 @@ public class ResourceList
 
     public bool Equals(ResourceList target)
     {
-        return resources.SequenceEqual(target.Resources);
+        return _resources.SequenceEqual(target.Resources);
     }
 
     public override bool Equals(object obj) => obj is ResourceList value ? Equals(value) : base.Equals(obj);
@@ -114,10 +116,10 @@ public class ResourceList
         return !resourceList1.Equals(resourceList2);
     }
 
-    public override int GetHashCode() => HashCode.Combine(resources);
+    public override int GetHashCode() => HashCode.Combine(_resources);
 
     public override string ToString()
     {
-        return string.Join(Environment.NewLine, resources);
+        return string.Join(Environment.NewLine, _resources);
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,54 +5,46 @@ using Random = UnityEngine.Random;
 public class PenguinFactory : MonoBehaviour
 {
     [SerializeField]
-    GameObject PenguinPrefab;
-
+    private GameObject _penguinPrefab;
     [SerializeField]
-    List<Sprite> BeakTops;
+    private List<Sprite> _beakTops;
     [SerializeField]
-    List<Sprite> BeakBottoms;
-
+    private List<Sprite> _beakBottoms;
     [SerializeField]
-    List<Sprite> Wings;
-
+    private List<Sprite> _wings;
     [SerializeField]
-    List<Sprite> Head;
-
+    private List<Sprite> _head;
     [SerializeField]
-    List<Sprite> Body;
-
+    private List<Sprite> _body;
     private static float PenguinZOffset = 0;
+    private Vector3 _position;
 
-    Vector3 Position => Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GeneratePenguin(Position);
+            GeneratePenguin(_position);
         }
     }
 
-    void GeneratePenguin (Vector2 position)
+    void GeneratePenguin(Vector2 position)
     {
-        var pen = Instantiate(PenguinPrefab);
+        var pen = Instantiate(_penguinPrefab);
         pen.transform.position = new Vector3(position.x, position.y, PenguinZOffset);
 
-        var penScript = pen.GetComponent<Penguin>();
-        penScript.BeakBottom.sprite = BeakBottoms[Random.Range(0, BeakBottoms.Count)];
-        penScript.BeakTop.sprite = BeakTops[Random.Range(0, BeakTops.Count)];
-        penScript.Body.sprite = Body[Random.Range(0, Body.Count)];
-        penScript.Head.sprite = Head[Random.Range(0, Head.Count)];
+        var penScript = pen.GetComponent<PenguinBody>();
+        penScript.BeakBottom.sprite = _beakBottoms[Random.Range(0, _beakBottoms.Count)];
+        penScript.BeakTop.sprite = _beakTops[Random.Range(0, _beakTops.Count)];
+        penScript.Body.sprite = _body[Random.Range(0, _body.Count)];
+        penScript.Head.sprite = _head[Random.Range(0, _head.Count)];
 
         //Same wings
-        var wings = Wings[Random.Range(0, Wings.Count)];
+        var wings = _wings[Random.Range(0, _wings.Count)];
         penScript.WingLeft.sprite = wings;
         penScript.WingRight.sprite = wings;
 

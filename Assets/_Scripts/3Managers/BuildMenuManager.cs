@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class BuildMenuManager : MonoBehaviour
 {
-    public BuildMenuView View;
+    [SerializeField]
+    private BuildMenuView _view;
 
     void Start()
     {
-        View.InitializeButtons(OnBuildingButtonClicked);
+        _view.InitializeButtons(OnBuildingButtonClicked);
     }
 
     public void OnBuildingButtonClicked(BuildingType buildingType)

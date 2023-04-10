@@ -5,35 +5,35 @@ using UnityEngine;
 [TestFixture]
 public class ResourceListTests
 {
-    private ResourceType woodType;
-    private ResourceType fishType;
-    private ResourceType stoneType;
+    private ResourceType _woodType;
+    private ResourceType _fishType;
+    private ResourceType _stoneType;
 
-    private Resource wood;
-    private Resource fish;
-    private Resource stone;
+    private Resource _wood;
+    private Resource _fish;
+    private Resource _stone;
 
-    private ResourceList empty;
-    private ResourceList someWood;
-    private ResourceList all;
+    private ResourceList _empty;
+    private ResourceList _someWood;
+    private ResourceList _all;
 
     [SetUp]
     public void SetUpResourceTests()
     {
-        woodType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
-        woodType.name = "Wood";
-        fishType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
-        fishType.name = "Fish";
-        stoneType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
-        stoneType.name = "Stone";
+        _woodType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
+        _woodType.name = "Wood";
+        _fishType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
+        _fishType.name = "Fish";
+        _stoneType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
+        _stoneType.name = "Stone";
 
-        wood = new(woodType, 100);
-        fish = new(fishType, 30);
-        stone = new(stoneType, 0);
+        _wood = new(_woodType, 100);
+        _fish = new(_fishType, 30);
+        _stone = new(_stoneType, 0);
 
-        empty = new();
-        someWood = new(wood);
-        all = new(new List<Resource>() { wood, fish, stone });
+        _empty = new();
+        _someWood = new(_wood);
+        _all = new(new List<Resource>() { _wood, _fish, _stone });
     }
 
     [Test]
@@ -46,9 +46,9 @@ public class ResourceListTests
     [Test]
     public void ConstructorWithValues()
     {
-        List<Resource> listOfResources1 = new() { wood };
-        List<Resource> listOfResources2 = new() { wood, fish };
-        ResourceList resourceList1 = new(wood);
+        List<Resource> listOfResources1 = new() { _wood };
+        List<Resource> listOfResources2 = new() { _wood, _fish };
+        ResourceList resourceList1 = new(_wood);
         ResourceList resourceList2 = new(listOfResources2);
 
         Assert.AreEqual(listOfResources1, resourceList1.Resources);
@@ -58,81 +58,81 @@ public class ResourceListTests
     [Test]
     public void TryGetResource()
     {
-        Assert.AreEqual(wood, all.TryGetResource(woodType));
-        Assert.AreEqual(fish, all.TryGetResource(fishType));
-        Assert.AreEqual(stone, all.TryGetResource(stoneType));
+        Assert.AreEqual(_wood, _all.TryGetResource(_woodType));
+        Assert.AreEqual(_fish, _all.TryGetResource(_fishType));
+        Assert.AreEqual(_stone, _all.TryGetResource(_stoneType));
 
-        Assert.IsNull(someWood.TryGetResource(fishType));
+        Assert.IsNull(_someWood.TryGetResource(_fishType));
     }
 
     [Test]
     public void Add()
     {
-        someWood.Add(wood);
-        someWood.Add(fish);
+        _someWood.Add(_wood);
+        _someWood.Add(_fish);
 
-        Assert.AreEqual(200, someWood.TryGetResource(woodType).Amount);
-        Assert.AreEqual(30, someWood.TryGetResource(fishType).Amount);
-        Assert.IsNull(someWood.TryGetResource(stoneType));
+        Assert.AreEqual(200, _someWood.TryGetResource(_woodType).Amount);
+        Assert.AreEqual(30, _someWood.TryGetResource(_fishType).Amount);
+        Assert.IsNull(_someWood.TryGetResource(_stoneType));
     }
 
     [Test]
     public void TransferTo()
     {
-        ResourceList someWoodCopy = someWood.Copy();
-        someWood.TransferTo(empty);
+        ResourceList someWoodCopy = _someWood.Copy();
+        _someWood.TransferTo(_empty);
 
-        Assert.AreEqual(someWoodCopy, empty);
-        Assert.AreEqual(new ResourceList(), someWood);
+        Assert.AreEqual(someWoodCopy, _empty);
+        Assert.AreEqual(new ResourceList(), _someWood);
     }
 
     [Test]
     public void TransferToWithAmount()
     {
-        ResourceList amount = new(new Resource(woodType, 40));
-        all.TransferTo(empty, amount);
+        ResourceList amount = new(new Resource(_woodType, 40));
+        _all.TransferTo(_empty, amount);
 
-        Assert.AreEqual(40, empty.TryGetResource(woodType).Amount);
-        Assert.IsNull(empty.TryGetResource(fishType));
-        Assert.IsNull(empty.TryGetResource(stoneType));
+        Assert.AreEqual(40, _empty.TryGetResource(_woodType).Amount);
+        Assert.IsNull(_empty.TryGetResource(_fishType));
+        Assert.IsNull(_empty.TryGetResource(_stoneType));
 
-        Assert.AreEqual(60, all.TryGetResource(woodType).Amount);
-        Assert.AreEqual(30, all.TryGetResource(fishType).Amount);
-        Assert.IsNull(all.TryGetResource(stoneType));
+        Assert.AreEqual(60, _all.TryGetResource(_woodType).Amount);
+        Assert.AreEqual(30, _all.TryGetResource(_fishType).Amount);
+        Assert.IsNull(_all.TryGetResource(_stoneType));
     }
 
     [Test]
     public void CleanUp()
     {
-        all.CleanUp();
+        _all.CleanUp();
 
-        Assert.IsNull(all.TryGetResource(stoneType));
+        Assert.IsNull(_all.TryGetResource(_stoneType));
     }
 
     [Test]
     public void CheckResourcesAvailability()
     {
-        Assert.IsTrue(all.CheckResourcesAvailability(someWood));
-        Assert.IsFalse(someWood.CheckResourcesAvailability(all));
-        Assert.IsTrue(someWood.CheckResourcesAvailability(empty));
+        Assert.IsTrue(_all.CheckResourcesAvailability(_someWood));
+        Assert.IsFalse(_someWood.CheckResourcesAvailability(_all));
+        Assert.IsTrue(_someWood.CheckResourcesAvailability(_empty));
     }
 
     [Test]
     public void Minus()
     {
-        ResourceList difference = all.Minus(someWood);
+        ResourceList difference = _all.Minus(_someWood);
 
-        Assert.IsNull(difference.TryGetResource(woodType));
-        Assert.AreEqual(fish, difference.TryGetResource(fishType));
-        Assert.IsNull(difference.TryGetResource(stoneType));
+        Assert.IsNull(difference.TryGetResource(_woodType));
+        Assert.AreEqual(_fish, difference.TryGetResource(_fishType));
+        Assert.IsNull(difference.TryGetResource(_stoneType));
     }
 
     [Test]
     public void Equals()
     {
-        Assert.AreEqual(someWood, new ResourceList(wood));
-        Assert.IsTrue(someWood.Equals(new ResourceList(wood)));
-        Assert.IsTrue(someWood == new ResourceList(wood));
-        Assert.IsTrue(someWood != all);
+        Assert.AreEqual(_someWood, new ResourceList(_wood));
+        Assert.IsTrue(_someWood.Equals(new ResourceList(_wood)));
+        Assert.IsTrue(_someWood == new ResourceList(_wood));
+        Assert.IsTrue(_someWood != _all);
     }
 }

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class BuildMenuView : MonoBehaviour
 {
-    [SerializeField] GameObject buttonPrefab;
+    [SerializeField]
+    private GameObject _buttonPrefab;
 
     public void InitializeButtons(Action<BuildingType> onButtonClicked)
     {
@@ -19,7 +20,7 @@ public class BuildMenuView : MonoBehaviour
 
     void InitializeButton(BuildingType buildingType, UnityAction callback)
     {
-        GameObject buttonGO = Instantiate(buttonPrefab, transform);
+        GameObject buttonGO = Instantiate(_buttonPrefab, transform);
         buttonGO.name = $"Button - {buildingType}";
         buttonGO.GetComponent<Button>().onClick.AddListener(callback);
         buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = buildingType.name;

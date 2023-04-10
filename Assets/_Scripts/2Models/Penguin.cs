@@ -5,33 +5,19 @@ using UnityEngine;
 
 public class Penguin : DataEntity
 {
-    [SerializeField]
     public SpriteRenderer WingRight;
-    [SerializeField]
     public SpriteRenderer WingLeft;
-    [SerializeField]
     public SpriteRenderer LegLeft;
-    [SerializeField]
     public SpriteRenderer LegRight;
-    [SerializeField]
     public SpriteRenderer FootLeft;
-    [SerializeField]
     public SpriteRenderer FootRight;
-    [SerializeField]
     public SpriteRenderer EyeLeft;
-    [SerializeField]
     public SpriteRenderer EyeRight;
-    [SerializeField]
     public SpriteRenderer PupilLeft;
-    [SerializeField]
     public SpriteRenderer PupilRight;
-    [SerializeField]
     public SpriteRenderer BeakTop;
-    [SerializeField]
     public SpriteRenderer BeakBottom;
-    [SerializeField]
     public SpriteRenderer Head;
-    [SerializeField]
     public SpriteRenderer Body;
 
     private PenguinData _penguinData;

@@ -1,35 +1,32 @@
 using System;
-using System.Collections.Generic;
 
 namespace EventCallbacks
 {
     public abstract class Event<T> where T : Event<T>
     {
-        public string Description;
-
-        private bool hasFired;
+        private bool _hasFired;
+        private static event EventListener Listeners;
         public delegate void EventListener(T info);
-        private static event EventListener listeners;
 
         public static void RegisterListener(EventListener listener)
         {
-            listeners += listener;
+            Listeners += listener;
         }
 
         public static void UnregisterListener(EventListener listener)
         {
-            listeners -= listener;
+            Listeners -= listener;
         }
 
         public void FireEvent()
         {
-            if (hasFired)
+            if (_hasFired)
             {
                 throw new Exception("This event has already fired, to prevent infinite loops you can't refire an event");
             }
-            hasFired = true;
+            _hasFired = true;
 
-            listeners?.Invoke(this as T);
+            Listeners?.Invoke(this as T);
         }
     }
 

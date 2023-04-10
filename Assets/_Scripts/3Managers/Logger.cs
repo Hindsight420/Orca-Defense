@@ -7,11 +7,11 @@ using UnityEngine;
 public class Logger : Singleton<Logger>
 {
     [SerializeField]
-    private GameObject LogPrefab;
-    private float timeOfLastLog;
-    private readonly float MINIMUM_TIME_BETWEEN_LOGS = 1f;
-    private readonly Queue MessageQueue = new();
-    private bool isCurrentlyLogging;
+    private GameObject _logPrefab;
+    private float _timeOfLastLog;
+    private const float MINIMUM_TIME_BETWEEN_LOGS = 1f;
+    private readonly Queue _messageQueue = new();
+    private bool _isCurrentlyLogging;
 
     public enum LogType
     {
@@ -30,13 +30,13 @@ public class Logger : Singleton<Logger>
         if (!messages.Any()) return;
         foreach (string message in messages)
         {
-            var logMessage = Instantiate(LogPrefab, transform).GetComponent<LogMessage>();
+            var logMessage = Instantiate(_logPrefab, transform).GetComponent<LogMessage>();
             logMessage.Initialise(message, logType);
 
-            MessageQueue.Enqueue(logMessage);
+            _messageQueue.Enqueue(logMessage);
         }
 
-        if (!isCurrentlyLogging) StartCoroutine(LogMessagesCoroutine());
+        if (!_isCurrentlyLogging) StartCoroutine(LogMessagesCoroutine());
     }
 
     public void LogError (string message)
@@ -61,20 +61,20 @@ public class Logger : Singleton<Logger>
 
     public IEnumerator LogMessagesCoroutine()
     {
-        isCurrentlyLogging = true;
-        if (Time.time - timeOfLastLog < MINIMUM_TIME_BETWEEN_LOGS)
+        _isCurrentlyLogging = true;
+        if (Time.time - _timeOfLastLog < MINIMUM_TIME_BETWEEN_LOGS)
         {
-            var timeUntilNextLogAllowed = MINIMUM_TIME_BETWEEN_LOGS - (Time.time - timeOfLastLog);
+            var timeUntilNextLogAllowed = MINIMUM_TIME_BETWEEN_LOGS - (Time.time - _timeOfLastLog);
             Debug.Log(timeUntilNextLogAllowed);
-            timeOfLastLog = Time.time + timeUntilNextLogAllowed;
+            _timeOfLastLog = Time.time + timeUntilNextLogAllowed;
             yield return new WaitForSeconds(timeUntilNextLogAllowed);
         }
 
-        LogMessage logMessage = (LogMessage)MessageQueue.Dequeue();
+        LogMessage logMessage = (LogMessage)_messageQueue.Dequeue();
         logMessage.Show();
 
-        timeOfLastLog = Time.time;
-        if (MessageQueue.Count > 0) StartCoroutine(LogMessagesCoroutine());
-        else isCurrentlyLogging = false;
+        _timeOfLastLog = Time.time;
+        if (_messageQueue.Count > 0) StartCoroutine(LogMessagesCoroutine());
+        else _isCurrentlyLogging = false;
     }
 }

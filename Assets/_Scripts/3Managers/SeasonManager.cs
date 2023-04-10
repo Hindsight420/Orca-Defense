@@ -1,50 +1,45 @@
 using Assets._Scripts._3Managers;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SeasonManager : Singleton<SeasonManager>
 {
     [SerializeField]
-    private int TicksPerBrightSeason;
-
+    private int _ticksPerBrightSeason;
     [SerializeField]
-    private int TicksPerDarkSeason;
+    private int _ticksPerDarkSeason;
+    private Logger _logger;
 
     public float SeasonProgressionPercentage { get => CurrentSeasonProgressionPercentage(); }
     public Quaternion[] CurrentSeasonRotationBounds { get => GetCurrentSeasonRotationBounds(); }
-
-    public Season CurrentSeason { get => currentSeason; }
+    public Season CurrentSeason { get; private set; }
     public Season NextSeason { get => (Season)(((int)CurrentSeason + 1) % 2); }
-    private Season currentSeason;
-    private Logger logger;
 
     public static event EventHandler<Season> OnSeasonChange;
 
     void Start()
     {
-        currentSeason = Season.Bright;
+        CurrentSeason = Season.Bright;
         TimeTicker.OnTick += OnTick;
-        logger = Logger.Instance;
+        _logger = Logger.Instance;
     }
 
     private int GetTicksPerCurrentSeason()
     {
-        return currentSeason == Season.Bright ? TicksPerBrightSeason : TicksPerDarkSeason;
+        return CurrentSeason == Season.Bright ? _ticksPerBrightSeason : _ticksPerDarkSeason;
     }
 
     private void GoToNextSeason()
     {
-        int season = (int)currentSeason;
-        currentSeason = NextSeason;
-        logger.LogMessage($"Season has changed to {currentSeason} season", Logger.LogType.Debug);
-        OnSeasonChange?.Invoke(this, currentSeason);
+        int season = (int)CurrentSeason;
+        CurrentSeason = NextSeason;
+        _logger.LogMessage($"Season has changed to {CurrentSeason} season", Logger.LogType.Debug);
+        OnSeasonChange?.Invoke(this, CurrentSeason);
     }
 
     private float CurrentSeasonProgressionPercentage()
     {
-        return (((float) TimeTicker.GetInnerTick(TimeTicker.START_OF_THE_GAME)) % GetTicksPerCurrentSeason()) / ((float) GetTicksPerCurrentSeason());
+        return (((float)TimeTicker.GetInnerTick(TimeTicker.START_OF_THE_GAME)) % GetTicksPerCurrentSeason()) / ((float)GetTicksPerCurrentSeason());
     }
 
     private void OnTick(object obj, int tick)
@@ -60,7 +55,7 @@ public class SeasonManager : Singleton<SeasonManager>
         var rotationForBrightSeason = Quaternion.Euler(0, 0, 180f);
         var rotationForDarkSeason = Quaternion.Euler(0, 0, 360f);
 
-        return currentSeason == Season.Bright ? new Quaternion[] { Quaternion.Euler(0,0,0), rotationForBrightSeason } 
+        return CurrentSeason == Season.Bright ? new Quaternion[] { Quaternion.Euler(0, 0, 0), rotationForBrightSeason }
                                             : new Quaternion[] { rotationForBrightSeason, rotationForDarkSeason };
     }
 }

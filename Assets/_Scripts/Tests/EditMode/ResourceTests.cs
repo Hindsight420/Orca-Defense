@@ -5,13 +5,14 @@ using UnityEngine.TestTools;
 [TestFixture]
 public class ResourceTests
 {
-    [SerializeField] private ResourceType resourceType;
+    [SerializeField]
+    private ResourceType _resourceType;
 
     [OneTimeSetUp]
     public void SetUpResourceTests()
     {
-        resourceType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
-        resourceType.name = "Wood";
+        _resourceType = (ResourceType)ScriptableObject.CreateInstance(nameof(ResourceType));
+        _resourceType.name = "Wood";
     }
 
     [Test]
@@ -27,7 +28,7 @@ public class ResourceTests
             amount = 0;
         }
 
-        Resource r = new(resourceType, originalAmount);
+        Resource r = new(_resourceType, originalAmount);
         Assert.AreEqual(amount, r.Amount);
 
         int i = r;
@@ -37,10 +38,10 @@ public class ResourceTests
     [Test]
     public void Equals()
     {
-        Resource 
-            resource1 = new(resourceType, 80), 
-            resource2 = new(resourceType, 80),
-            resource3 = new(resourceType, 100);
+        Resource
+            resource1 = new(_resourceType, 80),
+            resource2 = new(_resourceType, 80),
+            resource3 = new(_resourceType, 100);
 
         Assert.AreEqual(resource1, resource2);
         Assert.IsTrue(resource1 != resource3);

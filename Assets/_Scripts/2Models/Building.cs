@@ -1,49 +1,40 @@
 using Assets._Scripts._3Managers;
 using EventCallbacks;
 using OrcaDefense.Models;
-using System.Collections.Generic;
-using System.Linq;
 
 public class Building
 {
-    BuildingType type;
-    Tile tile;
-    int x;
-    int y;
-    BuildingState state;
-    ResourceList constructionResources = new();
-    ResourceList remainingResources = new();
+    private BuildingState _state;
+    private ResourceList _constructionResources = new();
+    private int startTick;
+    private readonly Logger _logger;
 
-    public BuildingType Type { get => type; private set => type = value; }
-    public Tile Tile { get => tile; private set => tile = value; }
-    public int X { get => x; private set => x = value; }
-    public int Y { get => y; private set => y = value; }
+    public BuildingType Type { get; }
+    public Tile Tile { get; }
+    public int X { get; }
+    public int Y { get; }
     public BuildingState State
     {
-        get => state; set
+        get => _state; set
         {
-            state = value;
+            _state = value;
             new BuildingChangedEvent().FireEvent(this);
         }
     }
     public ResourceList ConstructionResources
     {
-        get => constructionResources;
+        get => _constructionResources;
         private set
         {
             if (State != BuildingState.Planned)
             {
-                Logger.LogMessage($"{this} is in '{State}' state, but the construction resources are trying to alter.", Logger.LogType.Error);
+                _logger.LogMessage($"{this} is in '{State}' state, but the construction resources are trying to alter.", Logger.LogType.Error);
                 return;
             }
-            constructionResources = value;
+            _constructionResources = value;
         }
     }
-    public ResourceList RemainingResources { get => remainingResources; set => remainingResources = value; }
-
-    private Logger Logger { get => Logger.Instance; }
-
-    int startTick;
+    public ResourceList RemainingResources { get; set; } = new();
 
     public Building(BuildingType buildingType, Tile tile, BuildingState state = BuildingState.Planned)
     {
@@ -52,7 +43,8 @@ public class Building
         tile.Building = this;
         X = tile.X;
         Y = tile.Y;
-        this.state = state;
+        _state = state;
+        _logger = Logger.Instance;
 
         RemainingResources = buildingType.Cost.Copy();
     }
@@ -67,20 +59,20 @@ public class Building
     {
         if (State != BuildingState.Planned)
         {
-            Logger.LogMessage($"{this} is in '{State}' state, but it's trying to construct.", Logger.LogType.Error);
+            _logger.LogMessage($"{this} is in '{State}' state, but it's trying to construct.", Logger.LogType.Error);
             return;
         }
 
         if (!ConstructionResources.Equals(Type.Cost))
         {
-            Logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {ConstructionResources}. Expected: {Type.Cost}.", Logger.LogType.Error);
+            _logger.LogMessage($"{this} can't be constructed because of a mismatch in construction resources. Current: {ConstructionResources}. Expected: {Type.Cost}.", Logger.LogType.Error);
             return;
         }
         
         // Everything is in order, time to construct
         State = BuildingState.Constructed;
 
-        if (type.TicksPerIncome != 0 && type.Income is not null)
+        if (Type.TicksPerIncome != 0 && Type.Income is not null)
         {
             TimeTicker.OnTick += OnTick;
             startTick = TimeTicker.CurrentTick;
@@ -105,7 +97,7 @@ public class Building
 
     public override string ToString()
     {
-        return $"Building ({type}: {x}, {y})";
+        return $"Building ({Type}: {X}, {Y})";
     }
 }
 

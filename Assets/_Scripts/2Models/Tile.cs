@@ -2,28 +2,15 @@ namespace OrcaDefense.Models
 {
     public class Tile
     {
-        Building building;
-
-        public readonly int X;
-        public readonly int Y;
+        public int Y { get; }
+        public int X { get; }
+        public Building Building { get; set; }
         public IBuildingValidator Validator { get; set; }
-
-        // TODO: clean up this mess
-
-        public Building Building
-        {
-            get => building;
-            set
-            {
-                building = value;
-            }
-        }
 
         public Tile(int x, int y)
         {
             X = x;
             Y = y;
-
             Validator = new BaseBuildingValidator(this);
         }
 
