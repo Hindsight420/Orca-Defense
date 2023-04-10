@@ -1,8 +1,9 @@
+using Assets._Scripts._1Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PenguinBody : MonoBehaviour
+public class Penguin : DataEntity
 {
     [SerializeField]
     public SpriteRenderer WingRight;
@@ -33,16 +34,15 @@ public class PenguinBody : MonoBehaviour
     [SerializeField]
     public SpriteRenderer Body;
 
+    private PenguinData _penguinData;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _penguinData = new PenguinData(transform);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override ISelectionData GetSelectionData()
     {
-        
+        return _penguinData;
     }
 }

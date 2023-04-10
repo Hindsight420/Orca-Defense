@@ -36,7 +36,7 @@ public class MouseManager : Singleton<MouseManager>
     private void CreatePreview()
     {
         Destroy(buildingPreview);
-        buildingPreview = Instantiate(buildingType.Prefab, transform);
+        buildingPreview = Instantiate(buildingType.PreviewPrefab, transform);
 
         SpriteRenderer sr = buildingPreview.GetComponent<SpriteRenderer>();
         sr.color = new Color(1f, 1f, 1f, .5f);

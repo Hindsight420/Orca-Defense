@@ -47,7 +47,7 @@ public class PenguinFactory : MonoBehaviour
         var pen = Instantiate(PenguinPrefab);
         pen.transform.position = new Vector3(position.x, position.y, PenguinZOffset);
 
-        var penScript = pen.GetComponent<PenguinBody>();
+        var penScript = pen.GetComponent<Penguin>();
         penScript.BeakBottom.sprite = BeakBottoms[Random.Range(0, BeakBottoms.Count)];
         penScript.BeakTop.sprite = BeakTops[Random.Range(0, BeakTops.Count)];
         penScript.Body.sprite = Body[Random.Range(0, Body.Count)];
