@@ -1422,7 +1422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda986836aadfba4f94d4d6621b0262f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentTick: {fileID: 303245400}
+  _currentTick: {fileID: 303245400}
 --- !u!1 &730681821
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,7 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3326282f60539940a538afd8415f9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  View: {fileID: 1807695260}
+  _view: {fileID: 1807695260}
 --- !u!1 &1021970463
 GameObject:
   m_ObjectHideFlags: 0
