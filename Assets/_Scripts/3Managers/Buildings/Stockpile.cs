@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stockpile<T> : MonoBehaviour
+public abstract class Stockpile<T> : DataEntity
 {
-    private int _storageCapacity;
-    [SerializeField]
-    private int _currentCapacity;
+    protected int _capacity;
+    protected int _currentQuantity;
+    public int CurrentQuantity { get => _currentQuantity; }
+    public int Capacity { get => _capacity; }
+
     protected Queue<T> ResourceQueue { get; set; }
 
     [SerializeField]
@@ -16,7 +18,7 @@ public abstract class Stockpile<T> : MonoBehaviour
 
     protected Stockpile<T> ConfigureStore(int capacity)
     {
-        _storageCapacity = capacity;
+        _capacity = capacity;
         ResourceQueue = new Queue<T>();
         _logger = Logger.Instance;
 
@@ -28,12 +30,12 @@ public abstract class Stockpile<T> : MonoBehaviour
     /// </summary>
     protected void AddToStore()
     {
-        if (_currentCapacity >= _storageCapacity)
+        if (_currentQuantity >= _capacity)
         {
             return;
         }
 
-        _currentCapacity++;
+        _currentQuantity++;
         var go = Instantiate(ResourcePrefab, NewResourceSpawnLocation);
         var resource = go.GetComponent<T>();
 
