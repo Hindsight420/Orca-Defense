@@ -171,8 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b79dbb74e92777d4a9233b541bbd6b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NewResourceSpawnLocation: {fileID: 3873959531852360255}
-  ResourcePrefab: {fileID: 3441558236934719876, guid: e306a13e3bfe3494f8f586a9690a351c, type: 3}
+  _newResourceSpawnLocation: {fileID: 3873959531852360255}
+  _resourcePrefab: {fileID: 3441558236934719876, guid: e306a13e3bfe3494f8f586a9690a351c, type: 3}
 --- !u!1 &1121497637776982636
 GameObject:
   m_ObjectHideFlags: 0

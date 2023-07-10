@@ -1,16 +1,14 @@
 using Assets._Scripts._1Data;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FishStockpile : Stockpile<Fish>
 {
-    private FishStockpileData fishStockpileData;
+    private FishStockpileData _fishStockpileData;
 
     private void Awake()
     {
         ConfigureStore(50);
-        fishStockpileData = new FishStockpileData(this);
+        _fishStockpileData = new FishStockpileData(this);
     }
 
     private void Update()
@@ -23,11 +21,11 @@ public class FishStockpile : Stockpile<Fish>
 
     public void OnMouseDown()
     {
-        UI_SelectInterface.Instance.SelectEntity(fishStockpileData);
+        UI_SelectInterface.Instance.SelectEntity(_fishStockpileData);
     }
 
     public override ISelectionData GetSelectionData()
     {
-        return fishStockpileData;
+        return _fishStockpileData;
     }
 }
