@@ -6,34 +6,34 @@ using UnityEngine;
 public class BuildingType : ScriptableObject
 {
     [SerializeField]
-    private GameObject buildingPrefab;
+    private GameObject _buildingPrefab;
     [SerializeField]
-    private GameObject previewPrefab;
+    private GameObject _previewPrefab;
 
     [SerializeField]
-    private BuildingTypeEnum buildingEnum;
+    private BuildingTypeEnum _buildingEnum;
     [SerializeField]
-    private bool hasRoof;
+    private bool _hasRoof;
     [SerializeField]
-    private ResourceList cost;
+    private ResourceList _cost;
     [SerializeField]
-    private ResourceList income;
+    private ResourceList _income;
     [SerializeField]
-    private int ticksPerIncome;
+    private int _ticksPerIncome;
 
     //Accessors for the above
-    public GameObject BuildingPrefab { get => buildingPrefab; }
-    public GameObject PreviewPrefab { get => previewPrefab; }
-    public BuildingTypeEnum BuildingEnum { get => buildingEnum; }
-    public bool HasRoof { get => hasRoof; }
-    public ResourceList Cost { get => cost; }
-    public ResourceList Income { get => income; }
-    public int TicksPerIncome { get => ticksPerIncome; }
+    public GameObject BuildingPrefab { get => _buildingPrefab; }
+    public GameObject PreviewPrefab { get => _previewPrefab; }
+    public BuildingTypeEnum BuildingEnum { get => _buildingEnum; }
+    public bool HasRoof { get => _hasRoof; }
+    public ResourceList Cost { get => _cost; }
+    public ResourceList Income { get => _income; }
+    public int TicksPerIncome { get => _ticksPerIncome; }
 
 
     public IBuildingValidator GetBuildingValidator(Tile t)
     {
-        return GetValidatorByBuildingType(buildingEnum, t);
+        return GetValidatorByBuildingType(_buildingEnum, t);
     }
 
     public override string ToString()

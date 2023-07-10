@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Assets._Scripts._1Data
+﻿namespace Assets._Scripts._1Data
 {
     public class FishStockpileData : SelectionData, IStockpileData
     {
-        private FishStockpile _fishStockpile;
+        private readonly FishStockpile _fishStockpile;
 
         public FishStockpileData(FishStockpile fishStockpile)
         {
