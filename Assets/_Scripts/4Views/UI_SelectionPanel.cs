@@ -1,6 +1,4 @@
 using Assets._Scripts._1Data;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,19 +6,19 @@ using UnityEngine;
 public class UI_SelectionPanel : MonoBehaviour
 {
     [SerializeField]
-    private GameObject descValuePairPrefab;
+    private GameObject _descValuePairPrefab;
     [SerializeField]
-    private GameObject descPrefab;
+    private GameObject _descPrefab;
     [SerializeField]
     private TextMeshProUGUI _title;
     private Logger _logger;
 
-    private List<GameObject> descriptions;
+    private List<GameObject> _descriptions;
 
     private void Awake()
     {
         _logger = Logger.Instance;
-        descriptions = new List<GameObject>();
+        _descriptions = new List<GameObject>();
         gameObject.SetActive(false);
     }
 
@@ -45,19 +43,19 @@ public class UI_SelectionPanel : MonoBehaviour
 
     private void ClearInfoPanel()
     {
-        descriptions.ForEach(x => Destroy(x));
-        descriptions = new List<GameObject>();
+        _descriptions.ForEach(x => Destroy(x));
+        _descriptions = new List<GameObject>();
     }
 
     private void EnableInfoPanel()
     {
         //Place each description
         var currentYOffset = 100f;
-        for (var i = 0; i < descriptions.Count; i++)
+        for (var i = 0; i < _descriptions.Count; i++)
         {
-            descriptions[i].transform.Translate(new Vector3(0, currentYOffset, 0));
+            _descriptions[i].transform.Translate(new Vector3(0, currentYOffset, 0));
             //We shouldn't need to null check this
-            currentYOffset -= descriptions[i].GetComponentInChildren<RectTransform>().rect.height;
+            currentYOffset -= _descriptions[i].GetComponentInChildren<RectTransform>().rect.height;
         }
 
         gameObject.SetActive(true);
@@ -69,10 +67,10 @@ public class UI_SelectionPanel : MonoBehaviour
         PenguinData data = (PenguinData)penguinData;
 
         _title.text = data.GetTitle();
-        var description = Instantiate(descPrefab, transform);
+        var description = Instantiate(_descPrefab, transform);
         var descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = data.GetDescriptionOfPenguin();
-        descriptions.Add(description);
+        _descriptions.Add(description);
     }
 
     private void ConstructStockpileInfoPanel(ISelectionData stockpileData)
@@ -83,24 +81,24 @@ public class UI_SelectionPanel : MonoBehaviour
         _title.text = data.GetTitle();
 
         //e.g. Max Capacity: 50
-        var description = Instantiate(descPrefab, transform);
+        var description = Instantiate(_descPrefab, transform);
         var descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = data.GetCapacityDescription();
-        descriptions.Add(description);
+        _descriptions.Add(description);
 
         // e.g. Current Quantity 3/50 fish
-        description = Instantiate(descValuePairPrefab, transform); // Title
+        description = Instantiate(_descValuePairPrefab, transform); // Title
         descriptionText = description.transform.Find("Title").GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = "Current Quantity";
-        
+
         descriptionText = description.transform.Find("Value").GetComponentInChildren<TextMeshProUGUI>(); // Value
         descriptionText.text = data.GetStockpileCountDescription();
-        descriptions.Add(description);
+        _descriptions.Add(description);
 
         //e.g. A stockpile used to hold fish.
-        description = Instantiate(descPrefab, transform);
+        description = Instantiate(_descPrefab, transform);
         descriptionText = description.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = data.GetStockpileDescription();
-        descriptions.Add(description);
+        _descriptions.Add(description);
     }
 }

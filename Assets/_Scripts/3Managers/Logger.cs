@@ -39,7 +39,7 @@ public class Logger : Singleton<Logger>
         if (!_isCurrentlyLogging) StartCoroutine(LogMessagesCoroutine());
     }
 
-    public void LogError (string message)
+    public void LogError(string message)
     {
         LogMessage(message, LogType.Error);
     }

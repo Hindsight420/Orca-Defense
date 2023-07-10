@@ -2,7 +2,7 @@
 {
     public class FishStockpileData : SelectionData, IStockpileData
     {
-        private FishStockpile _fishStockpile;
+        private readonly FishStockpile _fishStockpile;
 
         public FishStockpileData(FishStockpile fishStockpile)
         {

@@ -16,7 +16,7 @@ public class PenguinFactory : MonoBehaviour
     private List<Sprite> _head;
     [SerializeField]
     private List<Sprite> _body;
-    private static float PenguinZOffset = 0;
+    private static float _penguinZOffset = 0;
     private Vector3 _position;
 
     private void Awake()
@@ -35,7 +35,7 @@ public class PenguinFactory : MonoBehaviour
     void GeneratePenguin(Vector2 position)
     {
         var pen = Instantiate(_penguinPrefab);
-        pen.transform.position = new Vector3(position.x, position.y, PenguinZOffset);
+        pen.transform.position = new Vector3(position.x, position.y, _penguinZOffset);
 
         var penScript = pen.GetComponent<Penguin>();
         penScript.BeakBottom.sprite = _beakBottoms[Random.Range(0, _beakBottoms.Count)];
@@ -49,6 +49,6 @@ public class PenguinFactory : MonoBehaviour
         penScript.WingRight.sprite = wings;
 
 
-        PenguinZOffset += 0.5f;
+        _penguinZOffset += 0.5f;
     }
 }

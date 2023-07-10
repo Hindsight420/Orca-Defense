@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Destroy
   m_EditorClassIdentifier: 
   Prefab: {fileID: 1897880056861038059, guid: a6162b27c59399744809e74edb1f3210, type: 3}
-  Cost: []
+  _cost: []
   hasRoof: 0
