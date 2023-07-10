@@ -6,7 +6,7 @@ using UnityEngine;
 public class BuildingType : ScriptableObject
 {
     [SerializeField]
-    private GameObject _prefab;
+    private GameObject buildingPrefab;
     [SerializeField]
     private GameObject previewPrefab;
 
@@ -22,7 +22,7 @@ public class BuildingType : ScriptableObject
     private int ticksPerIncome;
 
     //Accessors for the above
-    public GameObject Prefab { get => _prefab; }
+    public GameObject BuildingPrefab { get => buildingPrefab; }
     public GameObject PreviewPrefab { get => previewPrefab; }
     public BuildingTypeEnum BuildingEnum { get => buildingEnum; }
     public bool HasRoof { get => hasRoof; }

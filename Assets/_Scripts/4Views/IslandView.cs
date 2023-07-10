@@ -85,7 +85,7 @@ public class IslandView : MonoBehaviour
     GameObject UpdateBuildingGameObject(Building b)
     {
         if (!_buildingGameObjectMap.TryGetValue(b, out GameObject building_go)) 
-            building_go = Instantiate(b.Type.Prefab);
+            building_go = Instantiate(b.Type.BuildingPrefab);
 
         building_go.name = $"{b.Type.name}_{b.X}_{b.Y}";
         building_go.transform.position = new Vector3(b.X, b.Y, 0);

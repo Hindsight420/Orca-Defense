@@ -10,8 +10,8 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
     [SerializeField]
     private UI_SelectionPanel _selectionPanel;
 
-    private readonly WidthHeight _penguinSize = new(3, 5);
-    private readonly WidthHeight _buildingSize = new(2.5f, 2.5f);
+    private WidthHeight PenguinSize = new WidthHeight(3, 5);
+    private WidthHeight BuildingSize = new WidthHeight(2.5f,2.5f);
 
     protected override void Awake()
     {
@@ -47,25 +47,25 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
         FishStockpileData data = (FishStockpileData)stockpileData;
 
         //_logger.LogDebug($"Penguin {data.Name} Selected");
-        _selectionTransform.sizeDelta = new Vector2(_buildingSize.Width, _buildingSize.Height);
+        _selectionTransform.sizeDelta = new Vector2(BuildingSize.Width, BuildingSize.Height);
         _targetSelection = data.GetParent();
 
         EnableSelf(0.5f, 0.5f);
     }
 
     private void SelectPenguin(ISelectionData penguinData)
-    {
+    { 
         if (penguinData is not PenguinData) { _logger.LogError("Attempted to select penguin without PenguinData"); return; }
         PenguinData data = (PenguinData)penguinData;
 
         //_logger.LogDebug($"Penguin {data.Name} Selected");
-        _selectionTransform.sizeDelta = new Vector2(_penguinSize.Width, _penguinSize.Height);
+        _selectionTransform.sizeDelta = new Vector2(PenguinSize.Width, PenguinSize.Height);
         _targetSelection = data.GetParent();
 
         EnableSelf();
     }
 
-    private void EnableSelf(float offsetX = 0, float offsetY = 0)
+    private void EnableSelf (float offsetX = 0, float offsetY = 0)
     {
         if (_targetSelection != null)
         {
@@ -75,7 +75,7 @@ public class UI_SelectInterface : Singleton<UI_SelectInterface>
 
         }
     }
-    private void DisableSelf()
+    private void DisableSelf ()
     {
         gameObject.SetActive(false);
         _selectionTransform.SetParent(null);

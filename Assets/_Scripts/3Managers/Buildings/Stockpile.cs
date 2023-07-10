@@ -11,9 +11,9 @@ public abstract class Stockpile<T> : DataEntity
     protected Queue<T> ResourceQueue { get; set; }
 
     [SerializeField]
-    private Transform NewResourceSpawnLocation;
+    private Transform _newResourceSpawnLocation;
     [SerializeField]
-    private GameObject ResourcePrefab;
+    private GameObject _resourcePrefab;
     private Logger _logger;
 
     protected Stockpile<T> ConfigureStore(int capacity)
@@ -36,7 +36,7 @@ public abstract class Stockpile<T> : DataEntity
         }
 
         _currentQuantity++;
-        var go = Instantiate(ResourcePrefab, NewResourceSpawnLocation);
+        var go = Instantiate(_resourcePrefab, _newResourceSpawnLocation);
         var resource = go.GetComponent<T>();
 
         if (resource == null)
@@ -50,6 +50,4 @@ public abstract class Stockpile<T> : DataEntity
         var randVector = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
         rigidbody.AddForce(randVector);
     }
-
-
 }
