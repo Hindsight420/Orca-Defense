@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977bba8ce9f5dd9429c18901c8c06218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roofPrefab: {fileID: 6395731410237515148, guid: 506013e04b2d54b4c8ede2fecba37877, type: 3}
+  _roofPrefab: {fileID: 6395731410237515148, guid: 506013e04b2d54b4c8ede2fecba37877, type: 3}
 --- !u!1 &167089110
 GameObject:
   m_ObjectHideFlags: 0
